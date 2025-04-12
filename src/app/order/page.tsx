@@ -11,13 +11,14 @@ export const metadata: Metadata = {
     },
 };
 
-interface PageProps {
-    params: { [key: string]: string };
-    searchParams: { [key: string]: string | string[] | undefined };
-}
-
-export default function OrderConfirmationPage({ searchParams }: PageProps) {
-    const orderId = typeof searchParams.id === 'string' ? searchParams.id : null;
+// 👇 async function to await the props
+export default async function OrderConfirmationPage({
+                                                  searchParams,
+                                              }: {
+    searchParams:  Promise<{ [key: string]: string | string[] | undefined }>;
+}) {
+    const resolvedSearchParams = await searchParams;
+    const orderId = typeof resolvedSearchParams.id === 'string' ? resolvedSearchParams.id : null;
 
     if (!orderId) {
         notFound();

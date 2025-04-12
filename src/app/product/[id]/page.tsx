@@ -4,34 +4,36 @@ import ProductDetail from '@/components/product/ProductDetail';
 import RelatedProducts from '@/components/product/RelatedProducts';
 import { productApi } from '@/lib/api';
 
-type Props = {
-    params: { id: string };
-};
+// ✅ Next.js will wrap this in a Promise due to async `generateMetadata`
+export async function generateMetadata({
+                                           params,
+                                       }: {
+    params: Promise<{ id: string }>;
+}): Promise<Metadata> {
+    const { id } = await params;
 
-// Generate metadata for the page
-export async function generateMetadata({ params }: Props): Promise<Metadata> {
     try {
-        const product = await productApi.getById(params.id);
+        const product = await productApi.getById(id);
 
         return {
             title: `${product.name} | LUXE`,
             description: product.description,
-            openGraph: {
-                images: [{ url: product.image }],
-            },
         };
     } catch {
         return {
-            title: 'Product | LUXE',
-            description: 'Luxury product details',
+            title: 'Product Not Found | LUXE',
         };
     }
 }
+export default async function ProductPage({
+                                              params,
+                                          }: {
+    params: Promise<{ id: string }>;
+}) {
+    const { id } = await params;
 
-export default async function ProductPage({ params }: Props) {
     try {
-        // Fetch product data
-        const product = await productApi.getById(params.id);
+        const product = await productApi.getById(id);
 
         // If product not found, show 404
         if (!product) {

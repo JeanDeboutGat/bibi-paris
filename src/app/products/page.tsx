@@ -10,7 +10,7 @@ export const metadata: Metadata = {
 export default async function ProductsPage({
     searchParams,
   }: {
-    searchParams: { [key: string]: string | string[] | undefined };
+    searchParams: Promise< { [key: string]: string | string[] | undefined }>;
   }) {
     // Extract filter parameters from URL - await searchParams first
     const params = await searchParams;

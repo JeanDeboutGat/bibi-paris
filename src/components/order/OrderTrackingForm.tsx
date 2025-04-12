@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import { orderApi } from '@/lib/api';
 
-type OrderStatus = {
+export type OrderStatus = {
     orderId: string;
     status: 'processing' | 'shipped' | 'delivered';
     estimatedDelivery?: string;
