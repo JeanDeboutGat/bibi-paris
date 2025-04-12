@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
-import { productApi } from '@/lib/api';
+import { useCartStore } from '@/lib/store';
 
 type Product = {
     id: string;
@@ -24,41 +24,67 @@ export default function ProductGrid({ category, collection, sort }: ProductGridP
     const [products, setProducts] = useState<Product[]>([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
+    const [hoveredProduct, setHoveredProduct] = useState<string | null>(null);
+    const addItem = useCartStore((state) => state.addItem);
 
     useEffect(() => {
         const fetchProducts = async () => {
             try {
                 setLoading(true);
 
-                // In a real app, you'd pass these filters to your API
-                // For now, we'll simulate filtering on the client side with mock data
-                let data = await productApi.getAll();
+                // For development purposes, use mock data directly instead of API call
+                // that would likely fail without a backend
+                
+                // Use actual image filenames based on category
+                const mockImages = {
+                    handmades: ['/images/handmades/gobolet.jpg', '/images/handmades/pull.jpg', '/images/handmades/cousin.jpg', '/images/handmades/sac.jpg'],
+                    secondHands: ['/images/secondHands/table.jpg', '/images/secondHands/chair.jpg', '/images/secondHands/chairdark.jpg', '/images/secondHands/smallChair.jpg', '/images/secondHands/chair-fonce.jpg'],
+                    paintings: ['/images/paintings/girl.jpg', '/images/paintings/gate.jpg', '/images/paintings/girl-boy.jpg', '/images/paintings/flower.jpg'],
+                    decoratives: ['/images/decoratives/vase.jpg', '/images/decoratives/pot.jpg', '/images/decoratives/flower.jpg', '/images/decoratives/alexandra-gorn-W5dsm9n6e3g-unsplash.jpg'],
+                };
 
-                // Mock filtering
-                if (category) {
-                    data = data.filter((product: Product) =>
-                        product.category.toLowerCase() === category.toLowerCase()
-                    );
-                }
+                // Create mock data for all categories
+                let data: Product[] = [];
+                
+                // Only generate products for the selected category, or all categories if none selected
+                const categoriesToGenerate = category 
+                    ? [category] 
+                    : ['handmades', 'secondHands', 'paintings', 'decoratives'];
+                
+                categoriesToGenerate.forEach(cat => {
+                    const categoryImages = mockImages[cat as keyof typeof mockImages];
+                    if (categoryImages) {
+                        const categoryProducts = Array.from({ length: 4 }, (_, i) => ({
+                            id: `${cat}-${i + 1}`,
+                            name: `${cat === 'handmades' ? 'Handcrafted' : 
+                                cat === 'secondHands' ? 'Vintage' : 
+                                cat === 'paintings' ? 'Artwork' : 'Decorative'} Piece ${i + 1}`,
+                            price: Math.floor(Math.random() * 3000) + 500,
+                            image: categoryImages[i % categoryImages.length],
+                            category: cat,
+                            collection: i % 2 === 0 ? 'signature' : 'spring',
+                        }));
+                        data = [...data, ...categoryProducts];
+                    }
+                });
 
+                // Filter by collection if specified
                 if (collection) {
-                    data = data.filter((product: Product) =>
+                    data = data.filter(product => 
                         product.collection?.toLowerCase() === collection.toLowerCase()
                     );
                 }
 
-                // Mock sorting
+                // Sort products
                 if (sort) {
                     switch (sort) {
                         case 'price_asc':
-                            data.sort((a: Product, b: Product) => a.price - b.price);
+                            data.sort((a, b) => a.price - b.price);
                             break;
                         case 'price_desc':
-                            data.sort((a: Product, b: Product) => b.price - a.price);
+                            data.sort((a, b) => b.price - a.price);
                             break;
                         case 'newest':
-                            // Assuming there's a createdAt field in a real app
-                            // Here we just reverse the array as a simple simulation
                             data.reverse();
                             break;
                     }
@@ -68,74 +94,6 @@ export default function ProductGrid({ category, collection, sort }: ProductGridP
             } catch (err) {
                 console.error('Failed to fetch products:', err);
                 setError('Failed to load products. Please try again later.');
-
-                // For development, use mock data if API fails
-                setProducts([
-                    {
-                        id: '1',
-                        name: 'Leather Handbag',
-                        price: 2800,
-                        image: '/images/product1.jpg',
-                        category: 'Bags',
-                        collection: 'Autumn',
-                    },
-                    {
-                        id: '2',
-                        name: 'Silk Scarf',
-                        price: 450,
-                        image: '/images/product2.jpg',
-                        category: 'Accessories',
-                        collection: 'Spring',
-                    },
-                    {
-                        id: '3',
-                        name: 'Leather Belt',
-                        price: 680,
-                        image: '/images/product3.jpg',
-                        category: 'Accessories',
-                        collection: 'Timeless',
-                    },
-                    {
-                        id: '4',
-                        name: 'Cashmere Sweater',
-                        price: 1200,
-                        image: '/images/product4.jpg',
-                        category: 'Clothing',
-                        collection: 'Autumn',
-                    },
-                    {
-                        id: '5',
-                        name: 'Porcelain Vase',
-                        price: 980,
-                        image: '/images/product5.jpg',
-                        category: 'Home',
-                        collection: 'Timeless',
-                    },
-                    {
-                        id: '6',
-                        name: 'Gold Bracelet',
-                        price: 3200,
-                        image: '/images/product6.jpg',
-                        category: 'Jewelry',
-                        collection: 'Limited Edition',
-                    },
-                    {
-                        id: '7',
-                        name: 'Wool Blanket',
-                        price: 750,
-                        image: '/images/product7.jpg',
-                        category: 'Home',
-                        collection: 'Autumn',
-                    },
-                    {
-                        id: '8',
-                        name: 'Leather Wallet',
-                        price: 520,
-                        image: '/images/product8.jpg',
-                        category: 'Accessories',
-                        collection: 'Timeless',
-                    },
-                ]);
             } finally {
                 setLoading(false);
             }
@@ -144,14 +102,32 @@ export default function ProductGrid({ category, collection, sort }: ProductGridP
         fetchProducts();
     }, [category, collection, sort]);
 
+    const handleQuickAdd = (e: React.MouseEvent, product: Product) => {
+        e.preventDefault();
+        e.stopPropagation();
+        
+        addItem({
+            id: product.id,
+            name: product.name,
+            price: product.price,
+            image: product.image,
+        });
+
+        // Trigger subtle bounce animation on cart icon
+        document.querySelector('.cart-icon')?.classList.add('animate-subtle-bounce');
+        setTimeout(() => {
+            document.querySelector('.cart-icon')?.classList.remove('animate-subtle-bounce');
+        }, 500);
+    };
+
     if (loading) {
         return (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                 {[...Array(6)].map((_, index) => (
                     <div key={index} className="animate-pulse">
-                        <div className="bg-gray-200 h-80 mb-4"></div>
-                        <div className="bg-gray-200 h-6 w-3/4 mb-2"></div>
-                        <div className="bg-gray-200 h-4 w-1/4"></div>
+                        <div className="bg-luxury-cream h-96 mb-4"></div>
+                        <div className="bg-luxury-cream h-6 w-3/4 mb-2"></div>
+                        <div className="bg-luxury-cream h-4 w-1/4"></div>
                     </div>
                 ))}
             </div>
@@ -159,18 +135,28 @@ export default function ProductGrid({ category, collection, sort }: ProductGridP
     }
 
     if (error) {
-        return <div className="text-center text-red-500">{error}</div>;
+        return (
+            <div className="text-center py-12 text-luxury-charcoal">
+                <p className="text-lg mb-4">{error}</p>
+                <button 
+                    onClick={() => window.location.reload()} 
+                    className="btn-secondary"
+                >
+                    Try Again
+                </button>
+            </div>
+        );
     }
 
     if (products.length === 0) {
         return (
             <div className="text-center py-12">
-                <p className="text-lg text-gray-700">No products found matching your criteria.</p>
+                <p className="text-lg text-luxury-charcoal/80 mb-6">No products found matching your criteria.</p>
                 <button
                     onClick={() => window.history.back()}
-                    className="mt-4 text-sm underline text-gray-600 hover:text-black"
+                    className="btn-secondary"
                 >
-                    Go back
+                    Go Back
                 </button>
             </div>
         );
@@ -178,21 +164,46 @@ export default function ProductGrid({ category, collection, sort }: ProductGridP
 
     return (
         <>
-            <p className="text-sm text-gray-600 mb-6">{products.length} products</p>
+            <p className="text-sm text-luxury-charcoal/60 mb-8 font-light tracking-wide">
+                {products.length} {products.length === 1 ? 'product' : 'products'}
+            </p>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-6 gap-y-12">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-8 gap-y-16">
                 {products.map((product) => (
-                    <Link key={product.id} href={`/product/${product.id}`} className="group">
-                        <div className="relative h-80 mb-4 overflow-hidden">
+                    <Link 
+                        key={product.id} 
+                        href={`/product/${product.id}`} 
+                        className="group focus-visible"
+                        onMouseEnter={() => setHoveredProduct(product.id)}
+                        onMouseLeave={() => setHoveredProduct(null)}
+                    >
+                        <div className="relative h-96 mb-4 overflow-hidden">
                             <Image
                                 src={product.image}
                                 alt={product.name}
                                 fill
-                                className="object-cover transition-transform duration-700 group-hover:scale-105"
+                                className="object-cover transition-all duration-2000 group-hover:scale-105"
                             />
+                            
+                            {/* Add to cart button overlay */}
+                            <div 
+                                className={`absolute inset-0 bg-black bg-opacity-20 flex items-end justify-center transition-opacity duration-300 ${
+                                    hoveredProduct === product.id ? 'opacity-100' : 'opacity-0'
+                                }`}
+                            >
+                                <button 
+                                    onClick={(e) => handleQuickAdd(e, product)}
+                                    className="bg-white text-luxury-charcoal mb-6 py-3 px-6 text-sm uppercase tracking-wider hover:bg-luxury-cream transition-colors duration-300 focus-visible"
+                                    aria-label={`Quick add ${product.name} to cart`}
+                                >
+                                    Quick Add
+                                </button>
+                            </div>
                         </div>
-                        <h3 className="text-lg font-light mb-1">{product.name}</h3>
-                        <p className="text-gray-700">${product.price.toLocaleString()}</p>
+                        <div className="transition-all duration-300 group-hover:translate-x-2">
+                            <h3 className="font-serif text-lg mb-2 group-hover:text-luxury-sienna transition-colors duration-300">{product.name}</h3>
+                            <p className="text-luxury-charcoal/80">${product.price.toLocaleString()}</p>
+                        </div>
                     </Link>
                 ))}
             </div>

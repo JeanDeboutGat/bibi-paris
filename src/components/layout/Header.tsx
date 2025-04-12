@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useCartStore } from "@/lib/store";
@@ -11,53 +11,87 @@ export default function Header() {
   const pathname = usePathname();
   const cartItems = useCartStore((state) => state.items);
   const itemCount = cartItems.reduce((total, item) => total + item.quantity, 0);
+  const lastScrollTop = useRef(0);
+  const [hideHeader, setHideHeader] = useState(false);
 
-  // Change header style on scroll
+  // Change header style on scroll and implement hide on scroll down
   useEffect(() => {
     const handleScroll = () => {
-      setIsScrolled(window.scrollY > 10);
+      const st = window.scrollY;
+      setIsScrolled(st > 10);
+      
+      // Hide header on scroll down, show on scroll up
+      if (st > 100) { // Only apply this behavior after scrolling a bit
+        if (st > lastScrollTop.current) {
+          setHideHeader(true);
+        } else {
+          setHideHeader(false);
+        }
+      } else {
+        setHideHeader(false);
+      }
+      
+      lastScrollTop.current = st <= 0 ? 0 : st;
     };
 
     window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll,);
+    return () => window.removeEventListener("scroll", handleScroll);
   }, []);
+
+  const navItems = [
+    { path: "/", label: "Home" },
+    { path: "/products?category=handmades", label: "Handmade" },
+    { path: "/products?category=secondHands", label: "Second-Hand" },
+    { path: "/products?category=paintings", label: "Paintings" },
+    { path: "/products?category=decoratives", label: "Decorative" },
+  ];
 
   return (
     <header
       className={`fixed w-full z-50 transition-all duration-300 ${
-        isScrolled ? "bg-white shadow-md py-2" : "bg-transparent py-4"
+        isScrolled 
+          ? "bg-white shadow-sm py-3" 
+          : "bg-transparent py-5"
+      } ${
+        hideHeader ? "-translate-y-full" : "translate-y-0"
       }`}
     >
       <div className="container mx-auto px-4 flex justify-between items-center">
         {/* Logo */}
-        <Link href="/" className="relative z-10">
-          <h1 className="text-2xl font-light tracking-widest">LUXE</h1>
+        <Link 
+          href="/" 
+          className="relative z-10 focus-visible"
+          aria-label="Bibi Paris Home"
+        >
+          <h1 className="font-serif text-2xl tracking-widest">BIBI PARIS</h1>
         </Link>
 
         {/* Desktop Navigation */}
-        <nav className="hidden md:flex space-x-8">
-          {["/", "/products", "/about"].map((path) => {
-            const label =
-              path === "/"
-                ? "Home"
-                : path.slice(1).charAt(0).toUpperCase() + path.slice(2);
-            return (
-              <Link
-                key={path}
-                href={path}
-                className={`text-sm tracking-wider hover:text-gray-600 transition-colors ${
-                  pathname === path ? "border-b border-black" : ""
-                }`}
-              >
-                {label}
-              </Link>
-            );
-          })}
+        <nav className="hidden md:flex space-x-10">
+          {navItems.map((item) => (
+            <Link
+              key={item.path}
+              href={item.path}
+              className={`text-sm uppercase tracking-wider hover:text-luxury-sienna transition-colors duration-300 focus-visible ${
+                pathname === item.path || 
+                (pathname.startsWith('/products') && item.path.startsWith('/products') && 
+                 item.path.includes(new URLSearchParams(pathname.split('?')[1] || '').get('category') || ''))
+                  ? "border-b border-luxury-gold pb-1" 
+                  : ""
+              }`}
+            >
+              {item.label}
+            </Link>
+          ))}
         </nav>
 
-        {/* cart and Mobile Menu Toggle */}
-        <div className="flex items-center space-x-4">
-          <Link href="/cart" className="relative">
+        {/* Cart and Mobile Menu Toggle */}
+        <div className="flex items-center space-x-6">
+          <Link 
+            href="/cart" 
+            className="relative group focus-visible"
+            aria-label={`Shopping Cart with ${itemCount} items`}
+          >
             <span className="sr-only">Cart</span>
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -65,7 +99,7 @@ export default function Header() {
               viewBox="0 0 24 24"
               strokeWidth={1.5}
               stroke="currentColor"
-              className="w-6 h-6"
+              className="w-6 h-6 transition-all duration-300 group-hover:text-luxury-sienna"
             >
               <path
                 strokeLinecap="round"
@@ -74,7 +108,10 @@ export default function Header() {
               />
             </svg>
             {itemCount > 0 && (
-              <span className="absolute -top-2 -right-2 bg-black text-white text-xs w-5 h-5 rounded-full flex items-center justify-center">
+              <span 
+                className="absolute -top-2 -right-2 bg-luxury-sienna text-white text-xs w-5 h-5 rounded-full flex items-center justify-center animate-subtle-bounce"
+                aria-hidden="true"
+              >
                 {itemCount}
               </span>
             )}
@@ -82,53 +119,55 @@ export default function Header() {
 
           {/* Mobile Menu Button */}
           <button
-            className="md:hidden"
+            className="md:hidden focus-visible"
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-            aria-label="Toggle menu"
+            aria-label={isMobileMenuOpen ? "Close menu" : "Open menu"}
+            aria-expanded={isMobileMenuOpen}
           >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-              strokeWidth={1.5}
-              stroke="currentColor"
-              className="w-6 h-6"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5"
-              />
-            </svg>
+            <div className="w-6 h-5 relative flex flex-col justify-between">
+              <span className={`w-full h-px bg-luxury-charcoal absolute transition-all duration-300 ${isMobileMenuOpen ? 'top-2 rotate-45' : 'top-0'}`}></span>
+              <span className={`w-full h-px bg-luxury-charcoal absolute top-2 transition-opacity duration-300 ${isMobileMenuOpen ? 'opacity-0' : 'opacity-100'}`}></span>
+              <span className={`w-full h-px bg-luxury-charcoal absolute transition-all duration-300 ${isMobileMenuOpen ? 'bottom-2 -rotate-45' : 'bottom-0'}`}></span>
+            </div>
           </button>
         </div>
       </div>
 
       {/* Mobile Menu */}
-      {isMobileMenuOpen && (
-        <div className="md:hidden absolute top-full left-0 w-full bg-white shadow-md py-4 px-4 transition-all duration-300">
-          <nav className="flex flex-col space-y-4">
-            {["/", "/products", "/about"].map((path) => {
-              const label =
-                path === "/"
-                  ? "Home"
-                  : path.slice(1).charAt(0).toUpperCase() + path.slice(2);
-              return (
-                <Link
-                  key={path}
-                  href={path}
-                  className={`text-sm tracking-wider ${
-                    pathname === path ? "font-medium" : ""
-                  }`}
-                  onClick={() => setIsMobileMenuOpen(false)}
-                >
-                  {label}
-                </Link>
-              );
-            })}
-          </nav>
-        </div>
-      )}
+      <div 
+        className={`md:hidden absolute top-full left-0 w-full bg-white shadow-md overflow-hidden transition-all duration-500 ${
+          isMobileMenuOpen ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'
+        }`}
+        aria-hidden={!isMobileMenuOpen}
+      >
+        <nav className="flex flex-col px-4 py-6">
+          {navItems.map((item) => (
+            <Link
+              key={item.path}
+              href={item.path}
+              className={`py-3 text-sm uppercase tracking-wider border-b border-gray-100 ${
+                pathname === item.path || 
+                (pathname.startsWith('/products') && item.path.startsWith('/products') && 
+                item.path.includes(new URLSearchParams(pathname.split('?')[1] || '').get('category') || ''))
+                  ? "text-luxury-sienna" 
+                  : ""
+              }`}
+              onClick={() => setIsMobileMenuOpen(false)}
+            >
+              {item.label}
+            </Link>
+          ))}
+          <div className="pt-4">
+            <Link 
+              href="/track" 
+              className="py-3 text-sm uppercase tracking-wider block"
+              onClick={() => setIsMobileMenuOpen(false)}
+            >
+              Track Order
+            </Link>
+          </div>
+        </nav>
+      </div>
     </header>
   );
 }

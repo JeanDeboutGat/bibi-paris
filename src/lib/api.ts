@@ -44,44 +44,144 @@ interface OrderData {
 // Product API service
 export const productApi = {
 
-    // Get all
-
+    // Get all products with local images
     async getAll(){
-        return  [
+        // Use local images for each category
+        return [
+            // Handmade pieces
             {
-                id: 'P001',
-                name: 'LUXE Leather Handbag',
+                id: 'handmades-1',
+                name: 'Handcrafted Wooden Goblet',
                 price: 299.99,
-                image: 'https://example.com/images/handbag.jpg',
-                category: 'Accessories',
+                image: '/images/handmades/gobolet.jpg',
+                category: 'handmades',
+                collection: 'signature',
             },
             {
-                id: 'P002',
-                name: 'Gold-Plated Bracelet',
-                price: 149.99,
-                image: 'https://example.com/images/bracelet.jpg',
-                category: 'Jewelry',
+                id: 'handmades-2',
+                name: 'Artisanal Wooden Pullover',
+                price: 449.99,
+                image: '/images/handmades/pull.jpg',
+                category: 'handmades',
+                collection: 'spring',
             },
             {
-                id: 'P003',
-                name: 'LUXE Sunglasses',
+                id: 'handmades-3',
+                name: 'Handcrafted Wooden Cushion',
+                price: 189.99,
+                image: '/images/handmades/cousin.jpg',
+                category: 'handmades',
+                collection: 'signature',
+            },
+            {
+                id: 'handmades-4',
+                name: 'Artisanal Wooden Bag',
+                price: 499.99,
+                image: '/images/handmades/sac.jpg',
+                category: 'handmades',
+                collection: 'spring',
+            },
+            
+            // Second-hand items
+            {
+                id: 'secondHands-1',
+                name: 'Vintage Wooden Table',
+                price: 899.99,
+                image: '/images/secondHands/table.jpg',
+                category: 'secondHands',
+                collection: 'signature',
+            },
+            {
+                id: 'secondHands-2',
+                name: 'Antique Wooden Chair',
+                price: 599.99,
+                image: '/images/secondHands/chair.jpg',
+                category: 'secondHands',
+                collection: 'spring',
+            },
+            {
+                id: 'secondHands-3',
+                name: 'Vintage Dark Chair',
+                price: 649.99,
+                image: '/images/secondHands/chairdark.jpg',
+                category: 'secondHands',
+                collection: 'signature',
+            },
+            {
+                id: 'secondHands-4',
+                name: 'Compact Wooden Chair',
+                price: 549.99,
+                image: '/images/secondHands/smallChair.jpg',
+                category: 'secondHands',
+                collection: 'spring',
+            },
+            
+            // Paintings
+            {
+                id: 'paintings-1',
+                name: 'Portrait Painting',
+                price: 1299.99,
+                image: '/images/paintings/girl.jpg',
+                category: 'paintings',
+                collection: 'signature',
+            },
+            {
+                id: 'paintings-2',
+                name: 'Garden Gate Artwork',
+                price: 1499.99,
+                image: '/images/paintings/gate.jpg',
+                category: 'paintings',
+                collection: 'spring',
+            },
+            {
+                id: 'paintings-3',
+                name: 'Children Portrait',
+                price: 1199.99,
+                image: '/images/paintings/girl-boy.jpg',
+                category: 'paintings',
+                collection: 'signature',
+            },
+            {
+                id: 'paintings-4',
+                name: 'Floral Artwork',
+                price: 999.99,
+                image: '/images/paintings/flower.jpg',
+                category: 'paintings',
+                collection: 'spring',
+            },
+            
+            // Decorative objects
+            {
+                id: 'decoratives-1',
+                name: 'Elegant Wooden Vase',
                 price: 249.99,
-                image: 'https://example.com/images/sunglasses.jpg',
-                category: 'Accessories',
+                image: '/images/decoratives/vase.jpg',
+                category: 'decoratives',
+                collection: 'signature',
             },
             {
-                id: 'P004',
-                name: 'Designer Watch',
-                price: 799.99,
-                image: 'https://example.com/images/watch.jpg',
-                category: 'Watches',
+                id: 'decoratives-2',
+                name: 'Decorative Wooden Pot',
+                price: 199.99,
+                image: '/images/decoratives/pot.jpg',
+                category: 'decoratives',
+                collection: 'spring',
             },
             {
-                id: 'P005',
-                name: 'Cashmere Scarf',
-                price: 129.99,
-                image: 'https://example.com/images/scarf.jpg',
-                category: 'Clothing',
+                id: 'decoratives-3',
+                name: 'Wooden Flower Sculpture',
+                price: 159.99,
+                image: '/images/decoratives/flower.jpg',
+                category: 'decoratives',
+                collection: 'signature',
+            },
+            {
+                id: 'decoratives-4',
+                name: 'Modern Wooden Vase',
+                price: 279.99,
+                image: '/images/decoratives/alexandra-gorn-W5dsm9n6e3g-unsplash.jpg',
+                category: 'decoratives',
+                collection: 'spring',
             },
         ];
     },
@@ -90,13 +190,26 @@ export const productApi = {
         // Simulate API call delay
         await new Promise(resolve => setTimeout(resolve, 500));
 
-        // For now, return mock data
+        // Get all products
+        const allProducts = await this.getAll();
+        
+        // Find the requested product
+        const product = allProducts.find(p => p.id === id);
+        
+        if (product) {
+            return {
+                ...product,
+                description: 'This exquisite handcrafted piece embodies our commitment to quality craftsmanship and timeless design. Made from sustainably sourced materials and shaped with traditional techniques, it represents the perfect blend of functionality and artistry that defines our collection.'
+            };
+        }
+        
+        // Fallback if product not found
         return {
             id,
             name: 'Luxury Product',
-            description: 'High-end luxury product with premium materials',
-            image: '/images/product-placeholder.jpg',
-            category: 'accessories',
+            description: 'High-end luxury product with premium materials.',
+            image: '/images/handmades/gobolet.jpg',
+            category: 'handmades',
             price: 999.99
         };
     },
@@ -106,15 +219,21 @@ export const productApi = {
         // Simulate API call delay
         await new Promise(resolve => setTimeout(resolve, 500));
 
-        // Return mock related products and filter out the excluded ID
-        return Array(4).fill(null).map((_, i) => ({
-            id: `related-${i}`,
-            name: `Related Product ${i+1}`,
-            description: 'Another luxury item you might like',
-            image: '/images/product-placeholder.jpg',
-            category,
-            price: 799.99 + (i * 100)
-        })).filter(product => product.id !== excludeId);
+        // Get all products
+        const allProducts = await this.getAll();
+        
+        // Filter products by category and exclude the current product
+        const relatedProducts = allProducts
+            .filter(p => p.category === category && p.id !== excludeId)
+            // Add description field for each product
+            .map(p => ({
+                ...p,
+                description: 'A beautifully crafted piece from our exclusive collection.'
+            }))
+            // Limit to 4 related products
+            .slice(0, 4);
+        
+        return relatedProducts;
     },
     
     // Get products by category

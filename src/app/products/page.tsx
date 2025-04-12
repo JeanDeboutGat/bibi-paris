@@ -3,8 +3,8 @@ import ProductGrid from '@/components/product/ProductGrid';
 import ProductFilters from '@/components/product/ProductFilters';
 
 export const metadata: Metadata = {
-    title: 'LUXE | Products',
-    description: 'Browse our collection of luxury products.',
+    title: 'Bibi Paris | Collections',
+    description: 'Browse our collection of luxury wooden furniture, including handmade pieces, second-hand items, paintings, and decorative objects.',
 };
 
 export default async function ProductsPage({
@@ -19,11 +19,24 @@ export default async function ProductsPage({
     const collection = typeof params.collection === 'string' ? params.collection : undefined;
     const sort = typeof params.sort === 'string' ? params.sort : undefined;
   
+    // Determine page title based on filters
+    let pageTitle = "All Collections";
+    if (category === 'handmades') pageTitle = "Handmade Pieces";
+    if (category === 'secondHands') pageTitle = "Second-Hand";
+    if (category === 'paintings') pageTitle = "Paintings";
+    if (category === 'decoratives') pageTitle = "Decorative Objects";
+  
     return (
-      <div className="container mx-auto px-4 py-16">
-        <h1 className="text-3xl font-light text-center mb-12">Our Products</h1>
+      <div className="container-luxury">
+        <div className="text-center mb-16">
+          <h1 className="font-serif text-3xl md:text-4xl mb-4">{pageTitle}</h1>
+          <p className="text-luxury-charcoal/70 max-w-2xl mx-auto">
+            Discover thoughtfully crafted pieces that combine timeless elegance with exceptional quality,
+            designed to elevate your living spaces.
+          </p>
+        </div>
         
-        <div className="flex flex-col lg:flex-row gap-8">
+        <div className="flex flex-col lg:flex-row gap-12">
           <div className="lg:w-1/4">
             <ProductFilters 
               selectedCategory={category}
