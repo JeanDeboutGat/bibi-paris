@@ -1,11 +1,9 @@
 'use client';
 
-import { useState, useEffect } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { useCartStore } from '@/lib/store';
+import { useLocalCartStore } from '@/lib/store';
 import { useRouter } from 'next/navigation';
-// import { Metadata } from 'next';
 
 // Metadata can't be exported from client components
 // export const metadata: Metadata = {
@@ -15,37 +13,11 @@ import { useRouter } from 'next/navigation';
 
 export default function CartPage() {
     const router = useRouter();
-    const { items, removeItem, updateQuantity, clearCart } = useCartStore((state) => ({
-        items: state.items,
-        removeItem: state.removeItem,
-        updateQuantity: state.updateQuantity,
-        clearCart: state.clearCart,
-    }));
-
-    const [mounted, setMounted] = useState(false);
-
-    useEffect(() => {
-        setMounted(true);
-    }, []);
-
-    const subtotal = mounted
-        ? items.reduce((total, item) => total + item.price * item.quantity, 0)
-        : 0;
+    const { items, removeItem, updateQuantity, clearCart } = useLocalCartStore();
     
+    const subtotal = items.reduce((total, item) => total + item.price * item.quantity, 0);
     const shippingCost = subtotal >= 500 ? 0 : 25;
     const total = subtotal + shippingCost;
-
-    if (!mounted) {
-        return (
-            <div className="container-luxury min-h-[70vh] flex items-center justify-center">
-                <div className="animate-pulse w-full max-w-3xl">
-                    <div className="h-8 bg-luxury-cream w-1/4 mb-8 mx-auto"></div>
-                    <div className="h-64 bg-luxury-cream w-full mb-8"></div>
-                    <div className="h-12 bg-luxury-cream w-1/2 mx-auto"></div>
-                </div>
-            </div>
-        );
-    }
 
     if (items.length === 0) {
         return (

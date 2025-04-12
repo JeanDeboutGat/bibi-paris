@@ -3,14 +3,14 @@
 import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useCartStore } from "@/lib/store";
+import { useLocalCartStore } from "@/lib/store";
 
 export default function Header() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const pathname = usePathname();
-  const cartItems = useCartStore((state) => state.items);
-  const itemCount = cartItems.reduce((total, item) => total + item.quantity, 0);
+  const { items } = useLocalCartStore();
+  const itemCount = items.reduce((total, item) => total + item.quantity, 0);
   const lastScrollTop = useRef(0);
   const [hideHeader, setHideHeader] = useState(false);
 

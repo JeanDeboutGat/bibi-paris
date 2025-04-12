@@ -1,5 +1,6 @@
 import { create } from 'zustand';
-import { persist } from 'zustand/middleware';
+import { persist, createJSONStorage } from 'zustand/middleware';
+import { useState, useEffect } from 'react';
 
 export type CartItem = {
     id: string;
@@ -56,7 +57,23 @@ export const useCartStore = create<CartState>()(
             clearCart: () => set({ items: [] }),
         }),
         {
-            name: 'cart-storage', // name of the localStorage key
+            name: 'cart-storage',
+            storage: createJSONStorage(() => localStorage),
         }
     )
 );
+
+// Simple hook to safely use cart store with SSR/hydration
+export function useLocalCartStore() {
+    const store = useCartStore();
+    const [isClient, setIsClient] = useState(false);
+    
+    useEffect(() => {
+        setIsClient(true);
+    }, []);
+    
+    return {
+        ...store,
+        items: isClient ? store.items : [],
+    };
+}

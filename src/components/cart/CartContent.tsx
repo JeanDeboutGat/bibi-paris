@@ -3,12 +3,12 @@
 import { useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { useCartStore } from '@/lib/store';
+import { useLocalCartStore } from '@/lib/store';
 
 export default function CartContent() {
-    const { items, removeItem, updateQuantity, clearCart } = useCartStore();
+    const { items, removeItem, updateQuantity, clearCart } = useLocalCartStore();
     const [isUpdating, setIsUpdating] = useState(false);
-
+    
     // Calculate subtotal
     const subtotal = items.reduce((total, item) => total + (item.price * item.quantity), 0);
 

@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
-import { useCartStore } from '@/lib/store';
+import { useLocalCartStore } from '@/lib/store';
 
 type Product = {
     id: string;
@@ -25,7 +25,7 @@ export default function ProductGrid({ category, collection, sort }: ProductGridP
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
     const [hoveredProduct, setHoveredProduct] = useState<string | null>(null);
-    const addItem = useCartStore((state) => state.addItem);
+    const { addItem } = useLocalCartStore();
 
     useEffect(() => {
         const fetchProducts = async () => {

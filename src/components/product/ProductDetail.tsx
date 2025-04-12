@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import Image from 'next/image';
-import { useCartStore } from '@/lib/store';
+import { useLocalCartStore } from '@/lib/store';
 
 type ProductDetailProps = {
     product: {
@@ -21,7 +21,7 @@ export default function ProductDetail({ product }: ProductDetailProps) {
     const [isAddedToCart, setIsAddedToCart] = useState(false);
     const [isZoomed, setIsZoomed] = useState(false);
     const [zoomPosition, setZoomPosition] = useState({ x: 0, y: 0 });
-    const addItem = useCartStore((state) => state.addItem);
+    const { addItem } = useLocalCartStore();
 
     const handleAddToCart = () => {
         addItem({
