@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { CartItem, useCartStore } from "@/lib/store";
+import { useCartStore } from "@/lib/store";
 
 export default function Header() {
   const [isScrolled, setIsScrolled] = useState(false);

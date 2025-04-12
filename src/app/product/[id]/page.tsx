@@ -20,7 +20,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
                 images: [{ url: product.image }],
             },
         };
-    } catch (error) {
+    } catch {
         return {
             title: 'Product | LUXE',
             description: 'Luxury product details',
@@ -59,7 +59,7 @@ export default async function ProductPage({ params }: Props) {
                 </div>
             </div>
         );
-    } catch (error) {
+    } catch {
         // If there's an error fetching the product, show 404
         notFound();
     }

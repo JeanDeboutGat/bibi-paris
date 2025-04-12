@@ -62,7 +62,7 @@ export const productApi = {
         // Simulate API call delay
         await new Promise(resolve => setTimeout(resolve, 500));
 
-        // Return mock related products
+        // Return mock related products and filter out the excluded ID
         return Array(4).fill(null).map((_, i) => ({
             id: `related-${i}`,
             name: `Related Product ${i+1}`,
@@ -70,7 +70,7 @@ export const productApi = {
             image: '/images/product-placeholder.jpg',
             category,
             price: 799.99 + (i * 100)
-        }));
+        })).filter(product => product.id !== excludeId);
     },
     
     // Get products by category
