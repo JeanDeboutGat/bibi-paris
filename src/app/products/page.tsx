@@ -16,7 +16,6 @@ export default async function ProductsPage({
     const params = await searchParams;
     
     const category = typeof params.category === 'string' ? params.category : undefined;
-    const collection = typeof params.collection === 'string' ? params.collection : undefined;
     const sort = typeof params.sort === 'string' ? params.sort : undefined;
   
     // Determine page title based on filters
@@ -36,19 +35,19 @@ export default async function ProductsPage({
           </p>
         </div>
         
-        <div className="flex flex-col lg:flex-row gap-12">
-          <div className="lg:w-1/4">
+        <div className="flex flex-col lg:flex-row gap-12 lg:gap-20">
+          {/* Filters sidebar */}
+          <div className="lg:w-1/5">
             <ProductFilters 
               selectedCategory={category}
-              selectedCollection={collection}
               selectedSort={sort}
             />
           </div>
           
-          <div className="lg:w-3/4">
+          {/* Product grid */}
+          <div className="lg:w-4/5">
             <ProductGrid 
               category={category}
-              collection={collection}
               sort={sort}
             />
           </div>

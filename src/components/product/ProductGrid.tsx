@@ -31,14 +31,11 @@ export default function ProductGrid({ category, collection, sort }: ProductGridP
         const fetchProducts = async () => {
             try {
                 setLoading(true);
-
-                // For development purposes, use mock data directly instead of API call
-                // that would likely fail without a backend
                 
                 // Use actual image filenames based on category
                 const mockImages = {
                     handmades: ['/images/handmades/gobolet.jpg', '/images/handmades/pull.jpg', '/images/handmades/cousin.jpg', '/images/handmades/sac.jpg'],
-                    secondHands: ['/images/secondHands/table.jpg', '/images/secondHands/chair.jpg', '/images/secondHands/chairdark.jpg', '/images/secondHands/smallChair.jpg', '/images/secondHands/chair-fonce.jpg'],
+                    secondHands: ['/images/secondHands/table.jpg', '/images/secondHands/chair.jpg', '/images/secondHands/chairdark.jpg', '/images/secondHands/smallChair.jpg'],
                     paintings: ['/images/paintings/girl.jpg', '/images/paintings/gate.jpg', '/images/paintings/girl-boy.jpg', '/images/paintings/flower.jpg'],
                     decoratives: ['/images/decoratives/vase.jpg', '/images/decoratives/pot.jpg', '/images/decoratives/flower.jpg', '/images/decoratives/alexandra-gorn-W5dsm9n6e3g-unsplash.jpg'],
                 };
@@ -51,15 +48,25 @@ export default function ProductGrid({ category, collection, sort }: ProductGridP
                     ? [category] 
                     : ['handmades', 'secondHands', 'paintings', 'decoratives'];
                 
+                // Enhanced product names to convey luxury
+                const productNamesByCategory = {
+                    handmades: ['Artisanal Wooden Goblet', 'Hand-carved Oak Table', 'Sculpted Maple Vessel', 'Handcrafted Walnut Box'],
+                    secondHands: ['Vintage Dining Table', 'Mid-century Lounge Chair', 'Antique Oak Cabinet', 'Classic Rattan Armchair'],
+                    paintings: ['Abstract Forest Canvas', 'Botanical Study Print', 'Heritage Portrait', 'Landscape Oil Painting'],
+                    decoratives: ['Sculptural Ceramic Vase', 'Handblown Glass Bowl', 'Modernist Bronze Object', 'Woven Rattan Basket']
+                };
+                
                 categoriesToGenerate.forEach(cat => {
                     const categoryImages = mockImages[cat as keyof typeof mockImages];
+                    const categoryNames = productNamesByCategory[cat as keyof typeof productNamesByCategory];
+                    
                     if (categoryImages) {
                         const categoryProducts = Array.from({ length: 4 }, (_, i) => ({
                             id: `${cat}-${i + 1}`,
-                            name: `${cat === 'handmades' ? 'Handcrafted' : 
+                            name: categoryNames[i] || `${cat === 'handmades' ? 'Handcrafted' : 
                                 cat === 'secondHands' ? 'Vintage' : 
                                 cat === 'paintings' ? 'Artwork' : 'Decorative'} Piece ${i + 1}`,
-                            price: Math.floor(Math.random() * 3000) + 500,
+                            price: Math.floor(Math.random() * 1500) + 500,
                             image: categoryImages[i % categoryImages.length],
                             category: cat,
                             collection: i % 2 === 0 ? 'signature' : 'spring',
@@ -122,12 +129,12 @@ export default function ProductGrid({ category, collection, sort }: ProductGridP
 
     if (loading) {
         return (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-8 gap-y-16">
                 {[...Array(6)].map((_, index) => (
                     <div key={index} className="animate-pulse">
-                        <div className="bg-luxury-cream h-96 mb-4"></div>
-                        <div className="bg-luxury-cream h-6 w-3/4 mb-2"></div>
-                        <div className="bg-luxury-cream h-4 w-1/4"></div>
+                        <div className="bg-luxury-cream/30 h-[400px] mb-6"></div>
+                        <div className="bg-luxury-cream/30 h-5 w-3/4 mb-3"></div>
+                        <div className="bg-luxury-cream/30 h-4 w-1/4"></div>
                     </div>
                 ))}
             </div>
@@ -136,11 +143,11 @@ export default function ProductGrid({ category, collection, sort }: ProductGridP
 
     if (error) {
         return (
-            <div className="text-center py-12 text-luxury-charcoal">
-                <p className="text-lg mb-4">{error}</p>
+            <div className="text-center py-16 text-luxury-charcoal">
+                <p className="text-lg mb-6 font-light">{error}</p>
                 <button 
                     onClick={() => window.location.reload()} 
-                    className="btn-secondary"
+                    className="font-light border border-luxury-charcoal text-luxury-charcoal py-3 px-10 hover:bg-luxury-charcoal hover:text-white transition-colors duration-300"
                 >
                     Try Again
                 </button>
@@ -150,11 +157,11 @@ export default function ProductGrid({ category, collection, sort }: ProductGridP
 
     if (products.length === 0) {
         return (
-            <div className="text-center py-12">
-                <p className="text-lg text-luxury-charcoal/80 mb-6">No products found matching your criteria.</p>
+            <div className="text-center py-16">
+                <p className="font-serif text-lg text-luxury-charcoal mb-6">No products match your selected criteria.</p>
                 <button
                     onClick={() => window.history.back()}
-                    className="btn-secondary"
+                    className="font-light border border-luxury-charcoal text-luxury-charcoal py-3 px-10 hover:bg-luxury-charcoal hover:text-white transition-colors duration-300"
                 >
                     Go Back
                 </button>
@@ -164,46 +171,53 @@ export default function ProductGrid({ category, collection, sort }: ProductGridP
 
     return (
         <>
-            <p className="text-sm text-luxury-charcoal/60 mb-8 font-light tracking-wide">
-                {products.length} {products.length === 1 ? 'product' : 'products'}
+            <p className="font-light text-sm text-luxury-charcoal/60 mb-10">
+                Showing {products.length} {products.length === 1 ? 'item' : 'items'}
             </p>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-8 gap-y-16">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-12 gap-y-20">
                 {products.map((product) => (
                     <Link 
                         key={product.id} 
                         href={`/product/${product.id}`} 
-                        className="group focus-visible"
+                        className="group block focus-visible"
                         onMouseEnter={() => setHoveredProduct(product.id)}
                         onMouseLeave={() => setHoveredProduct(null)}
                     >
-                        <div className="relative h-96 mb-4 overflow-hidden">
-                            <Image
-                                src={product.image}
-                                alt={product.name}
-                                fill
-                                className="object-cover transition-all duration-2000 group-hover:scale-105"
-                            />
-                            
-                            {/* Add to cart button overlay */}
-                            <div 
-                                className={`absolute inset-0 bg-black bg-opacity-20 flex items-end justify-center transition-opacity duration-300 ${
-                                    hoveredProduct === product.id ? 'opacity-100' : 'opacity-0'
-                                }`}
-                            >
-                                <button 
-                                    onClick={(e) => handleQuickAdd(e, product)}
-                                    className="bg-white text-luxury-charcoal mb-6 py-3 px-6 text-sm uppercase tracking-wider hover:bg-luxury-cream transition-colors duration-300 focus-visible"
-                                    aria-label={`Quick add ${product.name} to cart`}
-                                >
-                                    Quick Add
-                                </button>
+                        <div className="relative mb-6 overflow-hidden">
+                            {/* Aspect ratio container for consistent image heights */}
+                            <div className="relative aspect-[3/4] w-full">
+                                <Image
+                                    src={product.image}
+                                    alt={product.name}
+                                    fill
+                                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                                    className="object-cover"
+                                    priority={product.id.endsWith('-1')}
+                                />
+                                
+                                {/* Subtle overlay effect on hover */}
+                                <div 
+                                    className={`absolute inset-0 bg-black transition-opacity duration-500 ${
+                                        hoveredProduct === product.id ? 'bg-opacity-5' : 'bg-opacity-0'
+                                    }`}
+                                />
                             </div>
+                            
+                            {/* Add to cart button */}
+                            <button 
+                                onClick={(e) => handleQuickAdd(e, product)}
+                                className={`absolute bottom-4 right-4 bg-white text-luxury-charcoal/90 px-4 py-2 text-xs font-light tracking-wide border border-luxury-charcoal/10 transition-all duration-500 focus-visible ${
+                                    hoveredProduct === product.id ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'
+                                }`}
+                                aria-label={`Add ${product.name} to cart`}
+                            >
+                                Add to Cart
+                            </button>
                         </div>
-                        <div className="transition-all duration-300 group-hover:translate-x-2">
-                            <h3 className="font-serif text-lg mb-2 group-hover:text-luxury-sienna transition-colors duration-300">{product.name}</h3>
-                            <p className="text-luxury-charcoal/80">${product.price.toLocaleString()}</p>
-                        </div>
+                        
+                        <h3 className="font-serif text-base mb-2 transition-colors duration-300 group-hover:text-luxury-gold">{product.name}</h3>
+                        <p className="text-luxury-charcoal/70 text-sm font-light">${product.price.toLocaleString()}</p>
                     </Link>
                 ))}
             </div>
