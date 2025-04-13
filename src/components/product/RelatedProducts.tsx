@@ -27,48 +27,81 @@ export default function RelatedProducts({ currentProductId, category }: RelatedP
             try {
                 setLoading(true);
 
-                // In a real app, you'd have a specific endpoint for related products
-                // For now, we'll get products by category and filter out the current one
-                const data = await productApi.getByCategory(category);
-
-                // Filter out the current product and limit to 4 items
-                const relatedProducts = data
-                    .filter((product: Product) => product.id !== currentProductId)
+                // Get all products first
+                const allProducts = await productApi.getAll();
+                
+                // Filter products from the same category, excluding current product
+                const relatedProducts = allProducts
+                    .filter(product => 
+                        product.category === category && 
+                        product.id !== currentProductId
+                    )
                     .slice(0, 4);
 
                 setProducts(relatedProducts);
             } catch (err) {
                 console.error('Failed to fetch related products:', err);
-
-                // For development, use mock data if API fails
+                
+                // Fallback to category-specific mock data if API fails
+                const mockImages = {
+                    handmades: [
+                        '/images/handmades/gobolet.jpg',
+                        '/images/handmades/pull.jpg',
+                        '/images/handmades/cousin.jpg',
+                        '/images/handmades/sac.jpg'
+                    ],
+                    secondHands: [
+                        '/images/secondHands/table.jpg',
+                        '/images/secondHands/chair.jpg',
+                        '/images/secondHands/chairdark.jpg',
+                        '/images/secondHands/smallChair.jpg'
+                    ],
+                    paintings: [
+                        '/images/paintings/girl.jpg',
+                        '/images/paintings/gate.jpg',
+                        '/images/paintings/girl-boy.jpg',
+                        '/images/paintings/flower.jpg'
+                    ],
+                    decoratives: [
+                        '/images/decoratives/vase.jpg',
+                        '/images/decoratives/pot.jpg',
+                        '/images/decoratives/flower.jpg',
+                        '/images/decoratives/alexandra-gorn-W5dsm9n6e3g-unsplash.jpg'
+                    ]
+                };
+                
+                // Use the appropriate image array based on category
+                const categoryImages = mockImages[category as keyof typeof mockImages] || 
+                    mockImages.decoratives; // Default fallback
+                
                 setProducts([
                     {
-                        id: '2',
-                        name: 'Silk Scarf',
-                        price: 450,
-                        image: '/images/product2.jpg',
-                        category: category,
+                        id: `${category}-1`,
+                        name: `${category.charAt(0).toUpperCase() + category.slice(1, -1)} Item 1`,
+                        price: 599,
+                        image: categoryImages[0],
+                        category,
                     },
                     {
-                        id: '3',
-                        name: 'Leather Belt',
-                        price: 680,
-                        image: '/images/product3.jpg',
-                        category: category,
+                        id: `${category}-2`,
+                        name: `${category.charAt(0).toUpperCase() + category.slice(1, -1)} Item 2`,
+                        price: 699,
+                        image: categoryImages[1],
+                        category,
                     },
                     {
-                        id: '5',
-                        name: 'Porcelain Vase',
-                        price: 980,
-                        image: '/images/product5.jpg',
-                        category: category,
+                        id: `${category}-3`,
+                        name: `${category.charAt(0).toUpperCase() + category.slice(1, -1)} Item 3`,
+                        price: 799,
+                        image: categoryImages[2],
+                        category,
                     },
                     {
-                        id: '8',
-                        name: 'Leather Wallet',
-                        price: 520,
-                        image: '/images/product8.jpg',
-                        category: category,
+                        id: `${category}-4`,
+                        name: `${category.charAt(0).toUpperCase() + category.slice(1, -1)} Item 4`,
+                        price: 899,
+                        image: categoryImages[3],
+                        category,
                     },
                 ]);
             } finally {

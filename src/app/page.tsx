@@ -79,7 +79,7 @@ export default function Home() {
                                 href="/products"
                                 className="inline-block text-sm uppercase tracking-wider text-white hover:text-luxury-gold transition-colors duration-300 group"
                             >
-                                Parcourir
+                                Explore
                                 <span className="ml-2 inline-block group-hover:translate-x-1 transition-transform duration-300">
                                     &rarr;
                                 </span>
