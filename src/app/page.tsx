@@ -43,17 +43,17 @@ export default function Home() {
     return (
         <>
             {/* Hero Section */}
-            <section className="relative h-screen">
+            <section className="relative h-screen overflow-hidden bg-neutral-100">
                 <div className="absolute inset-0">
                     <video
                         autoPlay
                         muted
                         loop
                         playsInline
-                        className="object-cover h-full w-full"
+                        className="absolute inset-0 w-full h-full object-cover"
                         poster="/images/handmades/gobolet.jpg"
                     >
-                        <source src="/videos/hero-furniture.mp4" type="video/mp4" />
+                        <source src="/videos/wood.mp4" type="video/mp4" />
                         {/* Fallback image if video fails */}
                         <Image
                             src="/images/handmades/gobolet.jpg"
@@ -63,22 +63,29 @@ export default function Home() {
                             className="object-cover"
                         />
                     </video>
-                    <div className="absolute inset-0 bg-black bg-opacity-30"></div>
+                    <div className="absolute inset-0 bg-black bg-opacity-5"></div>
                 </div>
 
-                <div className="relative h-full flex flex-col justify-center items-center text-center text-white px-4">
-                    <h1 className="font-serif text-4xl md:text-6xl lg:text-7xl font-light tracking-wide mb-4 animate-fade-in">
-                        Timeless Craftsmanship, Parisian Elegance
-                    </h1>
-                    <p className="text-lg md:text-xl max-w-2xl mb-10 animate-fade-in opacity-90 leading-relaxed delay-100">
-                        Elevating interiors through the art of high-end wooden furniture
-                    </p>
-                    <Link
-                        href="/products"
-                        className="font-light bg-luxury-cream text-luxury-charcoal px-10 py-4 text-sm uppercase tracking-widest hover:bg-white transition-colors duration-300 animate-fade-in delay-200 focus-visible"
-                    >
-                        Discover Collections
-                    </Link>
+                <div className="absolute bottom-0 left-0 w-full pb-20">
+                    <div className="container mx-auto px-2">
+                        <div className="max-w-4xl">
+                            <h1 className="font-serif text-1xl md:text-2xl lg:text-3xl text-white font-light mb-4 uppercase tracking-wide">
+                                Timeless Craftsmanship, Parisian Elegance
+                            </h1>
+                            <p className="text-white/80 text-sm max-w-1xl mb-10">
+                               Elevating interiors through the art of high-end wooden furniture.
+                            </p>
+                            <Link
+                                href="/products"
+                                className="inline-block text-sm uppercase tracking-wider text-white hover:text-luxury-gold transition-colors duration-300 group"
+                            >
+                                Parcourir
+                                <span className="ml-2 inline-block group-hover:translate-x-1 transition-transform duration-300">
+                                    &rarr;
+                                </span>
+                            </Link>
+                        </div>
+                    </div>
                 </div>
             </section>
 

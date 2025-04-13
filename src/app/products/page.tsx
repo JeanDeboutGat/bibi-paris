@@ -27,7 +27,7 @@ export default async function ProductsPage({
     if (category === 'decoratives') pageTitle = "Decorative Objects";
   
     return (
-      <div className="container-luxury">
+      <div className="container-luxury pt-32">
         <div className="text-center mb-16">
           <h1 className="font-serif text-3xl md:text-4xl mb-4">{pageTitle}</h1>
           <p className="text-luxury-charcoal/70 max-w-2xl mx-auto">

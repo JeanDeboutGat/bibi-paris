@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { useLocalCartStore } from "@/lib/store";
 
@@ -13,6 +14,7 @@ export default function Header() {
   const itemCount = items.reduce((total, item) => total + item.quantity, 0);
   const lastScrollTop = useRef(0);
   const [hideHeader, setHideHeader] = useState(false);
+  const isHomePage = pathname === '/';
 
   // Change header style on scroll and implement hide on scroll down
   useEffect(() => {
@@ -46,12 +48,15 @@ export default function Header() {
     { path: "/products?category=decoratives", label: "Decorative" },
   ];
 
+  // Show transparent background only on homepage when not scrolled
+  const showTransparentBackground = isHomePage && !isScrolled;
+
   return (
     <header
       className={`fixed w-full z-50 transition-all duration-300 ${
-        isScrolled 
+        isScrolled || !isHomePage
           ? "bg-white shadow-sm py-3" 
-          : "bg-transparent py-5"
+          : "py-5 bg-transparent"
       } ${
         hideHeader ? "-translate-y-full" : "translate-y-0"
       }`}
@@ -63,7 +68,15 @@ export default function Header() {
           className="relative z-10 focus-visible"
           aria-label="Bibi Paris Home"
         >
-          <h1 className="font-serif text-2xl tracking-widest">BIBI PARIS</h1>
+          <div className="relative w-14 h-14">
+            <Image
+              src={showTransparentBackground ? "/logo-white.png" : "/logo.png"}
+              alt="BIBI Paris"
+              fill
+              className="object-contain"
+              priority
+            />
+          </div>
         </Link>
 
         {/* Desktop Navigation */}
@@ -78,7 +91,7 @@ export default function Header() {
                  item.path.includes(new URLSearchParams(pathname.split('?')[1] || '').get('category') || ''))
                   ? "border-b border-luxury-gold pb-1" 
                   : ""
-              }`}
+              } ${showTransparentBackground ? "text-white" : "text-luxury-charcoal"}`}
             >
               {item.label}
             </Link>
@@ -99,7 +112,7 @@ export default function Header() {
               viewBox="0 0 24 24"
               strokeWidth={1.5}
               stroke="currentColor"
-              className="w-6 h-6 transition-all duration-300 group-hover:text-luxury-sienna"
+              className={`w-6 h-6 transition-all duration-300 group-hover:text-luxury-sienna ${showTransparentBackground ? "text-white" : "text-luxury-charcoal"}`}
             >
               <path
                 strokeLinecap="round"
@@ -109,7 +122,7 @@ export default function Header() {
             </svg>
             {itemCount > 0 && (
               <span 
-                className="absolute -top-2 -right-2 bg-luxury-sienna text-white text-xs w-5 h-5 rounded-full flex items-center justify-center animate-subtle-bounce"
+                className="absolute -top-2 -right-2 bg-luxury-sienna text-white text-xs w-5 h-5 rounded-full flex items-center justify-center animate-subtle-bounce cart-icon"
                 aria-hidden="true"
               >
                 {itemCount}
@@ -125,9 +138,9 @@ export default function Header() {
             aria-expanded={isMobileMenuOpen}
           >
             <div className="w-6 h-5 relative flex flex-col justify-between">
-              <span className={`w-full h-px bg-luxury-charcoal absolute transition-all duration-300 ${isMobileMenuOpen ? 'top-2 rotate-45' : 'top-0'}`}></span>
-              <span className={`w-full h-px bg-luxury-charcoal absolute top-2 transition-opacity duration-300 ${isMobileMenuOpen ? 'opacity-0' : 'opacity-100'}`}></span>
-              <span className={`w-full h-px bg-luxury-charcoal absolute transition-all duration-300 ${isMobileMenuOpen ? 'bottom-2 -rotate-45' : 'bottom-0'}`}></span>
+              <span className={`w-full h-px absolute transition-all duration-300 ${showTransparentBackground ? "bg-white" : "bg-luxury-charcoal"} ${isMobileMenuOpen ? 'top-2 rotate-45' : 'top-0'}`}></span>
+              <span className={`w-full h-px absolute top-2 transition-opacity duration-300 ${showTransparentBackground ? "bg-white" : "bg-luxury-charcoal"} ${isMobileMenuOpen ? 'opacity-0' : 'opacity-100'}`}></span>
+              <span className={`w-full h-px absolute transition-all duration-300 ${showTransparentBackground ? "bg-white" : "bg-luxury-charcoal"} ${isMobileMenuOpen ? 'bottom-2 -rotate-45' : 'bottom-0'}`}></span>
             </div>
           </button>
         </div>
@@ -145,12 +158,12 @@ export default function Header() {
             <Link
               key={item.path}
               href={item.path}
-              className={`py-3 text-sm uppercase tracking-wider border-b border-gray-100 ${
+              className={`py-3 text-sm uppercase tracking-wider border-b border-luxury-cream/30 hover:text-luxury-sienna transition-colors ${
                 pathname === item.path || 
                 (pathname.startsWith('/products') && item.path.startsWith('/products') && 
                 item.path.includes(new URLSearchParams(pathname.split('?')[1] || '').get('category') || ''))
-                  ? "text-luxury-sienna" 
-                  : ""
+                  ? "text-luxury-sienna font-medium" 
+                  : "text-luxury-charcoal"
               }`}
               onClick={() => setIsMobileMenuOpen(false)}
             >
@@ -160,7 +173,7 @@ export default function Header() {
           <div className="pt-4">
             <Link 
               href="/track" 
-              className="py-3 text-sm uppercase tracking-wider block"
+              className="py-3 text-sm uppercase tracking-wider block text-luxury-charcoal hover:text-luxury-sienna transition-colors"
               onClick={() => setIsMobileMenuOpen(false)}
             >
               Track Order

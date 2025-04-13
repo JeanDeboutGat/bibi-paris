@@ -32,7 +32,7 @@ export default function CartPage() {
     }
 
     return (
-        <div className="container-luxury">
+        <div className="container-luxury pt-32">
             <h1 className="font-serif text-3xl text-center mb-12">Your Shopping Bag</h1>
 
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">

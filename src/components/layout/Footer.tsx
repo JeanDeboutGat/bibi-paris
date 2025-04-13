@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import Image from 'next/image';
 
 export default function Footer() {
     return (
@@ -7,7 +8,16 @@ export default function Footer() {
                 <div className="grid grid-cols-1 md:grid-cols-4 gap-12 md:gap-8">
                     {/* Brand Column */}
                     <div className="col-span-1">
-                        <h2 className="font-serif text-xl tracking-widest mb-6">BIBI PARIS</h2>
+                        <div className="mb-6">
+                            <div className="relative w-20 h-20">
+                                <Image
+                                    src="/logo.png"
+                                    alt="BIBI Paris"
+                                    fill
+                                    className="object-contain"
+                                />
+                            </div>
+                        </div>
                         <p className="text-sm text-luxury-charcoal/80 mb-6 leading-relaxed">
                             Timeless craftsmanship, Parisian elegance. Elevating interiors through the art of luxurious wooden furniture since 2010.
                         </p>
