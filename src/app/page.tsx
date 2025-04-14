@@ -8,35 +8,59 @@ export const metadata: Metadata = {
 };
 
 export default function Home() {
-    // Collections data to display
+    // Collections data to display with featured image and product images
     const collections = [
         {
             id: 'handmades',
             name: 'Handmade Pieces',
             description: 'Expertly crafted furniture that celebrates the beauty of natural wood and artisanal techniques.',
-            image: '/images/handmades/gobolet.jpg',
+            featuredImage: '/images/handmades/gobolet.jpg',
             href: '/products?category=handmades',
+            products: [
+                { image: '/images/handmades/pull.jpg', name: 'Hand-carved Oak Table', price: 1825 },
+                { image: '/images/handmades/cousin.jpg', name: 'Sculpted Maple Vessel', price: 2125 },
+                { image: '/images/handmades/sac.jpg', name: 'Handcrafted Walnut Box', price: 907 },
+                { image: '/images/handmades/gobolet.jpg', name: 'Artisanal Wooden Goblet', price: 2107 }
+            ]
         },
         {
             id: 'secondHands',
             name: 'Second-Hand',
             description: 'Curated vintage pieces with history and character, restored to their original splendor.',
-            image: '/images/secondHands/table.jpg',
+            featuredImage: '/images/secondHands/table.jpg',
             href: '/products?category=secondHands',
+            products: [
+                { image: '/images/secondHands/chair.jpg', name: 'Mid-century Lounge Chair', price: 1825 },
+                { image: '/images/secondHands/chairdark.jpg', name: 'Antique Oak Cabinet', price: 2125 },
+                { image: '/images/secondHands/smallChair.jpg', name: 'Classic Rattan Armchair', price: 907 },
+                { image: '/images/secondHands/chair-fonce.jpg', name: 'Vintage Wooden Chair', price: 2107 }
+            ]
         },
         {
             id: 'paintings',
             name: 'Paintings',
             description: 'Original artworks that complement our furniture and bring emotional depth to any space.',
-            image: '/images/paintings/girl.jpg',
+            featuredImage: '/images/paintings/girl.jpg',
             href: '/products?category=paintings',
+            products: [
+                { image: '/images/paintings/gate.jpg', name: 'Botanical Study Print', price: 1825 },
+                { image: '/images/paintings/girl-boy.jpg', name: 'Heritage Portrait', price: 2125 },
+                { image: '/images/paintings/flower.jpg', name: 'Landscape Oil Painting', price: 907 },
+                { image: '/images/paintings/girl.jpg', name: 'Portrait Study', price: 2107 }
+            ]
         },
         {
             id: 'decoratives',
             name: 'Decorative Objects',
             description: 'Refined accessories that add the perfect finishing touch to your carefully curated interiors.',
-            image: '/images/decoratives/vase.jpg',
+            featuredImage: '/images/decoratives/vase.jpg',
             href: '/products?category=decoratives',
+            products: [
+                { image: '/images/decoratives/pot.jpg', name: 'Handblown Glass Bowl', price: 1825 },
+                { image: '/images/decoratives/flower.jpg', name: 'Modernist Bronze Object', price: 2125 },
+                { image: '/images/decoratives/alexandra-gorn-W5dsm9n6e3g-unsplash.jpg', name: 'Woven Rattan Basket', price: 907 },
+                { image: '/images/decoratives/vase.jpg', name: 'Sculptural Ceramic Vase', price: 2107 }
+            ]
         },
     ];
 
@@ -89,110 +113,193 @@ export default function Home() {
                 </div>
             </section>
 
-            {/* Our Collections Section */}
-            <section className="py-24 bg-luxury-cream">
+            {/* Featured Products Grid */}
+            <section className="py-24 bg-white">
                 <div className="container mx-auto px-4 md:px-8">
-                    <h2 className="font-serif text-3xl md:text-4xl text-center mb-6">Our Collections</h2>
-                    <p className="text-center text-luxury-charcoal/80 max-w-3xl mx-auto mb-16">
-                        Each piece tells a story of exceptional craftsmanship and design, creating a dialogue between 
-                        tradition and contemporary living.
-                    </p>
-                    
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-                        {collections.map((collection) => (
-                            <Link 
-                                key={collection.id}
-                                href={collection.href}
-                                className="group hover-expand focus-visible block"
-                            >
-                                <div className="relative h-96 mb-6 overflow-hidden">
+                    <div className="max-w-7xl mx-auto">
+                        <div className="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-4 gap-6 md:gap-10">
+                            {/* Handmades */}
+                            <Link href="/products?category=handmades" className="block group">
+                                <div className="relative aspect-square overflow-hidden mb-3">
                                     <Image
-                                        src={collection.image}
-                                        alt={collection.name}
+                                        src="/images/handmades/pull.jpg"
+                                        alt="Hand-carved Oak Table"
                                         fill
-                                        className="object-cover transition-all duration-2000 group-hover:scale-105"
+                                        className="object-cover"
                                     />
-                                    <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
                                 </div>
-                                <h3 className="font-serif text-xl mb-2 group-hover:text-luxury-sienna transition-colors duration-300">{collection.name}</h3>
-                                <p className="text-luxury-charcoal/70 text-sm leading-relaxed">{collection.description}</p>
+                                <h3 className="font-serif text-xs text-center text-luxury-charcoal/70">
+                                    Hand-carved Oak Table
+                                </h3>
                             </Link>
-                        ))}
+                            <Link href="/products?category=secondHands" className="block group">
+                                <div className="relative aspect-square overflow-hidden mb-3">
+                                    <Image
+                                        src="/images/secondHands/chair.jpg"
+                                        alt="Mid-century Lounge Chair"
+                                        fill
+                                        className="object-cover"
+                                    />
+                                </div>
+                                <h3 className="font-serif text-xs text-center text-luxury-charcoal/70">
+                                    Mid-century Lounge Chair
+                                </h3>
+                            </Link>
+                            <Link href="/products?category=paintings" className="block group">
+                                <div className="relative aspect-square overflow-hidden mb-3">
+                                    <Image
+                                        src="/images/paintings/girl.jpg"
+                                        alt="Portrait Study"
+                                        fill
+                                        className="object-cover"
+                                    />
+                                </div>
+                                <h3 className="font-serif text-xs text-center text-luxury-charcoal/70">
+                                    Portrait Study
+                                </h3>
+                            </Link>
+                            <Link href="/products?category=decoratives" className="block group">
+                                <div className="relative aspect-square overflow-hidden mb-3">
+                                    <Image
+                                        src="/images/decoratives/vase.jpg"
+                                        alt="Sculptural Ceramic Vase"
+                                        fill
+                                        className="object-cover"
+                                    />
+                                </div>
+                                <h3 className="font-serif text-xs text-center text-luxury-charcoal/70">
+                                    Sculptural Ceramic Vase
+                                </h3>
+                            </Link>
+                            
+                            {/* Second row */}
+                            <Link href="/products?category=handmades" className="block group">
+                                <div className="relative aspect-square overflow-hidden mb-3">
+                                    <Image
+                                        src="/images/handmades/cousin.jpg"
+                                        alt="Sculpted Maple Vessel"
+                                        fill
+                                        className="object-cover"
+                                    />
+                                </div>
+                                <h3 className="font-serif text-xs text-center text-luxury-charcoal/70">
+                                    Sculpted Maple Vessel
+                                </h3>
+                            </Link>
+                            <Link href="/products?category=secondHands" className="block group">
+                                <div className="relative aspect-square overflow-hidden mb-3">
+                                    <Image
+                                        src="/images/secondHands/smallChair.jpg"
+                                        alt="Classic Rattan Armchair"
+                                        fill
+                                        className="object-cover"
+                                    />
+                                </div>
+                                <h3 className="font-serif text-xs text-center text-luxury-charcoal/70">
+                                    Classic Rattan Armchair
+                                </h3>
+                            </Link>
+                            <Link href="/products?category=paintings" className="block group">
+                                <div className="relative aspect-square overflow-hidden mb-3">
+                                    <Image
+                                        src="/images/paintings/gate.jpg"
+                                        alt="Botanical Study Print"
+                                        fill
+                                        className="object-cover"
+                                    />
+                                </div>
+                                <h3 className="font-serif text-xs text-center text-luxury-charcoal/70">
+                                    Botanical Study Print
+                                </h3>
+                            </Link>
+                            <Link href="/products?category=decoratives" className="block group">
+                                <div className="relative aspect-square overflow-hidden mb-3">
+                                    <Image
+                                        src="/images/decoratives/pot.jpg"
+                                        alt="Handblown Glass Bowl"
+                                        fill
+                                        className="object-cover"
+                                    />
+                                </div>
+                                <h3 className="font-serif text-xs text-center text-luxury-charcoal/70">
+                                    Handblown Glass Bowl
+                                </h3>
+                            </Link>
+                        </div>
                     </div>
                 </div>
             </section>
 
-            {/* Philosophy Section */}
-            <section className="py-24 bg-white">
-                <div className="container mx-auto px-4 md:px-8">
-                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-                        <div className="relative h-[500px] lg:h-[700px] group overflow-hidden">
-                            <Image
-                                src="/images/handmades/pull.jpg"
-                                alt="Wood craftsmanship"
-                                fill
-                                className="object-cover transition-all duration-2000 group-hover:scale-105"
-                            />
+            {/* Collections Sections - Hermès-inspired Layout */}
+            {collections.map((collection, index) => (
+                <section 
+                    key={collection.id} 
+                    className={`py-24 ${index % 2 === 0 ? 'bg-white' : 'bg-white'}`}
+                >
+                    <div className="container mx-auto px-4 md:px-8">
+                        {/* Collection Title and Description */}
+                        <div className="text-center mb-16">
+                            <h2 className="font-serif text-3xl md:text-4xl mb-6">{collection.name}</h2>
+                            <p className="text-luxury-charcoal/80 max-w-2xl mx-auto">
+                                {collection.description}
+                            </p>
                         </div>
-                        <div className="lg:pl-12">
-                            <h2 className="font-serif text-3xl md:text-4xl mb-8">The Essence of Bibi Paris</h2>
-                            <div className="prose prose-lg text-luxury-charcoal/80">
-                                <p className="mb-6">
-                                    At Bibi Paris, we believe in the beauty of natural materials and the value of expert craftsmanship. 
-                                    Our pieces are designed to transcend trends, becoming heirlooms that tell a story across generations.
-                                </p>
-                                <p className="mb-8">
-                                    Each creation embodies our philosophy of understated luxury – where quality speaks through 
-                                    attention to detail, exceptional materials, and timeless design. We honor traditional woodworking 
-                                    techniques while embracing contemporary aesthetics, resulting in pieces that feel both familiar and novel.
-                                </p>
+                        
+                        {/* Featured Image - Smaller dimensions */}
+                        <div className="mb-16 max-w-5xl mx-auto">
+                            <div className="relative aspect-[21/9] w-full overflow-hidden">
+                                <Image
+                                    src={collection.featuredImage}
+                                    alt={`${collection.name} collection`}
+                                    fill
+                                    priority={index === 0}
+                                    className="object-cover"
+                                />
+                            </div>
+                            <div className="mt-4 text-right">
                                 <Link 
-                                    href="/about" 
-                                    className="btn-secondary inline-block"
+                                    href={collection.href}
+                                    className="inline-flex items-center text-sm text-luxury-charcoal/80 hover:text-luxury-gold transition-colors duration-300"
                                 >
-                                    OUR STORY
+                                    Explore Collection
+                                    <span className="ml-2">&rarr;</span>
                                 </Link>
                             </div>
                         </div>
-                    </div>
-                </div>
-            </section>
-
-            {/* Featured Product */}
-            <section className="py-24 bg-luxury-cream/50">
-                <div className="container mx-auto px-4 md:px-8">
-                    <h2 className="font-serif text-3xl md:text-4xl text-center mb-16">Featured Piece</h2>
-                    
-                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
-                        <div className="relative h-[400px] md:h-[600px] overflow-hidden order-2 lg:order-1">
-                            <Image
-                                src="/images/secondHands/chair.jpg"
-                                alt="Featured wooden chair"
-                                fill
-                                className="object-cover"
-                            />
-                        </div>
-                        <div className="flex flex-col justify-center lg:pl-12 order-1 lg:order-2">
-                            <h3 className="font-serif text-2xl mb-3">Vintage Dining Chair</h3>
-                            <p className="text-luxury-gold font-medium mb-6">Handmade Collection</p>
-                            <p className="text-luxury-charcoal/70 leading-relaxed mb-8">
-                                Crafted from century-old reclaimed oak with traditional joinery techniques, 
-                                the Marseille dining table embodies our commitment to sustainability and timeless design. 
-                                Each piece bears unique markings that tell the story of its previous life, now reimagined for contemporary living.
-                            </p>
-                            <Link 
-                                href="/products?category=handmades" 
-                                className="btn-primary self-start"
-                            >
-                                EXPLORE COLLECTION
-                            </Link>
+                        
+                        {/* Product Grid - Aligned with featured image width */}
+                        <div className="max-w-5xl mx-auto">
+                            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
+                                {collection.products.map((product, i) => (
+                                    <Link 
+                                        key={i} 
+                                        href={collection.href}
+                                        className="block group"
+                                    >
+                                        <div className="relative aspect-square overflow-hidden mb-3">
+                                            <Image
+                                                src={product.image}
+                                                alt={product.name}
+                                                fill
+                                                className="object-cover transition-all duration-700 group-hover:scale-105"
+                                            />
+                                        </div>
+                                        <h3 className="font-serif text-sm mb-1">
+                                            {product.name}
+                                        </h3>
+                                        <p className="text-luxury-charcoal/70 text-sm">
+                                            ${product.price}
+                                        </p>
+                                    </Link>
+                                ))}
+                            </div>
                         </div>
                     </div>
-                </div>
-            </section>
+                </section>
+            ))}
 
-            {/* Craftsmanship Process */}
-            <section className="py-24 bg-white">
+            {/* Craftsmanship Process - Restored from original */}
+            <section className="py-24 bg-luxury-cream/5">
                 <div className="container mx-auto px-4 md:px-8 text-center">
                     <h2 className="font-serif text-3xl md:text-4xl mb-6">Artisanal Excellence</h2>
                     <p className="text-luxury-charcoal/80 max-w-3xl mx-auto mb-16">
@@ -219,7 +326,7 @@ export default function Home() {
                             }
                         ].map((step, index) => (
                             <div key={index} className="flex flex-col items-center">
-                                <div className="w-16 h-16 rounded-full bg-luxury-cream flex items-center justify-center mb-6">
+                                <div className="w-16 h-16 rounded-full bg-white border border-luxury-gold/10 flex items-center justify-center mb-6">
                                     <svg
                                         xmlns="http://www.w3.org/2000/svg"
                                         fill="none"
@@ -236,32 +343,6 @@ export default function Home() {
                             </div>
                         ))}
                     </div>
-                </div>
-            </section>
-
-            {/* Newsletter Section */}
-            <section className="py-24 bg-luxury-cream">
-                <div className="container mx-auto px-4 md:px-8 max-w-2xl text-center">
-                    <h2 className="font-serif text-3xl md:text-4xl mb-6">Stay Connected</h2>
-                    <p className="text-luxury-charcoal/80 mb-10">
-                        Subscribe to receive updates on new collections, exclusive events, and the world of Bibi Paris.
-                    </p>
-                    <form className="flex flex-col sm:flex-row gap-3">
-                        <input
-                            type="email"
-                            placeholder="Your email address"
-                            className="input-luxury flex-grow py-3"
-                            required
-                            aria-label="Email address"
-                        />
-                        <button
-                            type="submit"
-                            className="btn-primary whitespace-nowrap"
-                            aria-label="Subscribe to newsletter"
-                        >
-                            SUBSCRIBE
-                        </button>
-                    </form>
                 </div>
             </section>
         </>
