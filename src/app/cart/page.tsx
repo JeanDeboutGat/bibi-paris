@@ -87,7 +87,7 @@ export default function CartPage() {
                                         <div className="inline-flex border border-luxury-charcoal/20">
                                             <button
                                                 onClick={() => item.quantity > 1 && updateQuantity(item.id, item.quantity - 1)}
-                                                className="px-3 py-1 hover:bg-luxury-cream/50 transition-colors"
+                                                className="px-3 py-1 hover:bg-[#f6f1eb] /50 transition-colors"
                                                 aria-label="Decrease quantity"
                                             >
                                                 -
@@ -97,7 +97,7 @@ export default function CartPage() {
                                             </span>
                                             <button
                                                 onClick={() => updateQuantity(item.id, item.quantity + 1)}
-                                                className="px-3 py-1 hover:bg-luxury-cream/50 transition-colors"
+                                                className="px-3 py-1 hover:bg-[#f6f1eb] /50 transition-colors"
                                                 aria-label="Increase quantity"
                                             >
                                                 +
@@ -137,7 +137,7 @@ export default function CartPage() {
 
                 {/* Order Summary */}
                 <div className="lg:col-span-1">
-                    <div className="bg-luxury-cream/30 p-6 lg:p-8">
+                    <div className="bg-[#f6f1eb] /30 p-6 lg:p-8">
                         <h2 className="font-serif text-xl mb-6">Order Summary</h2>
 
                         <div className="space-y-4 mb-6">

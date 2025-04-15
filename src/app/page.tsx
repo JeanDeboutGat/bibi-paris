@@ -79,13 +79,13 @@ export default function Home() {
                     >
                         <source src="/videos/wood.mp4" type="video/mp4" />
                         {/* Fallback image if video fails */}
-                        <Image
+                    <Image
                             src="/images/handmades/gobolet.jpg"
                             alt="Luxury wooden furniture"
-                            fill
-                            priority
-                            className="object-cover"
-                        />
+                        fill
+                        priority
+                        className="object-cover"
+                    />
                     </video>
                     <div className="absolute inset-0 bg-black bg-opacity-5"></div>
                 </div>
@@ -95,26 +95,26 @@ export default function Home() {
                         <div className="max-w-4xl">
                             <h1 className="font-serif text-1xl md:text-2xl lg:text-3xl text-white font-light mb-4 uppercase tracking-wide">
                                 Timeless Craftsmanship, Parisian Elegance
-                            </h1>
+                    </h1>
                             <p className="text-white/80 text-sm max-w-1xl mb-10">
                                Elevating interiors through the art of high-end wooden furniture.
-                            </p>
-                            <Link
-                                href="/products"
+                    </p>
+                    <Link
+                        href="/products"
                                 className="inline-block text-sm uppercase tracking-wider text-white hover:text-luxury-gold transition-colors duration-300 group"
-                            >
+                    >
                                 Explore
                                 <span className="ml-2 inline-block group-hover:translate-x-1 transition-transform duration-300">
                                     &rarr;
                                 </span>
-                            </Link>
-                        </div>
+                    </Link>
+                </div>
                     </div>
                 </div>
             </section>
 
             {/* Featured Products Grid */}
-            <section className="py-24 bg-white">
+            <section className="py-24 bg-[#f6f1eb]">
                 <div className="container mx-auto px-4 md:px-8">
                     <div className="max-w-7xl mx-auto">
                         <div className="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-4 gap-6 md:gap-10">
@@ -166,7 +166,7 @@ export default function Home() {
                                         fill
                                         className="object-cover"
                                     />
-                                </div>
+                </div>
                                 <h3 className="font-serif text-xs text-center text-luxury-charcoal/70">
                                     Sculptural Ceramic Vase
                                 </h3>
@@ -214,13 +214,13 @@ export default function Home() {
                             </Link>
                             <Link href="/products?category=decoratives" className="block group">
                                 <div className="relative aspect-square overflow-hidden mb-3">
-                                    <Image
+                            <Image
                                         src="/images/decoratives/pot.jpg"
                                         alt="Handblown Glass Bowl"
-                                        fill
-                                        className="object-cover"
-                                    />
-                                </div>
+                                fill
+                                className="object-cover"
+                            />
+                        </div>
                                 <h3 className="font-serif text-xs text-center text-luxury-charcoal/70">
                                     Handblown Glass Bowl
                                 </h3>
@@ -234,7 +234,7 @@ export default function Home() {
             {collections.map((collection, index) => (
                 <section 
                     key={collection.id} 
-                    className={`py-24 ${index % 2 === 0 ? 'bg-white' : 'bg-white'}`}
+                    className={`py-24 ${index % 2 === 0 ? 'bg-[#f6f1eb]' : 'bg-[#f6f1eb]'}`}
                 >
                     <div className="container mx-auto px-4 md:px-8">
                         {/* Collection Title and Description */}
@@ -299,7 +299,7 @@ export default function Home() {
             ))}
 
             {/* Craftsmanship Process - Restored from original */}
-            <section className="py-24 bg-luxury-cream/5">
+            <section className="py-24 bg-white">
                 <div className="container mx-auto px-4 md:px-8 text-center">
                     <h2 className="font-serif text-3xl md:text-4xl mb-6">Artisanal Excellence</h2>
                     <p className="text-luxury-charcoal/80 max-w-3xl mx-auto mb-16">

@@ -132,9 +132,9 @@ export default function ProductGrid({ category, collection, sort }: ProductGridP
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-8 gap-y-16">
                 {[...Array(6)].map((_, index) => (
                     <div key={index} className="animate-pulse">
-                        <div className="bg-luxury-cream/30 h-[400px] mb-6"></div>
-                        <div className="bg-luxury-cream/30 h-5 w-3/4 mb-3"></div>
-                        <div className="bg-luxury-cream/30 h-4 w-1/4"></div>
+                        <div className="bg-[#f6f1eb] /30 h-[400px] mb-6"></div>
+                        <div className="bg-[#f6f1eb] /30 h-5 w-3/4 mb-3"></div>
+                        <div className="bg-[#f6f1eb] /30 h-4 w-1/4"></div>
                     </div>
                 ))}
             </div>

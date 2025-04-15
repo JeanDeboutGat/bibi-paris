@@ -137,9 +137,9 @@ export default function CheckoutPage() {
         return (
             <div className="container-luxury min-h-[70vh] flex items-center justify-center">
                 <div className="animate-pulse w-full max-w-3xl">
-                    <div className="h-8 bg-luxury-cream w-1/4 mb-8 mx-auto"></div>
-                    <div className="h-64 bg-luxury-cream w-full mb-8"></div>
-                    <div className="h-12 bg-luxury-cream w-1/2 mx-auto"></div>
+                    <div className="h-8 bg-[#f6f1eb]  w-1/4 mb-8 mx-auto"></div>
+                    <div className="h-64 bg-[#f6f1eb]  w-full mb-8"></div>
+                    <div className="h-12 bg-[#f6f1eb]  w-1/2 mx-auto"></div>
                 </div>
             </div>
         );
@@ -438,7 +438,7 @@ export default function CheckoutPage() {
                                         </div>
                                         
                                         {formData.paymentMethod === 'credit' && (
-                                            <div className="mt-6 space-y-4 p-4 border border-luxury-gold/10 bg-luxury-cream/30">
+                                            <div className="mt-6 space-y-4 p-4 border border-luxury-gold/10 bg-[#f6f1eb] /30">
                                                 <div>
                                                     <label htmlFor="cardName" className="block text-sm mb-1">
                                                         Name on Card
@@ -513,7 +513,7 @@ export default function CheckoutPage() {
                 </div>
 
                 <div className="lg:w-2/5">
-                    <div className="bg-luxury-cream/30 p-6 lg:p-8 sticky top-32">
+                    <div className="bg-[#f6f1eb] /30 p-6 lg:p-8 sticky top-32">
                         <h2 className="font-serif text-xl mb-6">Order Summary</h2>
 
                         <div className="max-h-[300px] overflow-y-auto mb-6 pr-2">

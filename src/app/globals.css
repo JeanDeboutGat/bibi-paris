@@ -9,7 +9,7 @@
   }
   
   body {
-    @apply bg-luxury-cream text-luxury-charcoal font-sans;
+    @apply bg-[#f6f1eb]  text-luxury-charcoal font-sans;
   }
   
   h1, h2, h3, h4, h5, h6 {

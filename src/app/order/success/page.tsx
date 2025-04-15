@@ -48,7 +48,7 @@ export default function OrderSuccessPage() {
                     Your order has been successfully placed. A confirmation email has been sent to your email address.
                 </p>
                 
-                <div className="bg-luxury-cream/30 p-6 mb-8 inline-block">
+                <div className="bg-[#f6f1eb] /30 p-6 mb-8 inline-block">
                     <div className="text-left">
                         <p className="mb-2"><span className="font-medium">Order Number:</span> 78923146</p>
                         <p><span className="font-medium">Order Date:</span> {new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}</p>

@@ -81,7 +81,7 @@ export default function TrackOrderPage() {
             <div className="max-w-2xl mx-auto">
                 <h1 className="font-serif text-3xl text-center mb-8">Track Your Order</h1>
                 
-                <form onSubmit={handleSubmit} className="mb-12 animate-fade-in bg-luxury-cream/30 p-8">
+                <form onSubmit={handleSubmit} className="mb-12 animate-fade-in bg-[#f6f1eb] /30 p-8">
                     <p className="text-luxury-charcoal/70 mb-6 text-center">
                         Enter your order number and email address to track your order status.
                     </p>
