@@ -188,10 +188,32 @@ export default function Footer() {
         className={`w-full py-8 border-t border-luxury-gold/10 ${!isHomePage ? "bg-[#f6f1eb]" : "bg-white"}`}
       >
         <div className="container mx-auto px-4 md:px-8">
-          <p className="text-sm text-luxury-charcoal/60 text-center">
-            © {new Date().getFullYear()} Bibi Paris. All rights reserved.
-            Privacy Policy
-          </p>
+          <div className="flex flex-col items-center">
+            <div className="flex items-center space-x-3 mb-3">
+              <a
+                href="mailto:service@bibiparis.com"
+                className="text-sm text-luxury-charcoal/70 hover:text-luxury-sienna transition-colors duration-300"
+              >
+                service@bibiparis.com
+              </a>
+              <span className="text-luxury-charcoal/30">|</span>
+              <a
+                href="tel:+33142123456"
+                className="text-sm text-luxury-charcoal/70 hover:text-luxury-sienna transition-colors duration-300"
+              >
+                +33 1 42 12 34 56
+              </a>
+            </div>
+            <p className="text-sm text-luxury-charcoal/60 text-center">
+              © {new Date().getFullYear()} Bibi Paris. All rights reserved.
+              <Link
+                href="/privacy"
+                className="ml-2 hover:text-luxury-sienna transition-colors duration-300"
+              >
+                Privacy Policy
+              </Link>
+            </p>
+          </div>
         </div>
       </div>
     </footer>
