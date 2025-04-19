@@ -8,4 +8,4 @@ export default function TrackLayout({
   children: React.ReactNode;
 }) {
   return <>{children}</>;
-} 
+}

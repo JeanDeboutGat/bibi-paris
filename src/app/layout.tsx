@@ -1,26 +1,27 @@
-import type { Metadata } from "next";
-import { Playfair_Display, Inter } from "next/font/google";
+import type { Metadata } from 'next';
+import { Playfair_Display, Inter } from 'next/font/google';
 import './globals.css';
-import Header from "@/components/layout/Header";
-import Footer from "@/components/layout/Footer";
+import Header from '@/components/layout/Header';
+import Footer from '@/components/layout/Footer';
 
 // Use Playfair Display for serif font (headings)
-const playfair = Playfair_Display({ 
-  subsets: ["latin"],
+const playfair = Playfair_Display({
+  subsets: ['latin'],
   variable: '--font-serif',
   display: 'swap',
 });
 
 // Use Inter for sans-serif font (body text)
-const inter = Inter({ 
-  subsets: ["latin"],
+const inter = Inter({
+  subsets: ['latin'],
   variable: '--font-sans',
   display: 'swap',
 });
 
 export const metadata: Metadata = {
-  title: "Bibi Paris | Luxury Wooden Furniture",
-  description: "Discover our collection of high-end wooden furniture, featuring handmade pieces, second-hand items, paintings, and decorative objects.",
+  title: 'Bibi Paris | Luxury Wooden Furniture',
+  description:
+    'Discover our collection of high-end wooden furniture, featuring handmade pieces, second-hand items, paintings, and decorative objects.',
 };
 
 export default function RootLayout({

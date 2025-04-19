@@ -1,66 +1,66 @@
-"use client";
+'use client';
 
-import { useState } from "react";
+import { useState } from 'react';
 
 export default function TrackOrderPage() {
-  const [orderId, setOrderId] = useState("");
-  const [email, setEmail] = useState("");
+  const [orderId, setOrderId] = useState('');
+  const [email, setEmail] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [orderStatus, setOrderStatus] = useState<null | {
     id: string;
-    status: "processing" | "shipped" | "delivered";
+    status: 'processing' | 'shipped' | 'delivered';
     date: string;
     trackingNumber?: string;
     estimatedDelivery?: string;
   }>(null);
-  const [error, setError] = useState("");
+  const [error, setError] = useState('');
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
     if (!orderId || !email) {
-      setError("Please enter both order number and email");
+      setError('Please enter both order number and email');
       return;
     }
 
     try {
       setIsSubmitting(true);
-      setError("");
+      setError('');
 
       // In a real app, you would make an API call here
       // For demo purposes, we'll simulate a successful response
       await new Promise((resolve) => setTimeout(resolve, 1500));
 
       // Mock order status based on input
-      if (orderId === "123456") {
+      if (orderId === '123456') {
         setOrderStatus({
           id: orderId,
-          status: "shipped",
-          date: "2023-05-15",
-          trackingNumber: "TRK928374651",
-          estimatedDelivery: "2023-05-20",
+          status: 'shipped',
+          date: '2023-05-15',
+          trackingNumber: 'TRK928374651',
+          estimatedDelivery: '2023-05-20',
         });
-      } else if (orderId === "789012") {
+      } else if (orderId === '789012') {
         setOrderStatus({
           id: orderId,
-          status: "delivered",
-          date: "2023-05-10",
-          trackingNumber: "TRK827365498",
+          status: 'delivered',
+          date: '2023-05-10',
+          trackingNumber: 'TRK827365498',
         });
-      } else if (orderId === "345678") {
+      } else if (orderId === '345678') {
         setOrderStatus({
           id: orderId,
-          status: "processing",
-          date: "2023-05-18",
-          estimatedDelivery: "2023-05-25",
+          status: 'processing',
+          date: '2023-05-18',
+          estimatedDelivery: '2023-05-25',
         });
       } else {
-        setError("No order found with this ID and email combination.");
+        setError('No order found with this ID and email combination.');
       }
     } catch (e) {
       console.log(e);
       setError(
-        "An error occurred while tracking your order. Please try again.",
+        'An error occurred while tracking your order. Please try again.'
       );
     } finally {
       setIsSubmitting(false);
@@ -118,10 +118,10 @@ export default function TrackOrderPage() {
 
             <button
               type="submit"
-              className={`btn-primary w-full ${isSubmitting ? "opacity-70 cursor-not-allowed" : ""}`}
+              className={`btn-primary w-full ${isSubmitting ? 'opacity-70 cursor-not-allowed' : ''}`}
               disabled={isSubmitting}
             >
-              {isSubmitting ? "Tracking..." : "Track Order"}
+              {isSubmitting ? 'Tracking...' : 'Track Order'}
             </button>
           </div>
         </form>
@@ -141,10 +141,10 @@ export default function TrackOrderPage() {
                 <div>
                   <p className="text-sm text-luxury-charcoal/60">Order Date</p>
                   <p className="font-medium">
-                    {new Date(orderStatus.date).toLocaleDateString("en-US", {
-                      year: "numeric",
-                      month: "long",
-                      day: "numeric",
+                    {new Date(orderStatus.date).toLocaleDateString('en-US', {
+                      year: 'numeric',
+                      month: 'long',
+                      day: 'numeric',
                     })}
                   </p>
                 </div>
@@ -163,11 +163,11 @@ export default function TrackOrderPage() {
                     </p>
                     <p className="font-medium">
                       {new Date(
-                        orderStatus.estimatedDelivery,
-                      ).toLocaleDateString("en-US", {
-                        year: "numeric",
-                        month: "long",
-                        day: "numeric",
+                        orderStatus.estimatedDelivery
+                      ).toLocaleDateString('en-US', {
+                        year: 'numeric',
+                        month: 'long',
+                        day: 'numeric',
                       })}
                     </p>
                   </div>
@@ -179,28 +179,28 @@ export default function TrackOrderPage() {
 
                 <div className="flex justify-between relative">
                   <div
-                    className={`flex flex-col items-center z-10 ${orderStatus.status === "processing" || orderStatus.status === "shipped" || orderStatus.status === "delivered" ? "text-luxury-sienna" : "text-luxury-charcoal/30"}`}
+                    className={`flex flex-col items-center z-10 ${orderStatus.status === 'processing' || orderStatus.status === 'shipped' || orderStatus.status === 'delivered' ? 'text-luxury-sienna' : 'text-luxury-charcoal/30'}`}
                   >
                     <div
-                      className={`w-5 h-5 rounded-full mb-2 ${orderStatus.status === "processing" || orderStatus.status === "shipped" || orderStatus.status === "delivered" ? "bg-luxury-sienna" : "bg-luxury-charcoal/20"}`}
+                      className={`w-5 h-5 rounded-full mb-2 ${orderStatus.status === 'processing' || orderStatus.status === 'shipped' || orderStatus.status === 'delivered' ? 'bg-luxury-sienna' : 'bg-luxury-charcoal/20'}`}
                     ></div>
                     <p className="text-sm font-medium">Processing</p>
                   </div>
 
                   <div
-                    className={`flex flex-col items-center z-10 ${orderStatus.status === "shipped" || orderStatus.status === "delivered" ? "text-luxury-sienna" : "text-luxury-charcoal/30"}`}
+                    className={`flex flex-col items-center z-10 ${orderStatus.status === 'shipped' || orderStatus.status === 'delivered' ? 'text-luxury-sienna' : 'text-luxury-charcoal/30'}`}
                   >
                     <div
-                      className={`w-5 h-5 rounded-full mb-2 ${orderStatus.status === "shipped" || orderStatus.status === "delivered" ? "bg-luxury-sienna" : "bg-luxury-charcoal/20"}`}
+                      className={`w-5 h-5 rounded-full mb-2 ${orderStatus.status === 'shipped' || orderStatus.status === 'delivered' ? 'bg-luxury-sienna' : 'bg-luxury-charcoal/20'}`}
                     ></div>
                     <p className="text-sm font-medium">Shipped</p>
                   </div>
 
                   <div
-                    className={`flex flex-col items-center z-10 ${orderStatus.status === "delivered" ? "text-luxury-sienna" : "text-luxury-charcoal/30"}`}
+                    className={`flex flex-col items-center z-10 ${orderStatus.status === 'delivered' ? 'text-luxury-sienna' : 'text-luxury-charcoal/30'}`}
                   >
                     <div
-                      className={`w-5 h-5 rounded-full mb-2 ${orderStatus.status === "delivered" ? "bg-luxury-sienna" : "bg-luxury-charcoal/20"}`}
+                      className={`w-5 h-5 rounded-full mb-2 ${orderStatus.status === 'delivered' ? 'bg-luxury-sienna' : 'bg-luxury-charcoal/20'}`}
                     ></div>
                     <p className="text-sm font-medium">Delivered</p>
                   </div>
@@ -209,12 +209,12 @@ export default function TrackOrderPage() {
 
               <div className="mt-8 text-center">
                 <p className="text-sm text-luxury-charcoal/70">
-                  {orderStatus.status === "processing" &&
-                    "Your order is being prepared for shipment."}
-                  {orderStatus.status === "shipped" &&
-                    "Your order is on its way to you!"}
-                  {orderStatus.status === "delivered" &&
-                    "Your order has been delivered. Enjoy your purchase!"}
+                  {orderStatus.status === 'processing' &&
+                    'Your order is being prepared for shipment.'}
+                  {orderStatus.status === 'shipped' &&
+                    'Your order is on its way to you!'}
+                  {orderStatus.status === 'delivered' &&
+                    'Your order has been delivered. Enjoy your purchase!'}
                 </p>
               </div>
             </div>

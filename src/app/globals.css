@@ -7,17 +7,26 @@
   html {
     @apply scroll-smooth;
   }
-  
+
   body {
     @apply bg-[#f6f1eb]  text-luxury-charcoal font-sans;
   }
-  
-  h1, h2, h3, h4, h5, h6 {
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
     @apply font-serif tracking-wide;
   }
-  
+
   /* Minimum font sizes for accessibility */
-  p, li, a, span, div {
+  p,
+  li,
+  a,
+  span,
+  div {
     @apply text-base leading-relaxed;
   }
 }
@@ -27,29 +36,29 @@
   .btn-primary {
     @apply bg-luxury-charcoal text-white py-3 px-6 text-sm tracking-wider hover:bg-black transition-colors duration-300;
   }
-  
+
   .btn-secondary {
     @apply bg-transparent border border-luxury-charcoal text-luxury-charcoal py-3 px-6 text-sm tracking-wider hover:bg-luxury-charcoal hover:text-white transition-colors duration-300;
   }
-  
+
   .btn-accent {
     @apply bg-luxury-sienna text-white py-3 px-6 text-sm tracking-wider hover:bg-opacity-90 transition-colors duration-300;
   }
-  
+
   /* Card and Container Styles */
   .luxury-card {
     @apply bg-white p-6 shadow-sm transition-all duration-300 hover:shadow-md;
   }
-  
+
   .container-luxury {
     @apply container mx-auto px-4 md:px-8 py-12 md:py-16;
   }
-  
+
   /* Form Styles */
   .input-luxury {
     @apply w-full border-b border-luxury-charcoal bg-transparent px-4 py-2 focus:outline-none focus:border-luxury-gold transition-colors duration-300;
   }
-  
+
   /* Accessible Focus Styles */
   .focus-visible {
     @apply focus:outline-none focus-visible:ring-2 focus-visible:ring-luxury-sienna focus-visible:ring-opacity-75;
@@ -61,16 +70,16 @@
   .hover-lift {
     @apply transition-transform duration-300 hover:-translate-y-1;
   }
-  
+
   .hover-expand {
     @apply transition-transform duration-300 hover:scale-[1.02];
   }
-  
+
   /* Luxury Border Styles */
   .border-luxury {
     @apply border border-luxury-gold/20;
   }
-  
+
   /* Luxury Gradients */
   .bg-luxury-gradient {
     @apply bg-gradient-to-b from-luxury-cream to-white;

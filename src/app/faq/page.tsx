@@ -1,6 +1,6 @@
-"use client";
+'use client';
 
-import { useState } from "react";
+import { useState } from 'react';
 
 // FAQ component with accordion functionality
 function FaqItem({
@@ -28,7 +28,7 @@ function FaqItem({
           viewBox="0 0 24 24"
           strokeWidth={1.5}
           stroke="currentColor"
-          className={`w-5 h-5 transition-transform duration-300 ${isOpen ? "rotate-180" : ""}`}
+          className={`w-5 h-5 transition-transform duration-300 ${isOpen ? 'rotate-180' : ''}`}
         >
           <path
             strokeLinecap="round"
@@ -39,7 +39,7 @@ function FaqItem({
       </button>
       <div
         className={`overflow-hidden transition-all duration-300 ${
-          isOpen ? "max-h-96 opacity-100 pb-6" : "max-h-0 opacity-0"
+          isOpen ? 'max-h-96 opacity-100 pb-6' : 'max-h-0 opacity-0'
         }`}
       >
         <div className="text-luxury-charcoal/80 space-y-3">{answer}</div>
@@ -59,10 +59,10 @@ export default function FaqPage() {
   // FAQ data organized by category
   const faqCategories = [
     {
-      title: "Products & Materials",
+      title: 'Products & Materials',
       faqs: [
         {
-          question: "What types of wood do you use for your furniture?",
+          question: 'What types of wood do you use for your furniture?',
           answer: (
             <>
               <p>
@@ -85,7 +85,7 @@ export default function FaqPage() {
           ),
         },
         {
-          question: "Are your products handmade?",
+          question: 'Are your products handmade?',
           answer: (
             <p>
               Yes, all our handmade collection pieces are crafted by skilled
@@ -97,7 +97,7 @@ export default function FaqPage() {
           ),
         },
         {
-          question: "How do I care for my wooden furniture?",
+          question: 'How do I care for my wooden furniture?',
           answer: (
             <>
               <p>To maintain the beauty of your wooden furniture:</p>
@@ -110,23 +110,23 @@ export default function FaqPage() {
               </ul>
               <p className="mt-2">
                 For detailed care instructions, refer to the care guide included
-                with your purchase or visit our{" "}
+                with your purchase or visit our{' '}
                 <a href="/care" className="text-luxury-sienna hover:underline">
                   Care Guide
-                </a>{" "}
+                </a>{' '}
                 page.
               </p>
             </>
           ),
         },
         {
-          question: "Do you offer custom furniture pieces?",
+          question: 'Do you offer custom furniture pieces?',
           answer: (
             <p>
               Yes, we offer bespoke furniture creation services. Our
               craftspeople can work with you to design and create a custom piece
               tailored to your specific needs and preferences. For custom
-              inquiries, please contact us at{" "}
+              inquiries, please contact us at{' '}
               <a
                 href="mailto:custom@bibiparis.com"
                 className="text-luxury-sienna hover:underline"
@@ -140,16 +140,16 @@ export default function FaqPage() {
       ],
     },
     {
-      title: "Orders & Payment",
+      title: 'Orders & Payment',
       faqs: [
         {
-          question: "How do I place an order?",
+          question: 'How do I place an order?',
           answer: (
             <p>
               You can place an order directly through our website by selecting
               the item you wish to purchase, adding it to your cart, and
               proceeding to checkout. For assistance with orders, contact our
-              customer service team at{" "}
+              customer service team at{' '}
               <a
                 href="mailto:service@bibiparis.com"
                 className="text-luxury-sienna hover:underline"
@@ -161,7 +161,7 @@ export default function FaqPage() {
           ),
         },
         {
-          question: "What payment methods do you accept?",
+          question: 'What payment methods do you accept?',
           answer: (
             <>
               <p>We accept the following payment methods:</p>
@@ -178,13 +178,13 @@ export default function FaqPage() {
           ),
         },
         {
-          question: "Can I modify or cancel my order?",
+          question: 'Can I modify or cancel my order?',
           answer: (
             <p>
               You may request to modify or cancel your order within 24 hours of
               placing it by contacting our customer service team. After this
               period, orders enter our production and fulfillment process and
-              cannot be modified or canceled. For assistance, email{" "}
+              cannot be modified or canceled. For assistance, email{' '}
               <a
                 href="mailto:service@bibiparis.com"
                 className="text-luxury-sienna hover:underline"
@@ -196,7 +196,7 @@ export default function FaqPage() {
           ),
         },
         {
-          question: "Do you offer financing options?",
+          question: 'Do you offer financing options?',
           answer: (
             <p>
               Yes, for purchases over €1,500, we offer financing options through
@@ -210,10 +210,10 @@ export default function FaqPage() {
       ],
     },
     {
-      title: "Shipping & Delivery",
+      title: 'Shipping & Delivery',
       faqs: [
         {
-          question: "How long will it take to receive my order?",
+          question: 'How long will it take to receive my order?',
           answer: (
             <>
               <p>
@@ -225,20 +225,20 @@ export default function FaqPage() {
                 <li>Made-to-order pieces: 4-8 weeks</li>
               </ul>
               <p className="mt-2">
-                For more specific information, please refer to our{" "}
+                For more specific information, please refer to our{' '}
                 <a
                   href="/shipping"
                   className="text-luxury-sienna hover:underline"
                 >
                   Shipping Information
-                </a>{" "}
+                </a>{' '}
                 page.
               </p>
             </>
           ),
         },
         {
-          question: "Do you ship internationally?",
+          question: 'Do you ship internationally?',
           answer: (
             <p>
               Yes, we ship to most countries in Europe and select international
@@ -249,20 +249,20 @@ export default function FaqPage() {
           ),
         },
         {
-          question: "How can I track my order?",
+          question: 'How can I track my order?',
           answer: (
             <p>
               Once your order ships, you will receive a confirmation email with
-              a tracking number. You can track your order by visiting our{" "}
+              a tracking number. You can track your order by visiting our{' '}
               <a href="/track" className="text-luxury-sienna hover:underline">
                 Track Your Order
-              </a>{" "}
+              </a>{' '}
               page and entering your order number and email address.
             </p>
           ),
         },
         {
-          question: "What is white glove delivery?",
+          question: 'What is white glove delivery?',
           answer: (
             <p>
               Our white glove delivery service includes delivery to your room of
@@ -276,30 +276,30 @@ export default function FaqPage() {
       ],
     },
     {
-      title: "Returns & Exchanges",
+      title: 'Returns & Exchanges',
       faqs: [
         {
-          question: "What is your return policy?",
+          question: 'What is your return policy?',
           answer: (
             <p>
               We accept returns within 14 days of delivery for a full refund of
               the item price. Items must be in their original condition and
-              packaging. For complete details, please visit our{" "}
+              packaging. For complete details, please visit our{' '}
               <a href="/returns" className="text-luxury-sienna hover:underline">
                 Returns & Exchanges
-              </a>{" "}
+              </a>{' '}
               page.
             </p>
           ),
         },
         {
-          question: "How do I return an item?",
+          question: 'How do I return an item?',
           answer: (
             <>
               <p>To return an item:</p>
               <ol className="list-decimal pl-5 mt-2 space-y-2">
                 <li>
-                  Contact our customer service team at{" "}
+                  Contact our customer service team at{' '}
                   <a
                     href="mailto:returns@bibiparis.com"
                     className="text-luxury-sienna hover:underline"
@@ -314,29 +314,29 @@ export default function FaqPage() {
                 </li>
               </ol>
               <p className="mt-2">
-                For large furniture pieces, we will arrange for pickup. See our{" "}
+                For large furniture pieces, we will arrange for pickup. See our{' '}
                 <a
                   href="/returns"
                   className="text-luxury-sienna hover:underline"
                 >
                   Returns & Exchanges
-                </a>{" "}
+                </a>{' '}
                 page for full details.
               </p>
             </>
           ),
         },
         {
-          question: "What if my item arrives damaged?",
+          question: 'What if my item arrives damaged?',
           answer: (
             <p>
-              If your item arrives damaged, please contact us immediately at{" "}
+              If your item arrives damaged, please contact us immediately at{' '}
               <a
                 href="mailto:service@bibiparis.com"
                 className="text-luxury-sienna hover:underline"
               >
                 service@bibiparis.com
-              </a>{" "}
+              </a>{' '}
               with photos of the damage. We&apos;ll work quickly to resolve the
               issue and arrange for a replacement or refund. Please inspect your
               items promptly upon delivery and report any damage within 48
@@ -345,7 +345,7 @@ export default function FaqPage() {
           ),
         },
         {
-          question: "Can I exchange an item for a different one?",
+          question: 'Can I exchange an item for a different one?',
           answer: (
             <p>
               Yes, we offer exchanges within 30 days of delivery for items of
@@ -398,7 +398,7 @@ export default function FaqPage() {
             contact our customer service team.
           </p>
           <p className="mb-2">
-            <span className="font-medium">Email:</span>{" "}
+            <span className="font-medium">Email:</span>{' '}
             <a
               href="mailto:service@bibiparis.com"
               className="text-luxury-sienna hover:underline"
@@ -407,7 +407,7 @@ export default function FaqPage() {
             </a>
           </p>
           <p>
-            <span className="font-medium">Phone:</span>{" "}
+            <span className="font-medium">Phone:</span>{' '}
             <a href="tel:+33142123456" className="hover:underline">
               +33 1 42 12 34 56
             </a>

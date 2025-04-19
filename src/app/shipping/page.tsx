@@ -1,9 +1,9 @@
-import { Metadata } from "next";
+import { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: "Bibi Paris | Shipping Information",
+  title: 'Bibi Paris | Shipping Information',
   description:
-    "Learn about our shipping policy, delivery times, and shipping fees for our luxury furniture.",
+    'Learn about our shipping policy, delivery times, and shipping fees for our luxury furniture.',
 };
 
 export default function ShippingInformationPage() {
@@ -105,10 +105,10 @@ export default function ShippingInformationPage() {
               be active within 24 hours.
             </p>
             <p className="text-luxury-charcoal/80">
-              You can track your order by visiting our{" "}
+              You can track your order by visiting our{' '}
               <a href="/track" className="text-luxury-sienna hover:underline">
                 Track Your Order
-              </a>{" "}
+              </a>{' '}
               page.
             </p>
           </section>
@@ -120,7 +120,7 @@ export default function ShippingInformationPage() {
               contact our customer service team.
             </p>
             <p className="mb-2">
-              <span className="font-medium">Email:</span>{" "}
+              <span className="font-medium">Email:</span>{' '}
               <a
                 href="mailto:service@bibiparis.com"
                 className="text-luxury-sienna hover:underline"
@@ -129,7 +129,7 @@ export default function ShippingInformationPage() {
               </a>
             </p>
             <p>
-              <span className="font-medium">Phone:</span>{" "}
+              <span className="font-medium">Phone:</span>{' '}
               <a href="tel:+33142123456" className="hover:underline">
                 +33 1 42 12 34 56
               </a>

@@ -1,10 +1,10 @@
-"use client";
+'use client';
 
-import { useState, useEffect, useRef } from "react";
-import Link from "next/link";
-import Image from "next/image";
-import { usePathname } from "next/navigation";
-import { useLocalCartStore } from "@/lib/store";
+import { useState, useEffect, useRef } from 'react';
+import Link from 'next/link';
+import Image from 'next/image';
+import { usePathname } from 'next/navigation';
+import { useLocalCartStore } from '@/lib/store';
 
 export default function Header() {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -21,9 +21,10 @@ export default function Header() {
     const handleScroll = () => {
       const st = window.scrollY;
       setIsScrolled(st > 10);
-      
+
       // Hide header on scroll down, show on scroll up
-      if (st > 100) { // Only apply this behavior after scrolling a bit
+      if (st > 100) {
+        // Only apply this behavior after scrolling a bit
         if (st > lastScrollTop.current) {
           setHideHeader(true);
         } else {
@@ -32,20 +33,20 @@ export default function Header() {
       } else {
         setHideHeader(false);
       }
-      
+
       lastScrollTop.current = st <= 0 ? 0 : st;
     };
 
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
   const navItems = [
-    { path: "/", label: "Home" },
-    { path: "/products?category=handmades", label: "Handmade" },
-    { path: "/products?category=secondHands", label: "Second-Hand" },
-    { path: "/products?category=paintings", label: "Paintings" },
-    { path: "/products?category=decoratives", label: "Decorative" },
+    { path: '/', label: 'Home' },
+    { path: '/products?category=handmades', label: 'Handmade' },
+    { path: '/products?category=secondHands', label: 'Second-Hand' },
+    { path: '/products?category=paintings', label: 'Paintings' },
+    { path: '/products?category=decoratives', label: 'Decorative' },
   ];
 
   // Show transparent background only on homepage when not scrolled
@@ -55,22 +56,20 @@ export default function Header() {
     <header
       className={`fixed w-full z-50 transition-all duration-300 ${
         isScrolled || !isHomePage
-          ? "bg-white shadow-sm py-3" 
-          : "py-5 bg-transparent"
-      } ${
-        hideHeader ? "-translate-y-full" : "translate-y-0"
-      }`}
+          ? 'bg-white shadow-sm py-3'
+          : 'py-5 bg-transparent'
+      } ${hideHeader ? '-translate-y-full' : 'translate-y-0'}`}
     >
       <div className="container mx-auto px-4 flex justify-between items-center">
         {/* Logo */}
-        <Link 
-          href="/" 
+        <Link
+          href="/"
           className="relative z-10 focus-visible"
           aria-label="Bibi Paris Home"
         >
           <div className="relative w-14 h-14">
             <Image
-              src={showTransparentBackground ? "/logo-white.png" : "/logo.png"}
+              src={showTransparentBackground ? '/logo-white.png' : '/logo.png'}
               alt="BIBI Paris"
               fill
               className="object-contain"
@@ -86,12 +85,17 @@ export default function Header() {
               key={item.path}
               href={item.path}
               className={`text-sm uppercase tracking-wider hover:text-luxury-sienna transition-colors duration-300 focus-visible ${
-                pathname === item.path || 
-                (pathname.startsWith('/products') && item.path.startsWith('/products') && 
-                 item.path.includes(new URLSearchParams(pathname.split('?')[1] || '').get('category') || ''))
-                  ? "border-b border-luxury-gold pb-1" 
-                  : ""
-              } ${showTransparentBackground ? "text-white" : "text-luxury-charcoal"}`}
+                pathname === item.path ||
+                (pathname.startsWith('/products') &&
+                  item.path.startsWith('/products') &&
+                  item.path.includes(
+                    new URLSearchParams(pathname.split('?')[1] || '').get(
+                      'category'
+                    ) || ''
+                  ))
+                  ? 'border-b border-luxury-gold pb-1'
+                  : ''
+              } ${showTransparentBackground ? 'text-white' : 'text-luxury-charcoal'}`}
             >
               {item.label}
             </Link>
@@ -100,8 +104,8 @@ export default function Header() {
 
         {/* Cart and Mobile Menu Toggle */}
         <div className="flex items-center space-x-6">
-          <Link 
-            href="/cart" 
+          <Link
+            href="/cart"
             className="relative group focus-visible"
             aria-label={`Shopping Cart with ${itemCount} items`}
           >
@@ -112,7 +116,7 @@ export default function Header() {
               viewBox="0 0 24 24"
               strokeWidth={1.5}
               stroke="currentColor"
-              className={`w-6 h-6 transition-all duration-300 group-hover:text-luxury-sienna ${showTransparentBackground ? "text-white" : "text-luxury-charcoal"}`}
+              className={`w-6 h-6 transition-all duration-300 group-hover:text-luxury-sienna ${showTransparentBackground ? 'text-white' : 'text-luxury-charcoal'}`}
             >
               <path
                 strokeLinecap="round"
@@ -121,7 +125,7 @@ export default function Header() {
               />
             </svg>
             {itemCount > 0 && (
-              <span 
+              <span
                 className="absolute -top-2 -right-2 bg-luxury-sienna text-white text-xs w-5 h-5 rounded-full flex items-center justify-center animate-subtle-bounce cart-icon"
                 aria-hidden="true"
               >
@@ -134,20 +138,26 @@ export default function Header() {
           <button
             className="md:hidden focus-visible"
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-            aria-label={isMobileMenuOpen ? "Close menu" : "Open menu"}
+            aria-label={isMobileMenuOpen ? 'Close menu' : 'Open menu'}
             aria-expanded={isMobileMenuOpen}
           >
             <div className="w-6 h-5 relative flex flex-col justify-between">
-              <span className={`w-full h-px absolute transition-all duration-300 ${showTransparentBackground ? "bg-white" : "bg-luxury-charcoal"} ${isMobileMenuOpen ? 'top-2 rotate-45' : 'top-0'}`}></span>
-              <span className={`w-full h-px absolute top-2 transition-opacity duration-300 ${showTransparentBackground ? "bg-white" : "bg-luxury-charcoal"} ${isMobileMenuOpen ? 'opacity-0' : 'opacity-100'}`}></span>
-              <span className={`w-full h-px absolute transition-all duration-300 ${showTransparentBackground ? "bg-white" : "bg-luxury-charcoal"} ${isMobileMenuOpen ? 'bottom-2 -rotate-45' : 'bottom-0'}`}></span>
+              <span
+                className={`w-full h-px absolute transition-all duration-300 ${showTransparentBackground ? 'bg-white' : 'bg-luxury-charcoal'} ${isMobileMenuOpen ? 'top-2 rotate-45' : 'top-0'}`}
+              ></span>
+              <span
+                className={`w-full h-px absolute top-2 transition-opacity duration-300 ${showTransparentBackground ? 'bg-white' : 'bg-luxury-charcoal'} ${isMobileMenuOpen ? 'opacity-0' : 'opacity-100'}`}
+              ></span>
+              <span
+                className={`w-full h-px absolute transition-all duration-300 ${showTransparentBackground ? 'bg-white' : 'bg-luxury-charcoal'} ${isMobileMenuOpen ? 'bottom-2 -rotate-45' : 'bottom-0'}`}
+              ></span>
             </div>
           </button>
         </div>
       </div>
 
       {/* Mobile Menu */}
-      <div 
+      <div
         className={`md:hidden absolute top-full left-0 w-full bg-white shadow-md overflow-hidden transition-all duration-500 ${
           isMobileMenuOpen ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'
         }`}
@@ -159,11 +169,16 @@ export default function Header() {
               key={item.path}
               href={item.path}
               className={`py-3 text-sm uppercase tracking-wider border-b border-luxury-cream/30 hover:text-luxury-sienna transition-colors ${
-                pathname === item.path || 
-                (pathname.startsWith('/products') && item.path.startsWith('/products') && 
-                item.path.includes(new URLSearchParams(pathname.split('?')[1] || '').get('category') || ''))
-                  ? "text-luxury-sienna font-medium" 
-                  : "text-luxury-charcoal"
+                pathname === item.path ||
+                (pathname.startsWith('/products') &&
+                  item.path.startsWith('/products') &&
+                  item.path.includes(
+                    new URLSearchParams(pathname.split('?')[1] || '').get(
+                      'category'
+                    ) || ''
+                  ))
+                  ? 'text-luxury-sienna font-medium'
+                  : 'text-luxury-charcoal'
               }`}
               onClick={() => setIsMobileMenuOpen(false)}
             >
@@ -171,8 +186,8 @@ export default function Header() {
             </Link>
           ))}
           <div className="pt-4">
-            <Link 
-              href="/track" 
+            <Link
+              href="/track"
               className="py-3 text-sm uppercase tracking-wider block text-luxury-charcoal hover:text-luxury-sienna transition-colors"
               onClick={() => setIsMobileMenuOpen(false)}
             >

@@ -1,9 +1,9 @@
-import { Metadata } from "next";
+import { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: "Bibi Paris | Returns & Exchanges",
+  title: 'Bibi Paris | Returns & Exchanges',
   description:
-    "Learn about our returns and exchanges policy for luxury wooden furniture and decorative items.",
+    'Learn about our returns and exchanges policy for luxury wooden furniture and decorative items.',
 };
 
 export default function ReturnsAndExchangesPage() {
@@ -60,13 +60,13 @@ export default function ReturnsAndExchangesPage() {
               <div>
                 <h3 className="font-serif text-lg mb-3">1. Request a Return</h3>
                 <p className="text-luxury-charcoal/80">
-                  Contact our customer service team at{" "}
+                  Contact our customer service team at{' '}
                   <a
                     href="mailto:returns@bibiparis.com"
                     className="text-luxury-sienna hover:underline"
                   >
                     returns@bibiparis.com
-                  </a>{" "}
+                  </a>{' '}
                   to initiate a return. Please include your order number and the
                   reason for the return.
                 </p>
@@ -147,13 +147,13 @@ export default function ReturnsAndExchangesPage() {
           <section>
             <h2 className="font-serif text-2xl mb-4">Damaged Items</h2>
             <p className="text-luxury-charcoal/80 mb-4">
-              If you receive a damaged item, please contact us immediately at{" "}
+              If you receive a damaged item, please contact us immediately at{' '}
               <a
                 href="mailto:service@bibiparis.com"
                 className="text-luxury-sienna hover:underline"
               >
                 service@bibiparis.com
-              </a>{" "}
+              </a>{' '}
               with photos of the damage. We&apos;ll work quickly to resolve the
               issue and arrange for a replacement or refund.
             </p>
@@ -170,7 +170,7 @@ export default function ReturnsAndExchangesPage() {
               please contact our customer service team.
             </p>
             <p className="mb-2">
-              <span className="font-medium">Email:</span>{" "}
+              <span className="font-medium">Email:</span>{' '}
               <a
                 href="mailto:service@bibiparis.com"
                 className="text-luxury-sienna hover:underline"
@@ -179,7 +179,7 @@ export default function ReturnsAndExchangesPage() {
               </a>
             </p>
             <p>
-              <span className="font-medium">Phone:</span>{" "}
+              <span className="font-medium">Phone:</span>{' '}
               <a href="tel:+33142123456" className="hover:underline">
                 +33 1 42 12 34 56
               </a>
