@@ -56,7 +56,7 @@ export default function Header() {
     <header
       className={`fixed w-full z-[100] -mt-[2px] sm:mt-0 transition-all duration-300 ${
         isScrolled || !isHomePage
-          ? 'bg-white shadow-sm py-3'
+          ? 'bg-[#FBF9F6] shadow-sm py-3'
           : 'py-5 bg-transparent'
       } ${hideHeader ? 'max-md:-translate-y-full md:translate-y-0' : 'translate-y-0'}`}
     >
