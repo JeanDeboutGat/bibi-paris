@@ -9,12 +9,43 @@ import { useLocalCartStore } from '@/lib/store';
 export default function Header() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [menuToggleCount, setMenuToggleCount] = useState(0);
   const pathname = usePathname();
   const { items } = useLocalCartStore();
   const itemCount = items.reduce((total, item) => total + item.quantity, 0);
   const lastScrollTop = useRef(0);
   const [hideHeader, setHideHeader] = useState(false);
   const isHomePage = pathname === '/';
+
+  // Helper function to check if a menu item is active
+  const isMenuItemActive = (itemPath: string) => {
+    // For exact path matches (like home and track)
+    if (itemPath === pathname) return true;
+    
+    // For product categories
+    if (itemPath.includes('?category=') && pathname.includes('/products')) {
+      // Get the category from the menu item path
+      const itemCategory = itemPath.split('category=')[1];
+      
+      // Get the current URL search params - safely in client component
+      if (typeof window !== 'undefined') {
+        const urlParams = new URLSearchParams(window.location.search);
+        const currentCategory = urlParams.get('category');
+        
+        // For debugging
+        if (isMobileMenuOpen && menuToggleCount > 0) {
+          console.log(`Item: ${itemPath}, Category: ${itemCategory}`);
+          console.log(`Current search: ${window.location.search}`);
+          console.log(`Current category: ${currentCategory}`);
+          console.log(`Match: ${itemCategory === currentCategory}`);
+        }
+        
+        return itemCategory === currentCategory;
+      }
+    }
+    
+    return false;
+  };
 
   // Change header style on scroll and implement hide on scroll down
   useEffect(() => {
@@ -40,6 +71,17 @@ export default function Header() {
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
+
+  useEffect(() => {
+    // Log current pathname whenever it changes
+    if (typeof window !== 'undefined') {
+      console.log('Current pathname:', pathname);
+      const searchParams = pathname.includes('?') 
+        ? new URLSearchParams(pathname.split('?')[1])
+        : new URLSearchParams();
+      console.log('URL parameters:', Object.fromEntries(searchParams.entries()));
+    }
+  }, [pathname]);
 
   const navItems = [
     { path: '/', label: 'Home' },
@@ -85,16 +127,7 @@ export default function Header() {
               key={item.path}
               href={item.path}
               className={`text-sm uppercase tracking-wider hover:text-luxury-sienna transition-colors duration-300 focus-visible ${
-                pathname === item.path ||
-                (pathname.startsWith('/products') &&
-                  item.path.startsWith('/products') &&
-                  item.path.includes(
-                    new URLSearchParams(pathname.split('?')[1] || '').get(
-                      'category'
-                    ) || ''
-                  ))
-                  ? 'border-b border-luxury-gold pb-1'
-                  : ''
+                isMenuItemActive(item.path) ? 'border-b border-luxury-gold pb-1' : ''
               } ${showTransparentBackground ? 'text-white' : 'text-luxury-charcoal'}`}
             >
               {item.label}
@@ -136,20 +169,45 @@ export default function Header() {
 
           {/* Mobile Menu Button */}
           <button
-            className="md:hidden focus-visible"
-            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+            className="md:hidden focus-visible p-2 -mr-2 rounded-full hover:bg-luxury-cream/30 transition-all duration-300"
+            onClick={() => {
+              setIsMobileMenuOpen(!isMobileMenuOpen);
+              // Increment toggle count to force re-renders
+              setMenuToggleCount(prev => prev + 1);
+              
+              // Force update when menu is opened
+              if (!isMobileMenuOpen) {
+                // This is a small hack to force React to re-evaluate the active states
+                setTimeout(() => {
+                  if (typeof window !== 'undefined') {
+                    const currentPath = window.location.pathname;
+                    const search = window.location.search;
+                    console.log(`Current page: ${currentPath}${search}`);
+                    // Force component to update
+                    setIsScrolled(prev => !prev);
+                    setIsScrolled(prev => !prev);
+                  }
+                }, 50);
+              }
+            }}
             aria-label={isMobileMenuOpen ? 'Close menu' : 'Open menu'}
             aria-expanded={isMobileMenuOpen}
           >
-            <div className="w-6 h-5 relative flex flex-col justify-between">
+            <div className="w-5 h-4 relative flex flex-col justify-between">
               <span
-                className={`w-full h-px absolute transition-all duration-300 ${showTransparentBackground ? 'bg-white' : 'bg-luxury-charcoal'} ${isMobileMenuOpen ? 'top-2 rotate-45' : 'top-0'}`}
+                className={`w-full h-[1.5px] absolute transition-all duration-300 ${
+                  showTransparentBackground ? 'bg-white' : 'bg-luxury-charcoal/80'
+                } ${isMobileMenuOpen ? 'top-[7px] rotate-45' : 'top-0'}`}
               ></span>
               <span
-                className={`w-full h-px absolute top-2 transition-opacity duration-300 ${showTransparentBackground ? 'bg-white' : 'bg-luxury-charcoal'} ${isMobileMenuOpen ? 'opacity-0' : 'opacity-100'}`}
+                className={`w-full h-[1.5px] absolute top-[7px] transition-opacity duration-300 ${
+                  showTransparentBackground ? 'bg-white' : 'bg-luxury-charcoal/80'
+                } ${isMobileMenuOpen ? 'opacity-0' : 'opacity-100'}`}
               ></span>
               <span
-                className={`w-full h-px absolute transition-all duration-300 ${showTransparentBackground ? 'bg-white' : 'bg-luxury-charcoal'} ${isMobileMenuOpen ? 'bottom-2 -rotate-45' : 'bottom-0'}`}
+                className={`w-full h-[1.5px] absolute transition-all duration-300 ${
+                  showTransparentBackground ? 'bg-white' : 'bg-luxury-charcoal/80'
+                } ${isMobileMenuOpen ? 'bottom-[7px] -rotate-45' : 'bottom-0'}`}
               ></span>
             </div>
           </button>
@@ -158,43 +216,65 @@ export default function Header() {
 
       {/* Mobile Menu */}
       <div
-        className={`md:hidden absolute top-full left-0 w-full bg-white shadow-md overflow-hidden transition-all duration-500 ${
-          isMobileMenuOpen ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'
+        className={`md:hidden absolute top-full left-0 right-0 w-full overflow-hidden transition-all duration-500 mx-auto px-4 ${
+          isMobileMenuOpen ? 'max-h-[80vh] opacity-100' : 'max-h-0 opacity-0'
         }`}
         aria-hidden={!isMobileMenuOpen}
       >
-        <nav className="flex flex-col px-4 py-6">
-          {navItems.map((item) => (
-            <Link
-              key={item.path}
-              href={item.path}
-              className={`py-3 text-sm uppercase tracking-wider border-b border-luxury-cream/30 hover:text-luxury-sienna transition-colors ${
-                pathname === item.path ||
-                (pathname.startsWith('/products') &&
-                  item.path.startsWith('/products') &&
-                  item.path.includes(
-                    new URLSearchParams(pathname.split('?')[1] || '').get(
-                      'category'
-                    ) || ''
-                  ))
-                  ? 'text-luxury-sienna font-medium'
-                  : 'text-luxury-charcoal'
-              }`}
-              onClick={() => setIsMobileMenuOpen(false)}
-            >
-              {item.label}
-            </Link>
-          ))}
-          <div className="pt-4">
-            <Link
-              href="/track"
-              className="py-3 text-sm uppercase tracking-wider block text-luxury-charcoal hover:text-luxury-sienna transition-colors"
-              onClick={() => setIsMobileMenuOpen(false)}
-            >
-              Track Order
-            </Link>
+        <div className="glass-effect mt-2 rounded-xl shadow-luxury border border-luxury-gold/10 overflow-hidden transform transition-all duration-300">
+          <nav className="flex flex-col py-4" key={`mobile-nav-${menuToggleCount}-${pathname}`}>
+            {navItems.map((item, index) => {
+              // Direct check for active state
+              let isActive = item.path === pathname;
+              
+              // Category check for product pages
+              if (typeof window !== 'undefined' && pathname.includes('/products') && item.path.includes('category=')) {
+                const itemCategory = item.path.split('category=')[1];
+                const urlParams = new URLSearchParams(window.location.search);
+                const currentCategory = urlParams.get('category');
+                isActive = itemCategory === currentCategory;
+              }
+              
+              return (
+                <Link
+                  key={item.path}
+                  href={item.path}
+                  className={`px-6 py-4 text-sm uppercase tracking-wider transition-all ${
+                    index < navItems.length - 1 ? 'border-b border-luxury-gold/10' : ''
+                  } ${
+                    isActive ? 'text-luxury-sienna font-medium bg-luxury-cream/10' : 'text-luxury-charcoal/90'
+                  }`}
+                  onClick={() => setIsMobileMenuOpen(false)}
+                >
+                  {item.label}
+                </Link>
+              );
+            })}
+            <div className="px-6 pt-3 pb-1">
+              <Link
+                href="/track"
+                className={`py-4 text-sm uppercase tracking-wider block -mx-6 px-6 transition-all ${
+                  pathname === '/track' ? 'text-luxury-sienna font-medium bg-luxury-cream/10' : 'text-luxury-charcoal/90'
+                }`}
+                onClick={() => setIsMobileMenuOpen(false)}
+              >
+                Track Order
+              </Link>
+            </div>
+          </nav>
+          
+          <div className="bg-[#f8f5f2] py-4 px-6 border-t border-luxury-gold/10">
+            <div className="flex items-center justify-between">
+              <p className="text-xs text-luxury-charcoal/70">Customer Service</p>
+              <a 
+                href="tel:+33142123456" 
+                className="text-xs text-luxury-sienna"
+              >
+                +33 1 42 12 34 56
+              </a>
+            </div>
           </div>
-        </nav>
+        </div>
       </div>
     </header>
   );

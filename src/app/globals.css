@@ -63,6 +63,54 @@
   .focus-visible {
     @apply focus:outline-none focus-visible:ring-2 focus-visible:ring-luxury-sienna focus-visible:ring-opacity-75;
   }
+  
+  /* Mobile Menu Animations */
+  .mobile-menu-enter {
+    @apply transition-all duration-300 transform translate-y-2 opacity-0;
+  }
+  
+  .mobile-menu-enter-active {
+    @apply translate-y-0 opacity-100;
+  }
+  
+  /* Touch-friendly interactions */
+  .touch-feedback {
+    @apply transition-colors duration-200;
+    -webkit-tap-highlight-color: rgba(0, 0, 0, 0); /* Disable default mobile tap highlight */
+  }
+  
+  /* Only apply the background change when the element is being touched */
+  .touch-feedback:active {
+    @apply bg-luxury-cream/30;
+  }
+  
+  /* Ensure clean active states for mobile navigation */
+  a, button {
+    -webkit-tap-highlight-color: transparent;
+  }
+  
+  /* Style for active touch states in mobile menu */
+  .mobile-nav-item {
+    position: relative;
+  }
+  
+  .mobile-nav-item:active::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(136, 120, 103, 0.1);
+    pointer-events: none;
+  }
+  
+  /* Custom active state styles */
+  .mobile-nav-active {
+    background-color: rgba(136, 120, 103, 0.1) !important;
+    color: #A05B44 !important;
+    font-weight: 500 !important;
+  }
 }
 
 @layer utilities {
@@ -83,5 +131,15 @@
   /* Luxury Gradients */
   .bg-luxury-gradient {
     @apply bg-gradient-to-b from-luxury-cream to-white;
+  }
+  
+  /* Glass effect for menus */
+  .glass-effect {
+    @apply bg-white/90 backdrop-blur-sm;
+  }
+  
+  /* Luxury box shadow */
+  .shadow-luxury {
+    box-shadow: 0 4px 20px rgba(136, 120, 103, 0.05);
   }
 }
