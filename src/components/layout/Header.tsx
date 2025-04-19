@@ -58,7 +58,7 @@ export default function Header() {
         isScrolled || !isHomePage
           ? 'bg-white shadow-sm py-3'
           : 'py-5 bg-transparent'
-      } ${hideHeader ? '-translate-y-full' : 'translate-y-0'}`}
+      } ${hideHeader ? 'max-md:-translate-y-full md:translate-y-0' : 'translate-y-0'}`}
     >
       <div className="container mx-auto px-4 flex justify-between items-center">
         {/* Logo */}
