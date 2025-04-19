@@ -17,29 +17,18 @@ export default function Header() {
   const [hideHeader, setHideHeader] = useState(false);
   const isHomePage = pathname === '/';
 
-  // Helper function to check if a menu item is active
+  // Helper function to check if a menu item is active (for desktop nav)
   const isMenuItemActive = (itemPath: string) => {
-    // For exact path matches (like home and track)
+    // For exact path matches
     if (itemPath === pathname) return true;
     
     // For product categories
     if (itemPath.includes('?category=') && pathname.includes('/products')) {
-      // Get the category from the menu item path
       const itemCategory = itemPath.split('category=')[1];
       
-      // Get the current URL search params - safely in client component
       if (typeof window !== 'undefined') {
         const urlParams = new URLSearchParams(window.location.search);
         const currentCategory = urlParams.get('category');
-        
-        // For debugging
-        if (isMobileMenuOpen && menuToggleCount > 0) {
-          console.log(`Item: ${itemPath}, Category: ${itemCategory}`);
-          console.log(`Current search: ${window.location.search}`);
-          console.log(`Current category: ${currentCategory}`);
-          console.log(`Match: ${itemCategory === currentCategory}`);
-        }
-        
         return itemCategory === currentCategory;
       }
     }
@@ -72,17 +61,6 @@ export default function Header() {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  useEffect(() => {
-    // Log current pathname whenever it changes
-    if (typeof window !== 'undefined') {
-      console.log('Current pathname:', pathname);
-      const searchParams = pathname.includes('?') 
-        ? new URLSearchParams(pathname.split('?')[1])
-        : new URLSearchParams();
-      console.log('URL parameters:', Object.fromEntries(searchParams.entries()));
-    }
-  }, [pathname]);
-
   const navItems = [
     { path: '/', label: 'Home' },
     { path: '/products?category=handmades', label: 'Handmade' },
@@ -100,7 +78,8 @@ export default function Header() {
         isScrolled || !isHomePage
           ? 'bg-[#FBF9F6] shadow-sm py-3'
           : 'py-5 bg-transparent'
-      } ${hideHeader ? 'max-md:-translate-y-full md:translate-y-0' : 'translate-y-0'}`}
+        } ${hideHeader ? 'md:translate-y-0' : 'translate-y-0'}`}
+      // } ${hideHeader ? 'max-md:-translate-y-full md:translate-y-0' : 'translate-y-0'}`}
     >
       <div className="container mx-auto px-4 flex justify-between items-center">
         {/* Logo */}
@@ -172,23 +151,7 @@ export default function Header() {
             className="md:hidden focus-visible p-2 -mr-2 rounded-full hover:bg-luxury-cream/30 transition-all duration-300"
             onClick={() => {
               setIsMobileMenuOpen(!isMobileMenuOpen);
-              // Increment toggle count to force re-renders
               setMenuToggleCount(prev => prev + 1);
-              
-              // Force update when menu is opened
-              if (!isMobileMenuOpen) {
-                // This is a small hack to force React to re-evaluate the active states
-                setTimeout(() => {
-                  if (typeof window !== 'undefined') {
-                    const currentPath = window.location.pathname;
-                    const search = window.location.search;
-                    console.log(`Current page: ${currentPath}${search}`);
-                    // Force component to update
-                    setIsScrolled(prev => !prev);
-                    setIsScrolled(prev => !prev);
-                  }
-                }, 50);
-              }
             }}
             aria-label={isMobileMenuOpen ? 'Close menu' : 'Open menu'}
             aria-expanded={isMobileMenuOpen}
@@ -196,7 +159,7 @@ export default function Header() {
             <div className="w-5 h-4 relative flex flex-col justify-between">
               <span
                 className={`w-full h-[1.5px] absolute transition-all duration-300 ${
-                  showTransparentBackground ? 'bg-white' : 'bg-luxury-charcoal/80'
+                  showTransparentBackground ? 'bg-[#FBF9F6]' : 'bg-luxury-charcoal/80'
                 } ${isMobileMenuOpen ? 'top-[7px] rotate-45' : 'top-0'}`}
               ></span>
               <span
@@ -216,7 +179,7 @@ export default function Header() {
 
       {/* Mobile Menu */}
       <div
-        className={`md:hidden absolute top-full left-0 right-0 w-full overflow-hidden transition-all duration-500 mx-auto px-4 ${
+        className={`md:hidden absolute top-full left-0 right-0 w-full overflow-hidden transition-all duration-500 mx-auto px-4  ${
           isMobileMenuOpen ? 'max-h-[80vh] opacity-100' : 'max-h-0 opacity-0'
         }`}
         aria-hidden={!isMobileMenuOpen}
