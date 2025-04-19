@@ -54,7 +54,7 @@ export default function Header() {
 
   return (
     <header
-      className={`fixed w-full z-50 transition-all duration-300 ${
+      className={`fixed w-full z-[100] -mt-[2px] sm:mt-0 transition-all duration-300 ${
         isScrolled || !isHomePage
           ? 'bg-white shadow-sm py-3'
           : 'py-5 bg-transparent'
