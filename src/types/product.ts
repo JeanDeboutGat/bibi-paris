@@ -43,7 +43,7 @@ export type ProductListItem = {
   id: string;
   name: string;
   price: number;
-  image: string;
+  images: string[];
   category: ProductCategory;
 };
 

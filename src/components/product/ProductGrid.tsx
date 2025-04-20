@@ -110,7 +110,7 @@ export default function ProductGrid({
                         : 'Decorative'
                 } Piece ${i + 1}`,
               price: Math.floor(Math.random() * 1500) + 500,
-              image: categoryImages[i % categoryImages.length],
+              images: [categoryImages[i % categoryImages.length]],
               category: cat,
             }));
             data = [...data, ...categoryProducts];
@@ -153,7 +153,7 @@ export default function ProductGrid({
       id: product.id,
       name: product.name,
       price: product.price,
-      image: product.image
+      image: product.images[0]
     });
 
     // Trigger subtle bounce animation on cart icon
@@ -230,7 +230,7 @@ export default function ProductGrid({
               {/* Aspect ratio container for consistent image heights */}
               <div className="relative aspect-[3/4] w-full">
                 <Image
-                  src={product.image}
+                  src={product.images[0]}
                   alt={product.name}
                   fill
                   sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"

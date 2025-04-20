@@ -3,7 +3,7 @@ import { notFound } from 'next/navigation';
 import ProductDetail from '@/components/product/ProductDetail';
 import RelatedProducts from '@/components/product/RelatedProducts';
 import { productApi } from '@/lib/api';
-import { Product, ProductCategory } from '@/types/product';
+import { ProductCategory } from '@/types/product';
 
 // Define types for params that match Next.js requirements
 type PageProps = {
@@ -41,26 +41,9 @@ export default async function ProductPage({ params }: PageProps) {
       notFound();
     }
 
-    // Transform the product to match the expected shape
-    const enhancedProduct: Product = {
-      ...product,
-      // Using string array for details to avoid rendering issues
-      details: [
-        'Premium wood material',
-        'Handcrafted in Paris',
-        'Made from responsibly sourced materials'
-      ],
-      images: [product.image],
-      // Add missing required properties
-      inStock: true,
-      sku: `SKU-${product.id.toUpperCase()}`,
-      // Make sure category is typed correctly as ProductCategory
-      category: product.category as ProductCategory,
-    };
-
     return (
       <div className="container mx-auto px-4 pt-32 pb-16">
-        <ProductDetail product={enhancedProduct} />
+        <ProductDetail product={product} />
 
         <div className="mt-24">
           <h2 className="font-serif text-2xl font-light text-center mb-12">

@@ -1,46 +1,10 @@
 // Basic product API interface
 
-import {OrderStatusDetail, ProductCategory} from '@/types';
+import {Order, OrderStatusDetail, Product, ProductCategory} from '@/types';
 
-interface Product {
-    id: string;
-    name: string;
-    description: string;
-    image: string;
-    category: ProductCategory;
-    price: number;
-}
+
 
 // Order interface
-interface OrderData {
-    customer: {
-        firstName: string;
-        lastName: string;
-        email: string;
-        phone: string;
-    };
-    shipping: {
-        address: string;
-        city: string;
-        state: string;
-        zipCode: string;
-        country: string;
-    };
-    items: {
-        productId: string;
-        name: string;
-        price: number;
-        quantity: number;
-    }[];
-    payment: {
-        method: string;
-    };
-    totals: {
-        subtotal: number;
-        tax: number;
-        total: number;
-    };
-}
 
 // Product API service
 export const productApi = {
@@ -52,37 +16,62 @@ export const productApi = {
             {
                 id: 'handmades-1',
                 name: 'Handcrafted Wooden Goblet',
-                description: 'description',
+                description: 'This exquisite handcrafted piece embodies our commitment to quality craftsmanship and timeless design.',
                 price: 299.99,
-                image: '/images/handmades/gobolet.jpg',
+                images: [
+                    '/images/handmades/gobolet.jpg',
+                    '/images/handmades/gobolet.jpg',
+                    '/images/handmades/gobolet.jpg'
+                ],
                 category: 'handmades',
+                inStock: true,
+                sku: 'SKU-HANDMADES-1',
+                details: ['Handcrafted from premium wood', 'One-of-a-kind design', 'Made in Paris']
             },
             {
                 id: 'handmades-2',
                 name: 'Artisanal Wooden Pullover',
                 price: 449.99,
-                image: '/images/handmades/pull.jpg',
+                images: [
+                    '/images/handmades/pull.jpg',
+                    '/images/handmades/pull.jpg',
+                    '/images/handmades/pull.jpg'
+                ],
                 category: 'handmades',
-                description: 'description',
-
+                description: 'Blend of natural materials and expert craftsmanship for a truly unique piece.',
+                inStock: true,
+                sku: 'SKU-HANDMADES-2',
+                details: ['Hand-stitched details', 'Natural materials', 'Sustainable production']
             },
             {
                 id: 'handmades-3',
                 name: 'Handcrafted Wooden Cushion',
                 price: 189.99,
-                image: '/images/handmades/cousin.jpg',
+                images: [
+                    '/images/handmades/cousin.jpg',
+                    '/images/handmades/cousin.jpg',
+                    '/images/handmades/cousin.jpg'
+                ],
                 category: 'handmades',
-                description: 'description',
-
+                description: 'A comfortable and stylish addition to your living space.',
+                inStock: true,
+                sku: 'SKU-HANDMADES-3',
+                details: ['Soft yet durable', 'Hidden zipper closure', 'Hypoallergenic filling']
             },
             {
                 id: 'handmades-4',
                 name: 'Artisanal Wooden Bag',
                 price: 499.99,
-                image: '/images/handmades/sac.jpg',
+                images: [
+                    '/images/handmades/sac.jpg',
+                    '/images/handmades/sac.jpg',
+                    '/images/handmades/sac.jpg'
+                ],
                 category: 'handmades',
-                description: 'description',
-
+                description: 'A functional work of art that combines beauty and practicality.',
+                inStock: true,
+                sku: 'SKU-HANDMADES-4',
+                details: ['Lightweight yet sturdy', 'Multiple interior compartments', 'Adjustable strap']
             },
 
             // Second-hand items
@@ -90,37 +79,61 @@ export const productApi = {
                 id: 'secondHands-1',
                 name: 'Vintage Wooden Table',
                 price: 899.99,
-                image: '/images/secondHands/table.jpg',
+                images: [
+                    '/images/secondHands/table.jpg',
+                    '/images/secondHands/table.jpg',
+                    '/images/secondHands/table.jpg'
+                ],
                 category: 'secondHands',
-                description: 'description',
-
+                description: 'A beautifully preserved piece with decades of character.',
+                inStock: true,
+                sku: 'SKU-SECONDHANDS-1',
+                details: ['Mid-century design', 'Restored finish', 'Solid wood construction']
             },
             {
                 id: 'secondHands-2',
                 name: 'Antique Wooden Chair',
                 price: 599.99,
-                image: '/images/secondHands/chair.jpg',
+                images: [
+                    '/images/secondHands/chair.jpg',
+                    '/images/secondHands/chair.jpg',
+                    '/images/secondHands/chair.jpg'
+                ],
                 category: 'secondHands',
-                description: 'description',
-
+                description: 'Elegant seating with a storied past, carefully restored.',
+                inStock: true,
+                sku: 'SKU-SECONDHANDS-2',
+                details: ['Original upholstery', 'Hand-carved details', 'Sturdy construction']
             },
             {
                 id: 'secondHands-3',
                 name: 'Vintage Dark Chair',
                 price: 649.99,
-                image: '/images/secondHands/chairdark.jpg',
+                images: [
+                    '/images/secondHands/chairdark.jpg',
+                    '/images/secondHands/chairdark.jpg',
+                    '/images/secondHands/chairdark.jpg'
+                ],
                 category: 'secondHands',
-                description: 'description',
-
+                description: 'A striking dark finish highlights the beautiful grain of this vintage chair.',
+                inStock: true,
+                sku: 'SKU-SECONDHANDS-3',
+                details: ['Rich ebony finish', 'Ergonomic design', 'Carefully restored']
             },
             {
                 id: 'secondHands-4',
                 name: 'Compact Wooden Chair',
                 price: 549.99,
-                image: '/images/secondHands/smallChair.jpg',
+                images: [
+                    '/images/secondHands/smallChair.jpg',
+                    '/images/secondHands/smallChair.jpg',
+                    '/images/secondHands/smallChair.jpg'
+                ],
                 category: 'secondHands',
-                description: 'description',
-
+                description: 'Perfect for small spaces without sacrificing comfort or style.',
+                inStock: true,
+                sku: 'SKU-SECONDHANDS-4',
+                details: ['Space-saving design', 'Versatile use', 'Solid hardwood construction']
             },
 
             // Paintings
@@ -128,37 +141,61 @@ export const productApi = {
                 id: 'paintings-1',
                 name: 'Portrait Painting',
                 price: 1299.99,
-                image: '/images/paintings/girl.jpg',
+                images: [
+                    '/images/paintings/girl.jpg',
+                    '/images/paintings/girl.jpg',
+                    '/images/paintings/girl.jpg'
+                ],
                 category: 'paintings',
-                description: 'description',
-
+                description: 'A captivating portrait that brings timeless elegance to any room.',
+                inStock: true,
+                sku: 'SKU-PAINTINGS-1',
+                details: ['Original artwork', 'Signed by the artist', 'Custom framing available']
             },
             {
                 id: 'paintings-2',
                 name: 'Garden Gate Artwork',
                 price: 1499.99,
-                image: '/images/paintings/gate.jpg',
+                images: [
+                    '/images/paintings/gate.jpg',
+                    '/images/paintings/gate.jpg',
+                    '/images/paintings/gate.jpg'
+                ],
                 category: 'paintings',
-                description: 'description',
-
+                description: 'Transport yourself to a serene garden with this evocative piece.',
+                inStock: true,
+                sku: 'SKU-PAINTINGS-2',
+                details: ['Oil on canvas', 'Archival quality', 'UV-protective glazing']
             },
             {
                 id: 'paintings-3',
                 name: 'Children Portrait',
                 price: 1199.99,
-                image: '/images/paintings/girl-boy.jpg',
+                images: [
+                    '/images/paintings/girl-boy.jpg',
+                    '/images/paintings/girl-boy.jpg',
+                    '/images/paintings/girl-boy.jpg'
+                ],
                 category: 'paintings',
-                description: 'description',
-
+                description: 'A tender portrayal of childhood innocence and wonder.',
+                inStock: true,
+                sku: 'SKU-PAINTINGS-3',
+                details: ['Limited edition print', 'Certificate of authenticity', 'Museum-quality framing']
             },
             {
                 id: 'paintings-4',
                 name: 'Floral Artwork',
                 price: 999.99,
-                image: '/images/paintings/flower.jpg',
+                images: [
+                    '/images/paintings/flower.jpg',
+                    '/images/paintings/flower.jpg',
+                    '/images/paintings/flower.jpg'
+                ],
                 category: 'paintings',
-                description: 'description',
-
+                description: 'Vibrant colors and delicate details bring these flowers to life.',
+                inStock: true,
+                sku: 'SKU-PAINTINGS-4',
+                details: ['Botanical study', 'Archival pigments', 'Gallery-wrapped canvas']
             },
 
             // Decorative objects
@@ -166,40 +203,65 @@ export const productApi = {
                 id: 'decoratives-1',
                 name: 'Elegant Wooden Vase',
                 price: 249.99,
-                image: '/images/decoratives/vase.jpg',
+                images: [
+                    '/images/decoratives/vase.jpg',
+                    '/images/decoratives/vase.jpg',
+                    '/images/decoratives/vase.jpg'
+                ],
                 category: 'decoratives',
-                description: 'description',
-
+                description: 'A statement piece that adds natural elegance to any space.',
+                inStock: true,
+                sku: 'SKU-DECORATIVES-1',
+                details: ['Hand-turned wood', 'Natural finish', 'Waterproof interior']
             },
             {
                 id: 'decoratives-2',
                 name: 'Decorative Wooden Pot',
                 price: 199.99,
-                image: '/images/decoratives/pot.jpg',
+                images: [
+                    '/images/decoratives/pot.jpg',
+                    '/images/decoratives/pot.jpg',
+                    '/images/decoratives/pot.jpg'
+                ],
                 category: 'decoratives',
-                description: 'description',
-
+                description: 'Versatile and beautiful, perfect for plants or as a standalone piece.',
+                inStock: true,
+                sku: 'SKU-DECORATIVES-2',
+                details: ['Drainage hole included', 'Weather-resistant', 'Indoor/outdoor use']
             },
             {
                 id: 'decoratives-3',
                 name: 'Wooden Flower Sculpture',
                 price: 159.99,
-                image: '/images/decoratives/flower.jpg',
+                images: [
+                    '/images/decoratives/flower.jpg',
+                    '/images/decoratives/flower.jpg',
+                    '/images/decoratives/flower.jpg'
+                ],
                 category: 'decoratives',
-                description: 'description',
-
+                description: 'The beauty of nature captured in a lasting wooden form.',
+                inStock: true,
+                sku: 'SKU-DECORATIVES-3',
+                details: ['Hand-carved details', 'Natural variations', 'Stable base design']
             },
             {
                 id: 'decoratives-4',
                 name: 'Modern Wooden Vase',
                 price: 279.99,
-                image: '/images/decoratives/alexandra-gorn-W5dsm9n6e3g-unsplash.jpg',
+                images: [
+                    '/images/decoratives/alexandra-gorn-W5dsm9n6e3g-unsplash.jpg',
+                    '/images/decoratives/alexandra-gorn-W5dsm9n6e3g-unsplash.jpg',
+                    '/images/decoratives/alexandra-gorn-W5dsm9n6e3g-unsplash.jpg'
+                ],
                 category: 'decoratives',
-                description: 'description',
-
+                description: 'Contemporary design meets natural materials in this stunning vase.',
+                inStock: true,
+                sku: 'SKU-DECORATIVES-4',
+                details: ['Minimalist design', 'Versatile display options', 'Sealed for durability']
             },
         ];
     },
+    
     // Get product by ID
     async getById(id: string): Promise<Product> {
         // Simulate API call delay
@@ -212,11 +274,7 @@ export const productApi = {
         const product = allProducts.find((p) => p.id === id);
 
         if (product) {
-            return {
-                ...product,
-                description:
-                    'This exquisite handcrafted piece embodies our commitment to quality craftsmanship and timeless design. Made from sustainably sourced materials and shaped with traditional techniques, it represents the perfect blend of functionality and artistry that defines our collection.',
-            };
+            return product;
         }
 
         // Fallback if product not found
@@ -224,9 +282,16 @@ export const productApi = {
             id,
             name: 'Luxury Product',
             description: 'High-end luxury product with premium materials.',
-            image: '/images/handmades/gobolet.jpg',
+            images: [
+                '/images/handmades/gobolet.jpg',
+                '/images/handmades/gobolet.jpg',
+                '/images/handmades/gobolet.jpg'
+            ],
             category: 'handmades',
             price: 999.99,
+            inStock: false,
+            sku: `SKU-${id.toUpperCase()}`,
+            details: ['Product details not available']
         };
     },
 
@@ -239,18 +304,10 @@ export const productApi = {
         const allProducts = await this.getAll();
 
         // Filter products by category and exclude the current product
-        const relatedProducts = allProducts
+        return allProducts
             .filter((p) => p.category === category && p.id !== excludeId)
-            // Add description field for each product
-            .map((p) => ({
-                ...p,
-                description:
-                    'A beautifully crafted piece from our exclusive collection.',
-            }))
             // Limit to 4 related products
             .slice(0, 4);
-
-        return relatedProducts;
     },
 
     // Get products by category
@@ -258,24 +315,18 @@ export const productApi = {
         // Simulate API call delay
         await new Promise((resolve) => setTimeout(resolve, 500));
 
-        // Return mock products for the category
-        return Array(6)
-            .fill(null)
-            .map((_, i) => ({
-                id: `cat-${i}`,
-                name: `${category.charAt(0).toUpperCase() + category.slice(1)} Item ${i + 1}`,
-                description: `Quality ${category} product`,
-                image: '/images/product-placeholder.jpg',
-                category,
-                price: 599.99 + i * 150,
-            }));
+        // Get all products
+        const allProducts = await this.getAll();
+
+        // Filter products by category
+        return allProducts.filter((p) => p.category === category);
     },
 };
 
 // Order API service
 export const orderApi = {
     // Create a new order
-    async create(orderData: OrderData): Promise<{ orderId: string }> {
+    async create(orderData: Order): Promise<{ orderId: string }> {
         // Simulate API call delay
         await new Promise((resolve) => setTimeout(resolve, 1000));
 
@@ -288,12 +339,15 @@ export const orderApi = {
         };
     },
 
+    // Get order status
     async getStatus(orderId: string, email: string): Promise<OrderStatusDetail> {
         // Simulate API call delay
-        await new Promise((resolve) => setTimeout(resolve, 1000));
+        await new Promise((resolve) => setTimeout(resolve, 800));
 
-        // Log the order data (for development purposes)
-        console.log('Order id fetched:', orderId, 'for email', email);
+        // Validate input
+        if (!orderId || !email) {
+            throw new Error('Order ID and email are required');
+        }
 
         // Return a mock order ID
         return {

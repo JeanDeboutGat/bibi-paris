@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import { useCartStore } from '@/lib/store';
 import OrderSummary from '../order/OrderSummary';
 import { orderApi } from '@/lib/api';
+import { Order, PaymentMethod } from '@/types';
 
 type FormData = {
   firstName: string;
@@ -16,7 +17,7 @@ type FormData = {
   state: string;
   zipCode: string;
   country: string;
-  paymentMethod: 'credit_card' | 'paypal';
+  paymentMethod: PaymentMethod;
   cardNumber?: string;
   cardExpiry?: string;
   cardCvc?: string;
@@ -36,7 +37,7 @@ export default function CheckoutForm() {
     state: '',
     zipCode: '',
     country: 'United States',
-    paymentMethod: 'credit_card',
+    paymentMethod: 'paypal',
   });
   const [errors, setErrors] = useState<Partial<Record<keyof FormData, string>>>(
     {}
@@ -64,7 +65,7 @@ export default function CheckoutForm() {
   };
 
   // Handle payment method selection
-  const handlePaymentMethodChange = (method: 'credit_card' | 'paypal') => {
+  const handlePaymentMethodChange = (method: PaymentMethod) => {
     setFormData((prev) => ({ ...prev, paymentMethod: method }));
   };
 
@@ -97,7 +98,7 @@ export default function CheckoutForm() {
     }
 
     // Credit card validation if credit card is selected
-    if (formData.paymentMethod === 'credit_card') {
+    if (formData.paymentMethod === 'credit') {
       if (!formData.cardNumber) {
         newErrors.cardNumber = 'Card number is required';
       } else if (!/^\d{16}$/.test(formData.cardNumber.replace(/\s/g, ''))) {
@@ -133,14 +134,15 @@ export default function CheckoutForm() {
 
     try {
       // Prepare order data
-      const orderData = {
+      const orderData: Order = {
         customer: {
           firstName: formData.firstName,
           lastName: formData.lastName,
           email: formData.email,
           phone: formData.phone,
         },
-        shipping: {
+        shippingMethod: 'standard',
+        shippingAddress: {
           address: formData.address,
           city: formData.city,
           state: formData.state,
@@ -148,21 +150,29 @@ export default function CheckoutForm() {
           country: formData.country,
         },
         items: items.map((item) => ({
-          productId: item.id,
+          id: item.id,
           name: item.name,
           price: item.price,
           quantity: item.quantity,
         })),
-        payment: {
-          method: formData.paymentMethod,
-          // In a real app, you would handle payment securely
-          // Don't send raw card details to your backend
-        },
-        totals: {
-          subtotal,
-          tax,
-          total,
-        },
+        paymentMethod: formData.paymentMethod,
+        // In a real app, you would handle payment securely
+        // Don't send raw card details to your backend
+
+        subtotal: subtotal,
+        tax: tax,
+        total: total,
+        id: 'id',
+        status: 'processing',
+        shippingCost: 10,
+        createdAt: '',
+        timeline: [
+          {
+            status: '',
+            date: '',
+            description: '',
+          },
+        ],
       };
 
       // Submit order to API
@@ -393,8 +403,8 @@ export default function CheckoutForm() {
                   type="radio"
                   id="credit_card"
                   name="paymentMethod"
-                  checked={formData.paymentMethod === 'credit_card'}
-                  onChange={() => handlePaymentMethodChange('credit_card')}
+                  checked={formData.paymentMethod === 'credit'}
+                  onChange={() => handlePaymentMethodChange('credit')}
                   className="h-4 w-4 border-gray-300"
                 />
                 <label htmlFor="credit_card" className="ml-2 text-sm">
@@ -402,7 +412,7 @@ export default function CheckoutForm() {
                 </label>
               </div>
 
-              {formData.paymentMethod === 'credit_card' && (
+              {formData.paymentMethod === 'credit' && (
                 <div className="pl-6 space-y-4 mt-4">
                   <div>
                     <label htmlFor="cardNumber" className="block text-sm mb-1">

@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { productApi } from '@/lib/api';
-import { ProductListItem, ProductCategory } from '@/types/product';
+import { Product, ProductCategory } from '@/types/product';
 
 type RelatedProductsProps = {
   currentProductId: string;
@@ -15,7 +15,7 @@ export default function RelatedProducts({
   currentProductId,
   category,
 }: RelatedProductsProps) {
-  const [products, setProducts] = useState<ProductListItem[]>([]);
+  const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -78,29 +78,45 @@ export default function RelatedProducts({
             id: `${category}-1`,
             name: `${category.charAt(0).toUpperCase() + category.slice(1, -1)} Item 1`,
             price: 599,
-            image: categoryImages[0],
+            images: [categoryImages[0]],
             category,
+            description: 'Related product description',
+            inStock: true,
+            sku: `SKU-${category.toUpperCase()}-1`,
+            details: ['Quality craftsmanship', 'Sustainable materials', 'Unique design']
           },
           {
             id: `${category}-2`,
             name: `${category.charAt(0).toUpperCase() + category.slice(1, -1)} Item 2`,
             price: 699,
-            image: categoryImages[1],
+            images: [categoryImages[1]],
             category,
+            description: 'Related product description',
+            inStock: true,
+            sku: `SKU-${category.toUpperCase()}-2`,
+            details: ['Quality craftsmanship', 'Sustainable materials', 'Unique design']
           },
           {
             id: `${category}-3`,
             name: `${category.charAt(0).toUpperCase() + category.slice(1, -1)} Item 3`,
             price: 799,
-            image: categoryImages[2],
+            images: [categoryImages[2]],
             category,
+            description: 'Related product description',
+            inStock: true,
+            sku: `SKU-${category.toUpperCase()}-3`,
+            details: ['Quality craftsmanship', 'Sustainable materials', 'Unique design']
           },
           {
             id: `${category}-4`,
             name: `${category.charAt(0).toUpperCase() + category.slice(1, -1)} Item 4`,
             price: 899,
-            image: categoryImages[3],
+            images: [categoryImages[3]],
             category,
+            description: 'Related product description',
+            inStock: true,
+            sku: `SKU-${category.toUpperCase()}-4`,
+            details: ['Quality craftsmanship', 'Sustainable materials', 'Unique design']
           },
         ]);
       } finally {
@@ -139,7 +155,7 @@ export default function RelatedProducts({
         >
           <div className="relative h-64 mb-4 overflow-hidden">
             <Image
-              src={product.image}
+              src={product.images[0]}
               alt={product.name}
               fill
               className="object-cover transition-transform duration-700 group-hover:scale-105"

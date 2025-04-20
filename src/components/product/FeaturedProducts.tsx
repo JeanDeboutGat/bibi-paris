@@ -4,14 +4,7 @@ import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { productApi } from '@/lib/api';
-
-type Product = {
-  id: string;
-  name: string;
-  price: number;
-  image: string;
-  category: string;
-};
+import { Product } from '@/types/product';
 
 // TODO CHECK If THIS COMPONENT IS NECESSARY AND USED.
 export default function FeaturedProducts() {
@@ -37,29 +30,45 @@ export default function FeaturedProducts() {
             id: '1',
             name: 'Leather Handbag',
             price: 2800,
-            image: '/images/product1.jpg',
-            category: 'Bags',
+            images: ['/images/product1.jpg'],
+            category: 'handmades',
+            description: 'Elegant leather handbag with premium craftsmanship.',
+            inStock: true,
+            sku: 'SKU-HANDBAG-1',
+            details: ['Premium leather', 'Handcrafted in Italy', 'Gold hardware']
           },
           {
             id: '2',
             name: 'Silk Scarf',
             price: 450,
-            image: '/images/product2.jpg',
-            category: 'Accessories',
+            images: ['/images/product2.jpg'],
+            category: 'decoratives',
+            description: 'Luxurious silk scarf with a unique pattern.',
+            inStock: true,
+            sku: 'SKU-SCARF-2',
+            details: ['100% silk', 'Hand-rolled edges', 'Exclusive design']
           },
           {
             id: '3',
             name: 'Leather Belt',
             price: 680,
-            image: '/images/product3.jpg',
-            category: 'Accessories',
+            images: ['/images/product3.jpg'],
+            category: 'handmades',
+            description: 'Classic leather belt with a timeless design.',
+            inStock: true,
+            sku: 'SKU-BELT-3',
+            details: ['Full-grain leather', 'Brass buckle', 'Made in France']
           },
           {
             id: '4',
             name: 'Cashmere Sweater',
             price: 1200,
-            image: '/images/product4.jpg',
-            category: 'Clothing',
+            images: ['/images/product4.jpg'],
+            category: 'handmades',
+            description: 'Soft cashmere sweater for ultimate comfort.',
+            inStock: true,
+            sku: 'SKU-SWEATER-4',
+            details: ['100% cashmere', 'Ribbed cuffs and hem', 'Sustainably sourced']
           },
         ]);
       } finally {
@@ -98,7 +107,7 @@ export default function FeaturedProducts() {
         >
           <div className="relative h-80 mb-4 overflow-hidden">
             <Image
-              src={product.image}
+              src={product.images[0]}
               alt={product.name}
               fill
               className="object-cover transition-transform duration-700 group-hover:scale-105"
