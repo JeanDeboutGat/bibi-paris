@@ -2,11 +2,13 @@
 
 import { useState } from 'react';
 import { useRouter, usePathname } from 'next/navigation';
+import { ProductCategory, ProductSortOption } from '@/types/product';
 
 type ProductFiltersProps = {
-  selectedCategory?: string;
-  selectedSort?: string;
+  selectedCategory?: ProductCategory;
+  selectedSort?: ProductSortOption;
 };
+
 
 export default function ProductFilters({
   selectedCategory,
@@ -19,17 +21,17 @@ export default function ProductFilters({
 
   // Filter options
   const categories = [
-    { value: 'handmades', label: 'Handmade Pieces' },
-    { value: 'secondHands', label: 'Second-Hand' },
-    { value: 'paintings', label: 'Paintings' },
-    { value: 'decoratives', label: 'Decorative Objects' },
+    { value: 'handmades' as ProductCategory, label: 'Handmade Pieces' },
+    { value: 'secondHands' as ProductCategory, label: 'Second-Hand' },
+    { value: 'paintings' as ProductCategory, label: 'Paintings' },
+    { value: 'decoratives' as ProductCategory, label: 'Decorative Objects' },
   ];
 
   // Simplified sort options - only newest and price
   const sortOptions = [
-    { value: 'newest', label: 'Newest Arrivals' },
-    { value: 'price_asc', label: 'Price: Low to High' },
-    { value: 'price_desc', label: 'Price: High to Low' },
+    { value: 'newest' as ProductSortOption, label: 'Newest Arrivals' },
+    { value: 'price_asc' as ProductSortOption, label: 'Price: Low to High' },
+    { value: 'price_desc' as ProductSortOption, label: 'Price: High to Low' },
   ];
 
   const updateFilters = (key: string, value: string | null) => {

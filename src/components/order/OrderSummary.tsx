@@ -1,5 +1,5 @@
 import Image from 'next/image';
-import { CartItem } from '@/lib/store';
+import { CartItem } from '@/types';
 
 type OrderSummaryProps = {
   items: CartItem[];

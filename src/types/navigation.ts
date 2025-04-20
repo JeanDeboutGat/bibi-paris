@@ -5,9 +5,9 @@
 export type RouteType = 'page' | 'category' | 'collection' | 'external';
 
 export type NavigationItem = {
-  label: string;
-  path: string;
-  type: RouteType;
+  title: string;
+  href: string;
+  type?: RouteType;
   children?: NavigationItem[];
   isNew?: boolean;
   isFeatured?: boolean;

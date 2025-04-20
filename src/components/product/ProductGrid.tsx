@@ -4,28 +4,18 @@ import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { useLocalCartStore } from '@/lib/store';
-
-type Product = {
-  id: string;
-  name: string;
-  price: number;
-  image: string;
-  category: string;
-  collection?: string;
-};
+import { ProductListItem, ProductCategory, ProductSortOption } from '@/types/product';
 
 type ProductGridProps = {
-  category?: string;
-  collection?: string;
-  sort?: string;
+  category?: ProductCategory;
+  sort?: ProductSortOption;
 };
 
 export default function ProductGrid({
   category,
-  collection,
   sort,
 }: ProductGridProps) {
-  const [products, setProducts] = useState<Product[]>([]);
+  const [products, setProducts] = useState<ProductListItem[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [hoveredProduct, setHoveredProduct] = useState<string | null>(null);
@@ -65,12 +55,12 @@ export default function ProductGrid({
         };
 
         // Create mock data for all categories
-        let data: Product[] = [];
+        let data: ProductListItem[] = [];
 
         // Only generate products for the selected category, or all categories if none selected
         const categoriesToGenerate = category
           ? [category]
-          : ['handmades', 'secondHands', 'paintings', 'decoratives'];
+          : ['handmades', 'secondHands', 'paintings', 'decoratives'] as ProductCategory[];
 
         // Enhanced product names to convey luxury
         const productNamesByCategory = {
@@ -122,19 +112,11 @@ export default function ProductGrid({
               price: Math.floor(Math.random() * 1500) + 500,
               image: categoryImages[i % categoryImages.length],
               category: cat,
-              collection: i % 2 === 0 ? 'signature' : 'spring',
             }));
             data = [...data, ...categoryProducts];
           }
         });
 
-        // Filter by collection if specified
-        if (collection) {
-          data = data.filter(
-            (product) =>
-              product.collection?.toLowerCase() === collection.toLowerCase()
-          );
-        }
 
         // Sort products
         if (sort) {
@@ -161,9 +143,9 @@ export default function ProductGrid({
     };
 
     fetchProducts();
-  }, [category, collection, sort]);
+  }, [category, sort]);
 
-  const handleQuickAdd = (e: React.MouseEvent, product: Product) => {
+  const handleQuickAdd = (e: React.MouseEvent, product: ProductListItem) => {
     e.preventDefault();
     e.stopPropagation();
 
@@ -171,7 +153,7 @@ export default function ProductGrid({
       id: product.id,
       name: product.name,
       price: product.price,
-      image: product.image,
+      image: product.image
     });
 
     // Trigger subtle bounce animation on cart icon

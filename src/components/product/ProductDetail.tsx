@@ -3,17 +3,10 @@
 import { useState } from 'react';
 import Image from 'next/image';
 import { useLocalCartStore } from '@/lib/store';
+import { CartItem, Product } from '@/types/product';
 
 type ProductDetailProps = {
-  product: {
-    id: string;
-    name: string;
-    price: number;
-    description: string;
-    details: string[];
-    images: string[];
-    category: string;
-  };
+  product: Product;
 };
 
 export default function ProductDetail({ product }: ProductDetailProps) {
@@ -24,12 +17,15 @@ export default function ProductDetail({ product }: ProductDetailProps) {
   const { addItem } = useLocalCartStore();
 
   const handleAddToCart = () => {
-    addItem({
+    const cartItem: CartItem = {
       id: product.id,
       name: product.name,
       price: product.price,
       image: product.images[0],
-    });
+      quantity: 1,
+    };
+
+    addItem(cartItem);
 
     setIsAddedToCart(true);
 
@@ -48,6 +44,9 @@ export default function ProductDetail({ product }: ProductDetailProps) {
       setIsAddedToCart(false);
     }, 3000);
   };
+
+  // Make sure product.details is always treated as an array of strings for now
+  const details = Array.isArray(product.details) ? product.details : [];
 
   // Zoom functionality
   const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
@@ -178,10 +177,14 @@ export default function ProductDetail({ product }: ProductDetailProps) {
             </summary>
             <div className="pt-4 pb-2 text-luxury-charcoal/70 text-sm leading-relaxed">
               <ul className="space-y-2">
-                {product.details.map((detail, index) => (
+                {details.map((detail, index) => (
                   <li key={index} className="flex items-start gap-2">
                     <span className="text-luxury-gold">•</span>
-                    <span>{detail}</span>
+                    <span>
+                      {typeof detail === 'string'
+                        ? detail
+                        : JSON.stringify(detail)}
+                    </span>
                   </li>
                 ))}
               </ul>

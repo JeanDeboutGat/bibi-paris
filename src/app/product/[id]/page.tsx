@@ -3,7 +3,7 @@ import { notFound } from 'next/navigation';
 import ProductDetail from '@/components/product/ProductDetail';
 import RelatedProducts from '@/components/product/RelatedProducts';
 import { productApi } from '@/lib/api';
-import { Product } from '@/types';
+import { Product, ProductCategory } from '@/types/product';
 
 // Define types for params that match Next.js requirements
 type PageProps = {
@@ -44,17 +44,18 @@ export default async function ProductPage({ params }: PageProps) {
     // Transform the product to match the expected shape
     const enhancedProduct: Product = {
       ...product,
+      // Using string array for details to avoid rendering issues
       details: [
-        'Premium quality',
-        'Handcrafted with care',
-        'Sustainably sourced materials',
+        'Premium wood material',
+        'Handcrafted in Paris',
+        'Made from responsibly sourced materials'
       ],
       images: [product.image],
       // Add missing required properties
       inStock: true,
       sku: `SKU-${product.id.toUpperCase()}`,
       // Make sure category is typed correctly as ProductCategory
-      category: product.category,
+      category: product.category as ProductCategory,
     };
 
     return (
@@ -67,7 +68,7 @@ export default async function ProductPage({ params }: PageProps) {
           </h2>
           <RelatedProducts
             currentProductId={product.id}
-            category={product.category}
+            category={product.category as ProductCategory}
           />
         </div>
       </div>

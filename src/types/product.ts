@@ -4,18 +4,12 @@
 
 export type ProductCategory = 'handmades' | 'secondHands' | 'paintings' | 'decoratives';
 
-export type ProductCollection = 'signature' | 'spring' | 'winter' | 'limited';
 
-export type ProductSortOption = 'price_asc' | 'price_desc' | 'newest' | 'popularity';
+export type ProductSortOption = 'price_asc' | 'price_desc' | 'newest';
 
 export type ProductImage = {
   url: string;
   alt: string;
-};
-
-export type ProductDetail = {
-  label: string;
-  value: string;
 };
 
 export type ProductDimension = {
@@ -30,10 +24,9 @@ export type Product = {
   name: string;
   price: number;
   description: string;
-  details: string[];
+  details: string[];  // For now, only using string[] to avoid rendering issues
   images: string[];
   category: ProductCategory;
-  collection?: ProductCollection;
   inStock: boolean;
   featured?: boolean;
   new?: boolean;
@@ -52,7 +45,6 @@ export type ProductListItem = {
   price: number;
   image: string;
   category: ProductCategory;
-  collection?: ProductCollection;
 };
 
 export type CartItem = {
@@ -65,7 +57,6 @@ export type CartItem = {
 
 export type ProductFilterOptions = {
   category?: ProductCategory;
-  collection?: ProductCollection;
   sort?: ProductSortOption;
   priceRange?: {
     min?: number;

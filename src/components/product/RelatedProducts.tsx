@@ -4,25 +4,18 @@ import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { productApi } from '@/lib/api';
-
-type Product = {
-  id: string;
-  name: string;
-  price: number;
-  image: string;
-  category: string;
-};
+import { ProductListItem, ProductCategory } from '@/types/product';
 
 type RelatedProductsProps = {
   currentProductId: string;
-  category: string;
+  category: ProductCategory;
 };
 
 export default function RelatedProducts({
   currentProductId,
   category,
 }: RelatedProductsProps) {
-  const [products, setProducts] = useState<Product[]>([]);
+  const [products, setProducts] = useState<ProductListItem[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {

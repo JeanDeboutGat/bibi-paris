@@ -4,6 +4,7 @@ import { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { usePathname } from 'next/navigation';
+import { NavigationItem } from '@/types';
 import { useLocalCartStore } from '@/lib/store';
 
 export default function Header() {
@@ -61,12 +62,27 @@ export default function Header() {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  const navItems = [
-    { path: '/', label: 'Home' },
-    { path: '/products?category=handmades', label: 'Handmade' },
-    { path: '/products?category=secondHands', label: 'Second-Hand' },
-    { path: '/products?category=paintings', label: 'Paintings' },
-    { path: '/products?category=decoratives', label: 'Decorative' },
+  const navItems: NavigationItem[] = [
+    { 
+      title: 'Home',
+      href: '/'
+    },
+    { 
+      title: 'Handmade',
+      href: '/products?category=handmades'
+    },
+    { 
+      title: 'Second-Hand',
+      href: '/products?category=secondHands'
+    },
+    { 
+      title: 'Paintings',
+      href: '/products?category=paintings'
+    },
+    { 
+      title: 'Decorative',
+      href: '/products?category=decoratives'
+    }
   ];
 
   // Show transparent background only on homepage when not scrolled
@@ -103,13 +119,13 @@ export default function Header() {
         <nav className="hidden md:flex space-x-10">
           {navItems.map((item) => (
             <Link
-              key={item.path}
-              href={item.path}
+              key={item.href}
+              href={item.href}
               className={`text-sm uppercase tracking-wider hover:text-luxury-sienna transition-colors duration-300 focus-visible ${
-                isMenuItemActive(item.path) ? 'border-b border-luxury-gold pb-1' : ''
+                isMenuItemActive(item.href) ? 'border-b border-luxury-gold pb-1' : ''
               } ${showTransparentBackground ? 'text-white' : 'text-luxury-charcoal'}`}
             >
-              {item.label}
+              {item.title}
             </Link>
           ))}
         </nav>
@@ -188,11 +204,11 @@ export default function Header() {
           <nav className="flex flex-col py-4" key={`mobile-nav-${menuToggleCount}-${pathname}`}>
             {navItems.map((item, index) => {
               // Direct check for active state
-              let isActive = item.path === pathname;
+              let isActive = item.href === pathname;
               
               // Category check for product pages
-              if (typeof window !== 'undefined' && !!pathname?.includes('/products') && item.path.includes('category=')) {
-                const itemCategory = item.path.split('category=')[1];
+              if (typeof window !== 'undefined' && !!pathname?.includes('/products') && item.href.includes('category=')) {
+                const itemCategory = item.href.split('category=')[1];
                 const urlParams = new URLSearchParams(window.location.search);
                 const currentCategory = urlParams.get('category');
                 isActive = itemCategory === currentCategory;
@@ -200,8 +216,8 @@ export default function Header() {
               
               return (
                 <Link
-                  key={item.path}
-                  href={item.path}
+                  key={item.href}
+                  href={item.href}
                   className={`px-6 py-4 text-sm uppercase tracking-wider transition-all ${
                     index < navItems.length - 1 ? 'border-b border-luxury-gold/10' : ''
                   } ${
@@ -209,7 +225,7 @@ export default function Header() {
                   }`}
                   onClick={() => setIsMobileMenuOpen(false)}
                 >
-                  {item.label}
+                  {item.title}
                 </Link>
               );
             })}

@@ -1,6 +1,7 @@
 import { Metadata } from 'next';
 import ProductGrid from '@/components/product/ProductGrid';
 import ProductFilters from '@/components/product/ProductFilters';
+import { ProductCategory, ProductSortOption } from '@/types/product';
 
 export const metadata: Metadata = {
   title: 'Bibi Paris | Collections',
@@ -17,8 +18,8 @@ export default async function ProductsPage({
   const params = await searchParams;
 
   const category =
-    typeof params.category === 'string' ? params.category : undefined;
-  const sort = typeof params.sort === 'string' ? params.sort : undefined;
+    typeof params.category === 'string' ? params.category as ProductCategory : undefined;
+  const sort = typeof params.sort === 'string' ? params.sort as ProductSortOption : undefined;
 
   // Determine page title based on filters
   let pageTitle = 'All Collections';
