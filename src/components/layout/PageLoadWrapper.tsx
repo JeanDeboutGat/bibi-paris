@@ -3,13 +3,14 @@
 import { useEffect, useState, useRef } from 'react';
 import { usePathname, useSearchParams } from 'next/navigation';
 import LoadingSpinner from '@/components/ui/LoadingSpinner';
+import { DataFetchingRoute, StaticContentRoute, SpinnerStyle } from '@/types';
 
 type PageLoadWrapperProps = {
   children: React.ReactNode;
 };
 
 // Routes that likely require data fetching or are complex enough to warrant a loading spinner
-const DATA_FETCHING_ROUTES = [
+const DATA_FETCHING_ROUTES: DataFetchingRoute[] = [
   '/products',
   '/cart',
   '/checkout',
@@ -22,7 +23,7 @@ const DATA_FETCHING_ROUTES = [
 ];
 
 // Simple content pages that load quickly
-const STATIC_CONTENT_ROUTES = [
+const STATIC_CONTENT_ROUTES: StaticContentRoute[] = [
   '/about',
   '/contact',
   '/privacy',
@@ -162,7 +163,7 @@ export default function PageLoadWrapper({ children }: PageLoadWrapperProps) {
   }, [pathname, searchParams]);
 
   // Adjust loading spinner style based on the type of route
-  const getLoadingStyle = (): 'default' | 'minimal' | 'elegant' => {
+  const getLoadingStyle = (): SpinnerStyle => {
     const isProductPage = !!pathname?.startsWith('/product/');
     const isCheckoutFlow =
       !!pathname?.startsWith('/cart') || !!pathname?.startsWith('/checkout');

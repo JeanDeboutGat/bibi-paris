@@ -2,13 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import Image from 'next/image';
-
-interface LoadingSpinnerProps {
-  fullScreen?: boolean;
-  delay?: number; // delay in ms before showing the spinner
-  style?: 'default' | 'minimal' | 'elegant'; // different animation styles
-  size?: 'sm' | 'md' | 'lg'; // different size options
-}
+import { LoadingSpinnerProps, SpinnerSize } from '@/types';
 
 export default function LoadingSpinner({ 
   fullScreen = true, 
@@ -31,7 +25,7 @@ export default function LoadingSpinner({
   if (!show) return null;
 
   // Size mapping
-  const sizeMap = {
+  const sizeMap: Record<SpinnerSize, { container: string, bar: string }> = {
     sm: { container: 'w-16 h-16', bar: 'w-16' },
     md: { container: 'w-20 h-20', bar: 'w-20' },
     lg: { container: 'w-28 h-28', bar: 'w-28' },

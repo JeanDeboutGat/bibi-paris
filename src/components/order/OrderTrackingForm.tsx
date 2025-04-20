@@ -2,37 +2,14 @@
 
 import { useState } from 'react';
 import { orderApi } from '@/lib/api';
-
-export type OrderStatus = {
-  orderId: string;
-  status: 'processing' | 'shipped' | 'delivered';
-  estimatedDelivery?: string;
-  trackingNumber?: string;
-  trackingUrl?: string;
-  items: Array<{
-    name: string;
-    quantity: number;
-  }>;
-  shippingAddress: {
-    address: string;
-    city: string;
-    state: string;
-    zipCode: string;
-    country: string;
-  };
-  timeline: Array<{
-    status: string;
-    date: string;
-    description: string;
-  }>;
-};
+import { OrderStatusDetail } from '@/types';
 
 export default function OrderTrackingForm() {
   const [orderId, setOrderId] = useState('');
   const [email, setEmail] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [orderStatus, setOrderStatus] = useState<OrderStatus | null>(null);
+  const [orderStatus, setOrderStatus] = useState<OrderStatusDetail | null>(null);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();

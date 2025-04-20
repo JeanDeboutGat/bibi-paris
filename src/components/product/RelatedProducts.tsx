@@ -32,6 +32,7 @@ export default function RelatedProducts({
 
         // Get all products first
         const allProducts = await productApi.getAll();
+        console.log(allProducts)
 
         // Filter products from the same category, excluding current product
         const relatedProducts = allProducts
@@ -41,6 +42,7 @@ export default function RelatedProducts({
           )
           .slice(0, 4);
 
+        console.log("related",relatedProducts)
         setProducts(relatedProducts);
       } catch (err) {
         console.error('Failed to fetch related products:', err);
