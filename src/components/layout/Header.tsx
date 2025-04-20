@@ -23,7 +23,7 @@ export default function Header() {
     if (itemPath === pathname) return true;
     
     // For product categories
-    if (itemPath.includes('?category=') && pathname.includes('/products')) {
+    if (itemPath.includes('?category=') && !!pathname?.includes('/products')) {
       const itemCategory = itemPath.split('category=')[1];
       
       if (typeof window !== 'undefined') {
@@ -191,7 +191,7 @@ export default function Header() {
               let isActive = item.path === pathname;
               
               // Category check for product pages
-              if (typeof window !== 'undefined' && pathname.includes('/products') && item.path.includes('category=')) {
+              if (typeof window !== 'undefined' && !!pathname?.includes('/products') && item.path.includes('category=')) {
                 const itemCategory = item.path.split('category=')[1];
                 const urlParams = new URLSearchParams(window.location.search);
                 const currentCategory = urlParams.get('category');

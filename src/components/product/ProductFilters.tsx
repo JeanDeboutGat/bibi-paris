@@ -189,7 +189,7 @@ export default function ProductFilters({
         {/* Clear Filters - Elegant Button */}
         {hasActiveFilters && (
           <button
-            onClick={() => router.push(pathname)}
+            onClick={() => router.push(pathname?? '')} // TODO: FIX ME
             className="text-sm text-luxury-charcoal hover:text-luxury-gold border-b border-luxury-gold/20 pb-1 transition-colors duration-300 focus-visible inline-flex items-center"
             aria-label="Clear all filters and sorting options"
           >
