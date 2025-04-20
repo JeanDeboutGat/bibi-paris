@@ -1,13 +1,24 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, ChangeEvent } from 'react';
 import LoadingSpinner from '@/components/ui/LoadingSpinner';
 import DataLoadingExample from '@/components/ui/DataLoadingExample';
 
+type SpinnerStyle = 'default' | 'minimal' | 'elegant';
+type SpinnerSize = 'sm' | 'md' | 'lg';
+
 export default function LoadingDemoPage() {
   const [showFullscreen, setShowFullscreen] = useState(false);
-  const [style, setStyle] = useState<'default' | 'minimal' | 'elegant'>('default');
-  const [size, setSize] = useState<'sm' | 'md' | 'lg'>('md');
+  const [style, setStyle] = useState<SpinnerStyle>('default');
+  const [size, setSize] = useState<SpinnerSize>('md');
+  
+  const handleStyleChange = (e: ChangeEvent<HTMLSelectElement>) => {
+    setStyle(e.target.value as SpinnerStyle);
+  };
+  
+  const handleSizeChange = (e: ChangeEvent<HTMLSelectElement>) => {
+    setSize(e.target.value as SpinnerSize);
+  };
   
   return (
     <div className="container mx-auto px-4 py-12">
@@ -25,7 +36,7 @@ export default function LoadingDemoPage() {
               <label className="text-sm font-medium">Style:</label>
               <select 
                 value={style} 
-                onChange={(e) => setStyle(e.target.value as any)}
+                onChange={handleStyleChange}
                 className="border border-luxury-gold/20 px-2 py-1 rounded"
               >
                 <option value="default">Default</option>
@@ -38,7 +49,7 @@ export default function LoadingDemoPage() {
               <label className="text-sm font-medium">Size:</label>
               <select 
                 value={size} 
-                onChange={(e) => setSize(e.target.value as any)}
+                onChange={handleSizeChange}
                 className="border border-luxury-gold/20 px-2 py-1 rounded"
               >
                 <option value="sm">Small</option>

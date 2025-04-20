@@ -4,6 +4,7 @@ import './globals.css';
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
 import PageLoadWrapper from '@/components/layout/PageLoadWrapper';
+import { Suspense } from 'react';
 
 // Use Playfair Display for serif font (headings)
 const playfair = Playfair_Display({
@@ -33,11 +34,13 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${playfair.variable} ${inter.variable}`}>
       <body className="min-h-screen flex flex-col">
-        <PageLoadWrapper>
-          <Header />
-          <main className="flex-grow">{children}</main>
-          <Footer />
-        </PageLoadWrapper>
+        <Suspense fallback={<div className="min-h-screen flex flex-col"></div>}>
+          <PageLoadWrapper>
+            <Header />
+            <main className="flex-grow">{children}</main>
+            <Footer />
+          </PageLoadWrapper>
+        </Suspense>
       </body>
     </html>
   );
