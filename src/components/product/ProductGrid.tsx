@@ -19,7 +19,21 @@ export default function ProductGrid({
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [hoveredProduct, setHoveredProduct] = useState<string | null>(null);
+  const [currentImageIndex, setCurrentImageIndex] = useState<Record<string, number>>({});
   const { addItem } = useLocalCartStore();
+
+  // Reset image index when hover changes and set to second image on hover
+  useEffect(() => {
+    if (!hoveredProduct) {
+      setCurrentImageIndex({});
+    } else {
+      // Set to second image (index 1) when hovering
+      setCurrentImageIndex(prev => ({
+        ...prev,
+        [hoveredProduct]: 1
+      }));
+    }
+  }, [hoveredProduct]);
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -96,27 +110,35 @@ export default function ProductGrid({
             productNamesByCategory[cat as keyof typeof productNamesByCategory];
 
           if (categoryImages) {
-            const categoryProducts = Array.from({ length: 4 }, (_, i) => ({
-              id: `${cat}-${i + 1}`,
-              name:
-                categoryNames[i] ||
-                `${
-                  cat === 'handmades'
-                    ? 'Handcrafted'
-                    : cat === 'secondHands'
-                      ? 'Vintage'
-                      : cat === 'paintings'
-                        ? 'Artwork'
-                        : 'Decorative'
-                } Piece ${i + 1}`,
-              price: Math.floor(Math.random() * 1500) + 500,
-              images: [categoryImages[i % categoryImages.length]],
-              category: cat,
-            }));
+            const categoryProducts = Array.from({ length: 4 }, (_, i) => {
+              // Generate 3 images per product by reusing images from the category
+              const productImages = [
+                categoryImages[i % categoryImages.length],
+                categoryImages[(i + 1) % categoryImages.length],
+                categoryImages[(i + 2) % categoryImages.length],
+              ];
+              
+              return {
+                id: `${cat}-${i + 1}`,
+                name:
+                  categoryNames[i] ||
+                  `${
+                    cat === 'handmades'
+                      ? 'Handcrafted'
+                      : cat === 'secondHands'
+                        ? 'Vintage'
+                        : cat === 'paintings'
+                          ? 'Artwork'
+                          : 'Decorative'
+                  } Piece ${i + 1}`,
+                price: Math.floor(Math.random() * 1500) + 500,
+                images: productImages,
+                category: cat,
+              };
+            });
             data = [...data, ...categoryProducts];
           }
         });
-
 
         // Sort products
         if (sort) {
@@ -165,6 +187,29 @@ export default function ProductGrid({
         .querySelector('.cart-icon')
         ?.classList.remove('animate-subtle-bounce');
     }, 500);
+  };
+
+  const handleImageNavigation = (e: React.MouseEvent, productId: string, direction: 'prev' | 'next') => {
+    e.preventDefault();
+    e.stopPropagation();
+    
+    const product = products.find(p => p.id === productId);
+    if (!product) return;
+    
+    const currentIndex = currentImageIndex[productId] || 0;
+    const imageCount = product.images.length;
+    
+    let newIndex;
+    if (direction === 'next') {
+      newIndex = (currentIndex + 1) % imageCount;
+    } else {
+      newIndex = (currentIndex - 1 + imageCount) % imageCount;
+    }
+    
+    setCurrentImageIndex({
+      ...currentImageIndex,
+      [productId]: newIndex
+    });
   };
 
   if (loading) {
@@ -218,58 +263,102 @@ export default function ProductGrid({
       </p>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-12 gap-y-20">
-        {products.map((product) => (
-          <Link
-            key={product.id}
-            href={`/product/${product.id}`}
-            className="group block focus-visible"
-            onMouseEnter={() => setHoveredProduct(product.id)}
-            onMouseLeave={() => setHoveredProduct(null)}
-          >
-            <div className="relative mb-6 overflow-hidden">
-              {/* Aspect ratio container for consistent image heights */}
-              <div className="relative aspect-[3/4] w-full">
-                <Image
-                  src={product.images[0]}
-                  alt={product.name}
-                  fill
-                  sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                  className="object-cover"
-                  priority={product.id.endsWith('-1')}
-                />
+        {products.map((product) => {
+          const isHovered = hoveredProduct === product.id;
+          const currentIndex = currentImageIndex[product.id] || 0;
+          
+          return (
+            <Link
+              key={product.id}
+              href={`/product/${product.id}`}
+              className="group block focus-visible"
+              onMouseEnter={() => setHoveredProduct(product.id)}
+              onMouseLeave={() => setHoveredProduct(null)}
+            >
+              <div className="relative mb-6 overflow-hidden">
+                {/* Aspect ratio container for consistent image heights */}
+                <div className="relative aspect-[3/4] w-full">
+                  <Image
+                    src={product.images[currentIndex]}
+                    alt={product.name}
+                    fill
+                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                    className="object-cover transition-all duration-500"
+                    priority={product.id.endsWith('-1')}
+                  />
 
-                {/* Subtle overlay effect on hover */}
-                <div
-                  className={`absolute inset-0 bg-black transition-opacity duration-500 ${
-                    hoveredProduct === product.id
-                      ? 'bg-opacity-5'
-                      : 'bg-opacity-0'
+                  {/* Subtle overlay effect on hover */}
+                  <div
+                    className={`absolute inset-0 bg-black transition-opacity duration-500 ${
+                      isHovered ? 'bg-opacity-10' : 'bg-opacity-0'
+                    }`}
+                  />
+                  
+                  {/* Navigation arrows - only shown on hover and if there are multiple images */}
+                  {isHovered && product.images.length > 1 && (
+                    <>
+                      {/* Left navigation arrow */}
+                      <button
+                        onClick={(e) => handleImageNavigation(e, product.id, 'prev')}
+                        className="absolute left-3 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-white/80 text-luxury-charcoal hover:bg-white flex items-center justify-center transition-all duration-300 focus-visible shadow-lg"
+                        aria-label="Previous image"
+                      >
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-4 h-4">
+                          <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" />
+                        </svg>
+                      </button>
+                      
+                      {/* Right navigation arrow */}
+                      <button
+                        onClick={(e) => handleImageNavigation(e, product.id, 'next')}
+                        className="absolute right-3 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-white/80 text-luxury-charcoal hover:bg-white flex items-center justify-center transition-all duration-300 focus-visible shadow-lg"
+                        aria-label="Next image"
+                      >
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-4 h-4">
+                          <path strokeLinecap="round" strokeLinejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
+                        </svg>
+                      </button>
+                      
+                      {/* Image indicators */}
+                      <div className="absolute bottom-3 left-1/2 -translate-x-1/2 flex space-x-1.5">
+                        {product.images.map((_, index) => (
+                          <span 
+                            key={index}
+                            className={`w-1.5 h-1.5 rounded-full transition-all duration-300 ${
+                              currentIndex === index 
+                                ? 'bg-white w-2.5' 
+                                : 'bg-white/60'
+                            }`}
+                          />
+                        ))}
+                      </div>
+                    </>
+                  )}
+                </div>
+
+                {/* Add to cart button */}
+                <button
+                  onClick={(e) => handleQuickAdd(e, product)}
+                  className={`absolute bottom-4 right-4 bg-white text-luxury-charcoal/90 px-4 py-2 text-xs font-light tracking-wide border border-luxury-charcoal/10 transition-all duration-500 focus-visible z-10 ${
+                    isHovered
+                      ? 'opacity-100 translate-y-0'
+                      : 'opacity-0 translate-y-4'
                   }`}
-                />
+                  aria-label={`Add ${product.name} to cart`}
+                >
+                  Add to Cart
+                </button>
               </div>
 
-              {/* Add to cart button */}
-              <button
-                onClick={(e) => handleQuickAdd(e, product)}
-                className={`absolute bottom-4 right-4 bg-white text-luxury-charcoal/90 px-4 py-2 text-xs font-light tracking-wide border border-luxury-charcoal/10 transition-all duration-500 focus-visible ${
-                  hoveredProduct === product.id
-                    ? 'opacity-100 translate-y-0'
-                    : 'opacity-0 translate-y-4'
-                }`}
-                aria-label={`Add ${product.name} to cart`}
-              >
-                Add to Cart
-              </button>
-            </div>
-
-            <h3 className="font-serif text-base mb-2 transition-colors duration-300 group-hover:text-luxury-gold">
-              {product.name}
-            </h3>
-            <p className="text-luxury-charcoal/70 text-sm font-light">
-              ${product.price.toLocaleString()}
-            </p>
-          </Link>
-        ))}
+              <h3 className="font-serif text-base mb-2 transition-colors duration-300 group-hover:text-luxury-gold">
+                {product.name}
+              </h3>
+              <p className="text-luxury-charcoal/70 text-sm font-light">
+                ${product.price.toLocaleString()}
+              </p>
+            </Link>
+          );
+        })}
       </div>
     </>
   );
