@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useRouter, usePathname } from 'next/navigation';
 import { ProductCategory, ProductSortOption } from '@/types/product';
 
@@ -18,6 +18,21 @@ export default function ProductFilters({
   const pathname = usePathname();
 
   const [isFilterOpen, setIsFilterOpen] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
+
+  // Check if we're on a mobile device
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 1024); // lg breakpoint is 1024px
+    };
+    
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    
+    return () => {
+      window.removeEventListener('resize', checkMobile);
+    };
+  }, []);
 
   // Filter options
   const categories = [
@@ -48,10 +63,24 @@ export default function ProductFilters({
 
     // Update the URL with the new search parameters
     router.push(`${pathname}?${params.toString()}`);
+    
+    // Close filter menu on mobile after applying filter
+    if (isMobile) {
+      setIsFilterOpen(false);
+    }
   };
 
   // Check if any filters are active
   const hasActiveFilters = selectedCategory || selectedSort;
+
+  const clearFilters = () => {
+    router.push(pathname ?? '');
+    
+    // Close filter menu on mobile after clearing filters
+    if (isMobile) {
+      setIsFilterOpen(false);
+    }
+  };
 
   return (
     <div className="mb-12">
@@ -191,7 +220,7 @@ export default function ProductFilters({
         {/* Clear Filters - Elegant Button */}
         {hasActiveFilters && (
           <button
-            onClick={() => router.push(pathname?? '')} // TODO: FIX ME
+            onClick={clearFilters}
             className="text-sm text-luxury-charcoal hover:text-luxury-gold border-b border-luxury-gold/20 pb-1 transition-colors duration-300 focus-visible inline-flex items-center"
             aria-label="Clear all filters and sorting options"
           >
