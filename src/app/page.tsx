@@ -1,6 +1,7 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import { Metadata } from 'next';
+import FeaturedProducts from '@/components/product/FeaturedProducts';
 
 export const metadata: Metadata = {
   title: 'Bibi Paris | Timeless Wooden Furniture',
@@ -9,130 +10,6 @@ export const metadata: Metadata = {
 };
 
 export default function Home() {
-  // Collections data to display with featured image and product images
-  const collections = [
-    {
-      id: 'handmades',
-      name: 'Handmade Pieces',
-      description:
-        'Expertly crafted furniture that celebrates the beauty of natural wood and artisanal techniques.',
-      featuredImage: '/images/handmades/gobolet.jpg',
-      href: '/products?category=handmades',
-      products: [
-        {
-          image: '/images/handmades/pull.jpg',
-          name: 'Hand-carved Oak Table',
-          price: 1825,
-        },
-        {
-          image: '/images/handmades/cousin.jpg',
-          name: 'Sculpted Maple Vessel',
-          price: 2125,
-        },
-        {
-          image: '/images/handmades/sac.jpg',
-          name: 'Handcrafted Walnut Box',
-          price: 907,
-        },
-        {
-          image: '/images/handmades/gobolet.jpg',
-          name: 'Artisanal Wooden Goblet',
-          price: 2107,
-        },
-      ],
-    },
-    {
-      id: 'secondHands',
-      name: 'Second-Hand',
-      description:
-        'Curated vintage pieces with history and character, restored to their original splendor.',
-      featuredImage: '/images/secondHands/table.jpg',
-      href: '/products?category=secondHands',
-      products: [
-        {
-          image: '/images/secondHands/chair.jpg',
-          name: 'Mid-century Lounge Chair',
-          price: 1825,
-        },
-        {
-          image: '/images/secondHands/chairdark.jpg',
-          name: 'Antique Oak Cabinet',
-          price: 2125,
-        },
-        {
-          image: '/images/secondHands/smallChair.jpg',
-          name: 'Classic Rattan Armchair',
-          price: 907,
-        },
-        {
-          image: '/images/secondHands/chair-fonce.jpg',
-          name: 'Vintage Wooden Chair',
-          price: 2107,
-        },
-      ],
-    },
-    {
-      id: 'paintings',
-      name: 'Paintings',
-      description:
-        'Original artworks that complement our furniture and bring emotional depth to any space.',
-      featuredImage: '/images/paintings/girl.jpg',
-      href: '/products?category=paintings',
-      products: [
-        {
-          image: '/images/paintings/gate.jpg',
-          name: 'Botanical Study Print',
-          price: 1825,
-        },
-        {
-          image: '/images/paintings/girl-boy.jpg',
-          name: 'Heritage Portrait',
-          price: 2125,
-        },
-        {
-          image: '/images/paintings/flower.jpg',
-          name: 'Landscape Oil Painting',
-          price: 907,
-        },
-        {
-          image: '/images/paintings/girl.jpg',
-          name: 'Portrait Study',
-          price: 2107,
-        },
-      ],
-    },
-    {
-      id: 'decoratives',
-      name: 'Decorative Objects',
-      description:
-        'Refined accessories that add the perfect finishing touch to your carefully curated interiors.',
-      featuredImage: '/images/decoratives/vase.jpg',
-      href: '/products?category=decoratives',
-      products: [
-        {
-          image: '/images/decoratives/pot.jpg',
-          name: 'Handblown Glass Bowl',
-          price: 1825,
-        },
-        {
-          image: '/images/decoratives/flower.jpg',
-          name: 'Modernist Bronze Object',
-          price: 2125,
-        },
-        {
-          image: '/images/decoratives/alexandra-gorn-W5dsm9n6e3g-unsplash.jpg',
-          name: 'Woven Rattan Basket',
-          price: 907,
-        },
-        {
-          image: '/images/decoratives/vase.jpg',
-          name: 'Sculptural Ceramic Vase',
-          price: 2107,
-        },
-      ],
-    },
-  ];
-
   return (
     <>
       {/* Hero Section */}
@@ -305,69 +182,8 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Collections Sections - Hermès-inspired Layout */}
-      {collections.map((collection, index) => (
-        <section
-          key={collection.id}
-          className={`py-24 ${index % 2 === 0 ? 'bg-[#f6f1eb]' : 'bg-[#f6f1eb]'}`}
-        >
-          <div className="container mx-auto px-4 md:px-8">
-            {/* Collection Title and Description */}
-            <div className="text-center mb-16">
-              <h2 className="font-serif text-3xl md:text-4xl mb-6">
-                {collection.name}
-              </h2>
-              <p className="text-luxury-charcoal/80 max-w-2xl mx-auto">
-                {collection.description}
-              </p>
-            </div>
-
-            {/* Featured Image - Smaller dimensions */}
-            <div className="mb-16 max-w-5xl mx-auto">
-              <div className="relative aspect-[21/9] w-full overflow-hidden">
-                <Image
-                  src={collection.featuredImage}
-                  alt={`${collection.name} collection`}
-                  fill
-                  priority={index === 0}
-                  className="object-cover"
-                />
-              </div>
-              <div className="mt-4 text-right">
-                <Link
-                  href={collection.href}
-                  className="inline-flex items-center text-sm text-luxury-charcoal/80 hover:text-luxury-gold transition-colors duration-300"
-                >
-                  Explore Collection
-                  <span className="ml-2">&rarr;</span>
-                </Link>
-              </div>
-            </div>
-
-            {/* Product Grid - Aligned with featured image width */}
-            <div className="max-w-5xl mx-auto">
-              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
-                {collection.products.map((product, i) => (
-                  <Link key={i} href={collection.href} className="block group">
-                    <div className="relative aspect-square overflow-hidden mb-3">
-                      <Image
-                        src={product.image}
-                        alt={product.name}
-                        fill
-                        className="object-cover transition-all duration-700 group-hover:scale-105"
-                      />
-                    </div>
-                    <h3 className="font-serif text-sm mb-1">{product.name}</h3>
-                    <p className="text-luxury-charcoal/70 text-sm">
-                      ${product.price}
-                    </p>
-                  </Link>
-                ))}
-              </div>
-            </div>
-          </div>
-        </section>
-      ))}
+      {/* Collections Sections now using FeaturedProducts component */}
+      <FeaturedProducts />
 
       {/* Craftsmanship Process - Restored from original */}
       <section className="py-24 bg-white">
@@ -397,7 +213,7 @@ export default function Home() {
               },
               {
                 title: 'Finishing Touches',
-                icon: 'M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09zM18.259 8.715L18 9.75l-.259-1.035a3.375 3.375 0 00-2.455-2.456L14.25 6l1.036-.259a3.375 3.375 0 002.455-2.456L18 2.25l.259 1.035a3.375 3.375 0 002.456 2.456L21.75 6l-1.035.259a3.375 3.375 0 00-2.456 2.456zM16.894 20.567L16.5 21.75l-.394-1.183a2.25 2.25 0 00-1.423-1.423L13.5 18.75l1.183-.394a2.25 2.25 0 001.423-1.423l.394-1.183.394 1.183a2.25 2.25 0 001.423 1.423l1.183.394-1.183.394a2.25 2.25 0 00-1.423 1.423z',
+                icon: 'M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L14.25 12l-1.036-.259a3.375 3.375 0 00-2.455-2.456L18 2.25l.259 1.035a3.375 3.375 0 002.456 2.456L21.75 6l-1.035.259a3.375 3.375 0 00-2.456 2.456zM16.894 20.567L16.5 21.75l-.394-1.183a2.25 2.25 0 00-1.423-1.423L13.5 18.75l1.183-.394a2.25 2.25 0 001.423-1.423l.394-1.183.394 1.183a2.25 2.25 0 001.423 1.423l1.183.394-1.183.394a2.25 2.25 0 00-1.423 1.423z',
                 description:
                   "Every detail is perfected with natural oils and waxes, enhancing the wood's natural beauty.",
               },
