@@ -27,6 +27,6 @@ export type SocialMedia = {
   icon: string;
 };
 
-export type DataFetchingRoute = '/products' | '/cart' | '/checkout' | '/account' | '/orders' | '/product/' | '/search' | '/categories' | '/collection';
+export type DataFetchingRoute = '/products' | '/cart' | '/checkout' | '/account' | '/orders' | '/search' | '/categories' | '/collection';
 
-export type StaticContentRoute = '/about' | '/contact' | '/privacy' | '/terms' | '/faq' | '/shipping' | '/returns' | '/track'; 
+export type StaticContentRoute = '/about' | '/contact' | '/privacy' | '/terms' | '/faq' | '/shipping' | '/returns' | '/track' | '/product';

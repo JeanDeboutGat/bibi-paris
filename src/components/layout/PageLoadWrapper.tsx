@@ -16,7 +16,6 @@ const DATA_FETCHING_ROUTES: DataFetchingRoute[] = [
   '/checkout',
   '/account',
   '/orders',
-  '/product/',
   '/search',
   '/categories',
   '/collection',
@@ -32,6 +31,7 @@ const STATIC_CONTENT_ROUTES: StaticContentRoute[] = [
   '/shipping',
   '/returns',
   '/track',
+  '/product'
 ];
 
 export default function PageLoadWrapper({ children }: PageLoadWrapperProps) {

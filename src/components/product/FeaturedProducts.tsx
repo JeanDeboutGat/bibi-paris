@@ -8,6 +8,8 @@ export default function FeaturedProducts() {
   const [loading, setLoading] = useState(true);
   const [hoveredProduct, setHoveredProduct] = useState<string | null>(null);
   const [currentImageIndex, setCurrentImageIndex] = useState<Record<string, number>>({});
+  const [isMobile, setIsMobile] = useState(false);
+  const [selectedProduct, setSelectedProduct] = useState<string | null>(null);
 
   // Reset image index when hover changes and set to second image on hover
   useEffect(() => {
@@ -21,6 +23,20 @@ export default function FeaturedProducts() {
       }));
     }
   }, [hoveredProduct]);
+  
+  // Check if device is mobile
+  useEffect(() => {
+    const checkIfMobile = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+    
+    checkIfMobile();
+    window.addEventListener('resize', checkIfMobile);
+    
+    return () => {
+      window.removeEventListener('resize', checkIfMobile);
+    };
+  }, []);
 
   // Collections data to display with featured image and product images
   const collections = [
@@ -255,6 +271,22 @@ export default function FeaturedProducts() {
       [productId]: newIndex
     });
   };
+  
+  const handleProductClick = (e: React.MouseEvent, productId: string) => {
+    if (!isMobile) return; // Only apply this logic on mobile
+    
+    e.preventDefault();
+    
+    // If this is the first click on this product, select it but don't navigate
+    if (selectedProduct !== productId) {
+      setSelectedProduct(productId);
+      setHoveredProduct(productId);
+      return;
+    }
+    
+    // If this is the second click on the same product, navigate to product detail
+    window.location.href = `/product/${productId}`;
+  };
 
   useEffect(() => {
     // Simulate loading
@@ -288,9 +320,9 @@ export default function FeaturedProducts() {
                       <div className="bg-gray-200 aspect-square w-full mb-3"></div>
                       <div className="bg-gray-200 h-4 w-3/4 mb-2"></div>
                       <div className="bg-gray-200 h-3 w-1/4"></div>
-          </div>
-        ))}
-      </div>
+                    </div>
+                  ))}
+                </div>
               </div>
             </div>
           </section>
@@ -346,16 +378,17 @@ export default function FeaturedProducts() {
               <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
                 {collection.products.map((product) => {
                   const isHovered = hoveredProduct === product.id;
+                  const isSelected = selectedProduct === product.id;
                   const currentIndex = currentImageIndex[product.id] || 0;
                   
                   return (
-        <Link
-          key={product.id}
-          href={`/product/${product.id}`}
-                      className="block group"
-                      onMouseEnter={() => setHoveredProduct(product.id)}
-                      onMouseLeave={() => setHoveredProduct(null)}
-        >
+                    <div
+                      key={product.id}
+                      className="block group relative"
+                      onClick={(e) => handleProductClick(e, product.id)}
+                      onMouseEnter={() => !isMobile && setHoveredProduct(product.id)}
+                      onMouseLeave={() => !isMobile && setHoveredProduct(null)}
+                    >
                       <div className="relative aspect-square overflow-hidden mb-3">
                         <Image
                           src={product.images[currentIndex]}
@@ -376,15 +409,15 @@ export default function FeaturedProducts() {
                           </div>
                         )}
                         
-                        {/* Subtle overlay effect on hover */}
+                        {/* Subtle overlay effect on hover/selected */}
                         <div
                           className={`absolute inset-0 bg-black transition-opacity duration-500 ${
-                            isHovered ? 'bg-opacity-10' : 'bg-opacity-0'
+                            (isHovered || isSelected) ? 'bg-opacity-10' : 'bg-opacity-0'
                           }`}
                         />
-                        
-                        {/* Navigation arrows - only shown on hover and if there are multiple images */}
-                        {isHovered && product.images.length > 1 && (
+
+                        {/* Navigation arrows - shown on hover or when selected on mobile */}
+                        {((isHovered && !isMobile) || (isSelected && isMobile)) && product.images.length > 1 && (
                           <>
                             {/* Left navigation arrow */}
                             <button
@@ -428,7 +461,16 @@ export default function FeaturedProducts() {
                       <p className="text-luxury-charcoal/70 text-sm">
                         ${product.price}
                       </p>
-                    </Link>
+                      
+                      {/* Non-mobile users get normal links; mobile uses the onClick handler */}
+                      {!isMobile && (
+                        <Link 
+                          href={`/product/${product.id}`} 
+                          className="absolute inset-0 z-10"
+                          aria-label={`View ${product.name} details`}
+                        />
+                      )}
+                    </div>
                   );
                 })}
               </div>

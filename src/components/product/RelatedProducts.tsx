@@ -19,6 +19,8 @@ export default function RelatedProducts({
   const [loading, setLoading] = useState(true);
   const [hoveredProduct, setHoveredProduct] = useState<string | null>(null);
   const [currentImageIndex, setCurrentImageIndex] = useState<Record<string, number>>({});
+  const [isMobile, setIsMobile] = useState(false);
+  const [selectedProduct, setSelectedProduct] = useState<string | null>(null);
 
   // Reset image index when hover changes and set to second image on hover
   useEffect(() => {
@@ -32,6 +34,20 @@ export default function RelatedProducts({
       }));
     }
   }, [hoveredProduct]);
+  
+  // Check if device is mobile
+  useEffect(() => {
+    const checkIfMobile = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+    
+    checkIfMobile();
+    window.addEventListener('resize', checkIfMobile);
+    
+    return () => {
+      window.removeEventListener('resize', checkIfMobile);
+    };
+  }, []);
 
   useEffect(() => {
     const fetchRelatedProducts = async () => {
@@ -180,6 +196,22 @@ export default function RelatedProducts({
       [productId]: newIndex
     });
   };
+  
+  const handleProductClick = (e: React.MouseEvent, productId: string) => {
+    if (!isMobile) return; // Only apply this logic on mobile
+    
+    e.preventDefault();
+    
+    // If this is the first click on this product, select it but don't navigate
+    if (selectedProduct !== productId) {
+      setSelectedProduct(productId);
+      setHoveredProduct(productId);
+      return;
+    }
+    
+    // If this is the second click on the same product, navigate to product detail
+    window.location.href = `/product/${productId}`;
+  };
 
   if (loading) {
     return (
@@ -203,15 +235,16 @@ export default function RelatedProducts({
     <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
       {products.map((product) => {
         const isHovered = hoveredProduct === product.id;
+        const isSelected = selectedProduct === product.id;
         const currentIndex = currentImageIndex[product.id] || 0;
         
         return (
-          <Link
+          <div
             key={product.id}
-            href={`/product/${product.id}`}
-            className="group"
-            onMouseEnter={() => setHoveredProduct(product.id)}
-            onMouseLeave={() => setHoveredProduct(null)}
+            className="group relative"
+            onClick={(e) => handleProductClick(e, product.id)}
+            onMouseEnter={() => !isMobile && setHoveredProduct(product.id)}
+            onMouseLeave={() => !isMobile && setHoveredProduct(null)}
           >
             <div className="relative h-64 mb-4 overflow-hidden">
               <Image
@@ -233,15 +266,15 @@ export default function RelatedProducts({
                 </div>
               )}
               
-              {/* Subtle overlay effect on hover */}
+              {/* Subtle overlay effect on hover/selected */}
               <div
                 className={`absolute inset-0 bg-black transition-opacity duration-500 ${
-                  isHovered ? 'bg-opacity-10' : 'bg-opacity-0'
+                  (isHovered || isSelected) ? 'bg-opacity-10' : 'bg-opacity-0'
                 }`}
               />
               
-              {/* Navigation arrows - only shown on hover and if there are multiple images */}
-              {isHovered && product.images.length > 1 && (
+              {/* Navigation arrows - shown on hover or when selected on mobile */}
+              {((isHovered && !isMobile) || (isSelected && isMobile)) && product.images.length > 1 && (
                 <>
                   {/* Left navigation arrow */}
                   <button
@@ -283,7 +316,16 @@ export default function RelatedProducts({
             </div>
             <h3 className="text-base font-light mb-1">{product.name}</h3>
             <p className="text-gray-700">${product.price.toLocaleString()}</p>
-          </Link>
+            
+            {/* Non-mobile users get normal links; mobile uses the onClick handler */}
+            {!isMobile && (
+              <Link 
+                href={`/product/${product.id}`} 
+                className="absolute inset-0 z-10"
+                aria-label={`View ${product.name} details`}
+              />
+            )}
+          </div>
         );
       })}
     </div>
