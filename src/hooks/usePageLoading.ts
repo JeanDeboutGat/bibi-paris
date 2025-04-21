@@ -33,4 +33,4 @@ export function usePageLoading() {
   }, [pathname, searchParams]);
 
   return { isLoading, setIsLoading };
-} 
+}

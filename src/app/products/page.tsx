@@ -18,8 +18,13 @@ export default async function ProductsPage({
   const params = await searchParams;
 
   const category =
-    typeof params.category === 'string' ? params.category as ProductCategory : undefined;
-  const sort = typeof params.sort === 'string' ? params.sort as ProductSortOption : undefined;
+    typeof params.category === 'string'
+      ? (params.category as ProductCategory)
+      : undefined;
+  const sort =
+    typeof params.sort === 'string'
+      ? (params.sort as ProductSortOption)
+      : undefined;
 
   // Determine page title based on filters
   let pageTitle = 'All Collections';

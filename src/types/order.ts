@@ -2,7 +2,12 @@
  * Order and checkout related type definitions
  */
 
-export type OrderStatus = 'processing' | 'shipped' | 'delivered' | 'canceled' | 'returned';
+export type OrderStatus =
+  | 'processing'
+  | 'shipped'
+  | 'delivered'
+  | 'canceled'
+  | 'returned';
 
 export type PaymentMethod = 'credit' | 'paypal' | 'bank_transfer';
 
@@ -90,4 +95,4 @@ export type CheckoutFormData = {
   cardNumber?: string;
   cardExpiry?: string;
   cardCvc?: string;
-}; 
+};

@@ -13,7 +13,12 @@ export type LoadingSpinnerProps = {
   size?: SpinnerSize;
 };
 
-export type ButtonVariant = 'primary' | 'secondary' | 'outline' | 'ghost' | 'link';
+export type ButtonVariant =
+  | 'primary'
+  | 'secondary'
+  | 'outline'
+  | 'ghost'
+  | 'link';
 
 export type ButtonSize = 'sm' | 'md' | 'lg';
 
@@ -69,4 +74,4 @@ export type ModalProps = {
   title?: string;
   size?: ModalSize;
   children: React.ReactNode;
-}; 
+};

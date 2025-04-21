@@ -22,11 +22,34 @@ export type FooterLinkGroup = {
 };
 
 export type SocialMedia = {
-  platform: 'instagram' | 'facebook' | 'twitter' | 'pinterest' | 'youtube' | 'tiktok';
+  platform:
+    | 'instagram'
+    | 'facebook'
+    | 'twitter'
+    | 'pinterest'
+    | 'youtube'
+    | 'tiktok';
   url: string;
   icon: string;
 };
 
-export type DataFetchingRoute = '/products' | '/cart' | '/checkout' | '/account' | '/orders' | '/search' | '/categories' | '/collection';
+export type DataFetchingRoute =
+  | '/products'
+  | '/cart'
+  | '/checkout'
+  | '/account'
+  | '/orders'
+  | '/search'
+  | '/categories'
+  | '/collection';
 
-export type StaticContentRoute = '/about' | '/contact' | '/privacy' | '/terms' | '/faq' | '/shipping' | '/returns' | '/track' | '/product';
+export type StaticContentRoute =
+  | '/about'
+  | '/contact'
+  | '/privacy'
+  | '/terms'
+  | '/faq'
+  | '/shipping'
+  | '/returns'
+  | '/track'
+  | '/product';

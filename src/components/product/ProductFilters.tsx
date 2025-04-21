@@ -9,7 +9,6 @@ type ProductFiltersProps = {
   selectedSort?: ProductSortOption;
 };
 
-
 export default function ProductFilters({
   selectedCategory,
   selectedSort,
@@ -25,10 +24,10 @@ export default function ProductFilters({
     const checkMobile = () => {
       setIsMobile(window.innerWidth < 1024); // lg breakpoint is 1024px
     };
-    
+
     checkMobile();
     window.addEventListener('resize', checkMobile);
-    
+
     return () => {
       window.removeEventListener('resize', checkMobile);
     };
@@ -63,7 +62,7 @@ export default function ProductFilters({
 
     // Update the URL with the new search parameters
     router.push(`${pathname}?${params.toString()}`);
-    
+
     // Close filter menu on mobile after applying filter
     if (isMobile) {
       setIsFilterOpen(false);
@@ -75,7 +74,7 @@ export default function ProductFilters({
 
   const clearFilters = () => {
     router.push(pathname ?? '');
-    
+
     // Close filter menu on mobile after clearing filters
     if (isMobile) {
       setIsFilterOpen(false);

@@ -15,8 +15,8 @@ export default function DataLoadingExample() {
   // Simulated data fetching
   const fetchData = async (): Promise<ExampleData[]> => {
     // Simulate network delay
-    await new Promise(resolve => setTimeout(resolve, 2000));
-    
+    await new Promise((resolve) => setTimeout(resolve, 2000));
+
     // Return mock data
     return [
       { id: 1, title: 'Handcrafted Wooden Table' },
@@ -38,7 +38,11 @@ export default function DataLoadingExample() {
   }
 
   if (error) {
-    return <div className="my-8 text-center text-red-500">Error loading data: {error.message}</div>;
+    return (
+      <div className="my-8 text-center text-red-500">
+        Error loading data: {error.message}
+      </div>
+    );
   }
 
   if (!data) {
@@ -49,16 +53,18 @@ export default function DataLoadingExample() {
     <div className="my-8">
       <h2 className="text-2xl font-serif mb-4">Featured Products</h2>
       <ul className="space-y-2">
-        {data.map(item => (
-          <li key={item.id} className="p-4 bg-white shadow-sm">{item.title}</li>
+        {data.map((item) => (
+          <li key={item.id} className="p-4 bg-white shadow-sm">
+            {item.title}
+          </li>
         ))}
       </ul>
-      <button 
-        onClick={() => loadData(fetchData)} 
+      <button
+        onClick={() => loadData(fetchData)}
         className="mt-4 bg-luxury-charcoal text-white px-4 py-2 text-sm"
       >
         Reload Data
       </button>
     </div>
   );
-} 
+}

@@ -44,20 +44,32 @@ export default function CheckoutPage() {
     const newErrors: Record<string, string> = {};
 
     fields.forEach((field) => {
-      if (!formData[field] && field !== 'cardCvc' && field !== 'cardExpiry' && field !== 'cardNumber') {
+      if (
+        !formData[field] &&
+        field !== 'cardCvc' &&
+        field !== 'cardExpiry' &&
+        field !== 'cardNumber'
+      ) {
         newErrors[field] = 'This field is required';
         valid = false;
       }
     });
 
     // Validate email format
-    if (fields.includes('email') && formData.email && !/\S+@\S+\.\S+/.test(formData.email)) {
+    if (
+      fields.includes('email') &&
+      formData.email &&
+      !/\S+@\S+\.\S+/.test(formData.email)
+    ) {
       newErrors.email = 'Please enter a valid email address';
       valid = false;
     }
 
     // Validate card details if payment method is credit
-    if (fields.includes('paymentMethod') && formData.paymentMethod === 'credit') {
+    if (
+      fields.includes('paymentMethod') &&
+      formData.paymentMethod === 'credit'
+    ) {
       if (!formData.cardNumber) {
         newErrors.cardNumber = 'Card number is required';
         valid = false;
@@ -96,7 +108,7 @@ export default function CheckoutPage() {
   // Handle shipping form submission
   const handleShippingSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     const fieldsToValidate: (keyof CheckoutFormData)[] = [
       'firstName',
       'lastName',
@@ -109,7 +121,7 @@ export default function CheckoutPage() {
       'country',
       'shippingMethod',
     ];
-    
+
     if (validateForm(fieldsToValidate)) {
       setStep('payment');
       window.scrollTo(0, 0);
@@ -119,24 +131,24 @@ export default function CheckoutPage() {
   // Handle payment form submission
   const handlePaymentSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     const fieldsToValidate: (keyof CheckoutFormData)[] = ['paymentMethod'];
-    
+
     if (formData.paymentMethod === 'credit') {
       fieldsToValidate.push('cardNumber', 'cardExpiry', 'cardCvc');
     }
-    
+
     if (!validateForm(fieldsToValidate)) {
       return;
     }
-    
+
     setSubmitting(true);
-    
+
     try {
       // Here you would normally send the data to your payment processor
       // For this demo, we'll just simulate a successful payment
-      await new Promise(resolve => setTimeout(resolve, 2000));
-      
+      await new Promise((resolve) => setTimeout(resolve, 2000));
+
       // Clear cart and redirect to success page
       clearCart();
       localStorage.setItem('orderCompleted', 'true');
@@ -195,7 +207,9 @@ export default function CheckoutPage() {
                       placeholder="your@email.com"
                     />
                     {errors.email && (
-                      <p className="text-red-500 text-xs mt-1">{errors.email}</p>
+                      <p className="text-red-500 text-xs mt-1">
+                        {errors.email}
+                      </p>
                     )}
                   </div>
                 </div>
@@ -288,7 +302,9 @@ export default function CheckoutPage() {
                       className={`input-luxury w-full ${errors.state ? 'border-red-500' : ''}`}
                     />
                     {errors.state && (
-                      <p className="text-red-500 text-xs mt-1">{errors.state}</p>
+                      <p className="text-red-500 text-xs mt-1">
+                        {errors.state}
+                      </p>
                     )}
                   </div>
                   <div>
@@ -322,7 +338,9 @@ export default function CheckoutPage() {
                       className={`input-luxury w-full ${errors.phone ? 'border-red-500' : ''}`}
                     />
                     {errors.phone && (
-                      <p className="text-red-500 text-xs mt-1">{errors.phone}</p>
+                      <p className="text-red-500 text-xs mt-1">
+                        {errors.phone}
+                      </p>
                     )}
                   </div>
                 </div>
@@ -338,13 +356,16 @@ export default function CheckoutPage() {
                       name="shippingMethod"
                       value="standard"
                       checked={formData.shippingMethod === 'standard'}
-                      onChange={() => setFormData({ ...formData, shippingMethod: 'standard' })}
+                      onChange={() =>
+                        setFormData({ ...formData, shippingMethod: 'standard' })
+                      }
                       className="h-4 w-4 border-luxury-charcoal/30 text-luxury-sienna focus:ring-luxury-gold/50 mr-3"
                     />
                     <div className="flex-1">
                       <span className="font-medium">Standard Shipping</span>
                       <p className="text-sm text-luxury-charcoal/70">
-                        {subtotal >= 500 ? 'Free' : '$25.00'} · 5-7 business days
+                        {subtotal >= 500 ? 'Free' : '$25.00'} · 5-7 business
+                        days
                       </p>
                     </div>
                   </label>
@@ -354,7 +375,9 @@ export default function CheckoutPage() {
                       name="shippingMethod"
                       value="express"
                       checked={formData.shippingMethod === 'express'}
-                      onChange={() => setFormData({ ...formData, shippingMethod: 'express' })}
+                      onChange={() =>
+                        setFormData({ ...formData, shippingMethod: 'express' })
+                      }
                       className="h-4 w-4 border-luxury-charcoal/30 text-luxury-sienna focus:ring-luxury-gold/50 mr-3"
                     />
                     <div className="flex-1">
@@ -385,7 +408,9 @@ export default function CheckoutPage() {
                       name="paymentMethod"
                       value="credit"
                       checked={formData.paymentMethod === 'credit'}
-                      onChange={() => setFormData({ ...formData, paymentMethod: 'credit' })}
+                      onChange={() =>
+                        setFormData({ ...formData, paymentMethod: 'credit' })
+                      }
                       className="h-4 w-4 border-luxury-charcoal/30 text-luxury-sienna focus:ring-luxury-gold/50 mr-3"
                     />
                     <span className="font-medium">Credit Card</span>
@@ -396,7 +421,9 @@ export default function CheckoutPage() {
                       name="paymentMethod"
                       value="paypal"
                       checked={formData.paymentMethod === 'paypal'}
-                      onChange={() => setFormData({ ...formData, paymentMethod: 'paypal' })}
+                      onChange={() =>
+                        setFormData({ ...formData, paymentMethod: 'paypal' })
+                      }
                       className="h-4 w-4 border-luxury-charcoal/30 text-luxury-sienna focus:ring-luxury-gold/50 mr-3"
                     />
                     <span className="font-medium">PayPal</span>
@@ -406,7 +433,10 @@ export default function CheckoutPage() {
                 {formData.paymentMethod === 'credit' && (
                   <div className="mt-6 space-y-4 p-4 border border-luxury-gold/10 bg-[#f6f1eb] /30">
                     <div>
-                      <label htmlFor="cardNumber" className="block text-sm mb-1">
+                      <label
+                        htmlFor="cardNumber"
+                        className="block text-sm mb-1"
+                      >
                         Card Number*
                       </label>
                       <input
@@ -426,7 +456,10 @@ export default function CheckoutPage() {
                     </div>
                     <div className="grid grid-cols-2 gap-4">
                       <div>
-                        <label htmlFor="cardExpiry" className="block text-sm mb-1">
+                        <label
+                          htmlFor="cardExpiry"
+                          className="block text-sm mb-1"
+                        >
                           Expiration Date*
                         </label>
                         <input

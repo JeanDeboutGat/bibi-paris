@@ -31,7 +31,7 @@ const STATIC_CONTENT_ROUTES: StaticContentRoute[] = [
   '/shipping',
   '/returns',
   '/track',
-  '/product'
+  '/product',
 ];
 
 export default function PageLoadWrapper({ children }: PageLoadWrapperProps) {

@@ -2,8 +2,11 @@
  * Product-related type definitions
  */
 
-export type ProductCategory = 'handmades' | 'secondHands' | 'paintings' | 'decoratives';
-
+export type ProductCategory =
+  | 'handmades'
+  | 'secondHands'
+  | 'paintings'
+  | 'decoratives';
 
 export type ProductSortOption = 'price_asc' | 'price_desc' | 'newest';
 
@@ -24,7 +27,7 @@ export type Product = {
   name: string;
   price: number;
   description: string;
-  details: string[];  // For now, only using string[] to avoid rendering issues
+  details: string[]; // For now, only using string[] to avoid rendering issues
   images: string[];
   category: ProductCategory;
   inStock: boolean;
@@ -64,4 +67,4 @@ export type ProductFilterOptions = {
   };
   materials?: string[];
   inStock?: boolean;
-}; 
+};

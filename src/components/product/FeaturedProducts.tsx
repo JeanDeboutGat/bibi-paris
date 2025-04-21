@@ -7,7 +7,9 @@ import Image from 'next/image';
 export default function FeaturedProducts() {
   const [loading, setLoading] = useState(true);
   const [hoveredProduct, setHoveredProduct] = useState<string | null>(null);
-  const [currentImageIndex, setCurrentImageIndex] = useState<Record<string, number>>({});
+  const [currentImageIndex, setCurrentImageIndex] = useState<
+    Record<string, number>
+  >({});
   const [isMobile, setIsMobile] = useState(false);
   const [selectedProduct, setSelectedProduct] = useState<string | null>(null);
 
@@ -17,22 +19,22 @@ export default function FeaturedProducts() {
       setCurrentImageIndex({});
     } else {
       // Set to second image (index 1) when hovering
-      setCurrentImageIndex(prev => ({
+      setCurrentImageIndex((prev) => ({
         ...prev,
-        [hoveredProduct]: 1
+        [hoveredProduct]: 1,
       }));
     }
   }, [hoveredProduct]);
-  
+
   // Check if device is mobile
   useEffect(() => {
     const checkIfMobile = () => {
       setIsMobile(window.innerWidth < 768);
     };
-    
+
     checkIfMobile();
     window.addEventListener('resize', checkIfMobile);
-    
+
     return () => {
       window.removeEventListener('resize', checkIfMobile);
     };
@@ -246,44 +248,50 @@ export default function FeaturedProducts() {
     },
   ];
 
-  const handleImageNavigation = (e: React.MouseEvent, productId: string, direction: 'prev' | 'next') => {
+  const handleImageNavigation = (
+    e: React.MouseEvent,
+    productId: string,
+    direction: 'prev' | 'next'
+  ) => {
     e.preventDefault();
     e.stopPropagation();
-    
-    const collection = collections.find(c => c.products.some(p => p.id === productId));
+
+    const collection = collections.find((c) =>
+      c.products.some((p) => p.id === productId)
+    );
     if (!collection) return;
-    
-    const product = collection.products.find(p => p.id === productId);
+
+    const product = collection.products.find((p) => p.id === productId);
     if (!product) return;
-    
+
     const currentIndex = currentImageIndex[productId] || 0;
     const imageCount = product.images.length;
-    
+
     let newIndex;
     if (direction === 'next') {
       newIndex = (currentIndex + 1) % imageCount;
     } else {
       newIndex = (currentIndex - 1 + imageCount) % imageCount;
     }
-    
+
     setCurrentImageIndex({
       ...currentImageIndex,
-      [productId]: newIndex
+      [productId]: newIndex,
     });
   };
-  
+
   const handleProductClick = (e: React.MouseEvent, productId: string) => {
     if (!isMobile) return; // Only apply this logic on mobile
-    
+
     e.preventDefault();
-    
+
     // If this is the first click on this product, select it but don't navigate
     if (selectedProduct !== productId) {
       setSelectedProduct(productId);
       setHoveredProduct(productId);
       return;
     }
-    
+
     // If this is the second click on the same product, navigate to product detail
     window.location.href = `/product/${productId}`;
   };
@@ -293,7 +301,7 @@ export default function FeaturedProducts() {
     const timer = setTimeout(() => {
       setLoading(false);
     }, 500);
-    
+
     return () => clearTimeout(timer);
   }, []);
 
@@ -380,13 +388,15 @@ export default function FeaturedProducts() {
                   const isHovered = hoveredProduct === product.id;
                   const isSelected = selectedProduct === product.id;
                   const currentIndex = currentImageIndex[product.id] || 0;
-                  
+
                   return (
                     <div
                       key={product.id}
                       className="block group relative"
                       onClick={(e) => handleProductClick(e, product.id)}
-                      onMouseEnter={() => !isMobile && setHoveredProduct(product.id)}
+                      onMouseEnter={() =>
+                        !isMobile && setHoveredProduct(product.id)
+                      }
                       onMouseLeave={() => !isMobile && setHoveredProduct(null)}
                     >
                       <div className="relative aspect-square overflow-hidden mb-3">
@@ -396,7 +406,7 @@ export default function FeaturedProducts() {
                           fill
                           className="object-cover transition-all duration-700 ease-in-out"
                         />
-                        
+
                         {/* Previous image with fade-out effect */}
                         {isHovered && (
                           <div className="absolute inset-0 animate-fadeOut">
@@ -408,64 +418,96 @@ export default function FeaturedProducts() {
                             />
                           </div>
                         )}
-                        
+
                         {/* Subtle overlay effect on hover/selected */}
                         <div
                           className={`absolute inset-0 bg-black transition-opacity duration-500 ${
-                            (isHovered || isSelected) ? 'bg-opacity-10' : 'bg-opacity-0'
+                            isHovered || isSelected
+                              ? 'bg-opacity-10'
+                              : 'bg-opacity-0'
                           }`}
                         />
 
                         {/* Navigation arrows - shown on hover or when selected on mobile */}
-                        {((isHovered && !isMobile) || (isSelected && isMobile)) && product.images.length > 1 && (
-                          <>
-                            {/* Left navigation arrow */}
-                            <button
-                              onClick={(e) => handleImageNavigation(e, product.id, 'prev')}
-                              className="absolute left-3 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-white/80 text-luxury-charcoal hover:bg-white flex items-center justify-center transition-all duration-300 focus-visible shadow-lg"
-                              aria-label="Previous image"
-                            >
-                              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-4 h-4">
-                                <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" />
-                              </svg>
-                            </button>
-                            
-                            {/* Right navigation arrow */}
-                            <button
-                              onClick={(e) => handleImageNavigation(e, product.id, 'next')}
-                              className="absolute right-3 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-white/80 text-luxury-charcoal hover:bg-white flex items-center justify-center transition-all duration-300 focus-visible shadow-lg"
-                              aria-label="Next image"
-                            >
-                              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-4 h-4">
-                                <path strokeLinecap="round" strokeLinejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
-                              </svg>
-                            </button>
-                            
-                            {/* Image indicators */}
-                            <div className="absolute bottom-3 left-1/2 -translate-x-1/2 flex space-x-1.5">
-                              {product.images.map((_, index) => (
-                                <span 
-                                  key={index}
-                                  className={`w-1.5 h-1.5 rounded-full transition-all duration-300 ${
-                                    currentIndex === index 
-                                      ? 'bg-white w-2.5' 
-                                      : 'bg-white/60'
-                                  }`}
-                                />
-                              ))}
-                            </div>
-                          </>
-                        )}
+                        {((isHovered && !isMobile) ||
+                          (isSelected && isMobile)) &&
+                          product.images.length > 1 && (
+                            <>
+                              {/* Left navigation arrow */}
+                              <button
+                                onClick={(e) =>
+                                  handleImageNavigation(e, product.id, 'prev')
+                                }
+                                className="absolute left-3 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-white/80 text-luxury-charcoal hover:bg-white flex items-center justify-center transition-all duration-300 focus-visible shadow-lg"
+                                aria-label="Previous image"
+                              >
+                                <svg
+                                  xmlns="http://www.w3.org/2000/svg"
+                                  fill="none"
+                                  viewBox="0 0 24 24"
+                                  strokeWidth={1.5}
+                                  stroke="currentColor"
+                                  className="w-4 h-4"
+                                >
+                                  <path
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
+                                    d="M15.75 19.5L8.25 12l7.5-7.5"
+                                  />
+                                </svg>
+                              </button>
+
+                              {/* Right navigation arrow */}
+                              <button
+                                onClick={(e) =>
+                                  handleImageNavigation(e, product.id, 'next')
+                                }
+                                className="absolute right-3 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-white/80 text-luxury-charcoal hover:bg-white flex items-center justify-center transition-all duration-300 focus-visible shadow-lg"
+                                aria-label="Next image"
+                              >
+                                <svg
+                                  xmlns="http://www.w3.org/2000/svg"
+                                  fill="none"
+                                  viewBox="0 0 24 24"
+                                  strokeWidth={1.5}
+                                  stroke="currentColor"
+                                  className="w-4 h-4"
+                                >
+                                  <path
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
+                                    d="M8.25 4.5l7.5 7.5-7.5 7.5"
+                                  />
+                                </svg>
+                              </button>
+
+                              {/* Image indicators */}
+                              <div className="absolute bottom-3 left-1/2 -translate-x-1/2 flex space-x-1.5">
+                                {product.images.map((_, index) => (
+                                  <span
+                                    key={index}
+                                    className={`w-1.5 h-1.5 rounded-full transition-all duration-300 ${
+                                      currentIndex === index
+                                        ? 'bg-white w-2.5'
+                                        : 'bg-white/60'
+                                    }`}
+                                  />
+                                ))}
+                              </div>
+                            </>
+                          )}
                       </div>
-                      <h3 className="font-serif text-sm mb-1">{product.name}</h3>
+                      <h3 className="font-serif text-sm mb-1">
+                        {product.name}
+                      </h3>
                       <p className="text-luxury-charcoal/70 text-sm">
                         ${product.price}
                       </p>
-                      
+
                       {/* Non-mobile users get normal links; mobile uses the onClick handler */}
                       {!isMobile && (
-                        <Link 
-                          href={`/product/${product.id}`} 
+                        <Link
+                          href={`/product/${product.id}`}
                           className="absolute inset-0 z-10"
                           aria-label={`View ${product.name} details`}
                         />

@@ -16,7 +16,7 @@ export default function ProductDetail({ product }: ProductDetailProps) {
   const [zoomPosition, setZoomPosition] = useState({ x: 0, y: 0 });
   const [isMobile, setIsMobile] = useState(false);
   const { addItem } = useLocalCartStore();
-  
+
   // Touch handling for mobile swipe
   const touchStartX = useRef(0);
   const touchEndX = useRef(0);
@@ -27,10 +27,10 @@ export default function ProductDetail({ product }: ProductDetailProps) {
     const checkMobile = () => {
       setIsMobile(window.innerWidth < 768);
     };
-    
+
     checkMobile();
     window.addEventListener('resize', checkMobile);
-    
+
     return () => {
       window.removeEventListener('resize', checkMobile);
     };
@@ -80,7 +80,7 @@ export default function ProductDetail({ product }: ProductDetailProps) {
   const handleTouchEnd = () => {
     const touchDiff = touchStartX.current - touchEndX.current;
     const minSwipeDistance = 50;
-    
+
     if (touchDiff > minSwipeDistance) {
       // Swiped left, go to next image
       if (selectedImage < product.images.length - 1) {
@@ -92,7 +92,7 @@ export default function ProductDetail({ product }: ProductDetailProps) {
         setSelectedImage(selectedImage - 1);
       }
     }
-    
+
     // Reset touch coordinates
     touchStartX.current = 0;
     touchEndX.current = 0;
@@ -153,7 +153,7 @@ export default function ProductDetail({ product }: ProductDetailProps) {
               Click to exit zoom
             </div>
           )}
-          
+
           {/* Mobile swipe indicators */}
           {isMobile && product.images.length > 1 && (
             <div className="absolute bottom-4 left-0 right-0 flex justify-center gap-2">
@@ -165,8 +165,8 @@ export default function ProductDetail({ product }: ProductDetailProps) {
                     setSelectedImage(index);
                   }}
                   className={`w-2 h-2 rounded-full ${
-                    selectedImage === index 
-                      ? 'bg-luxury-gold' 
+                    selectedImage === index
+                      ? 'bg-luxury-gold'
                       : 'bg-luxury-gold/30'
                   }`}
                   aria-label={`View image ${index + 1}`}
@@ -175,7 +175,7 @@ export default function ProductDetail({ product }: ProductDetailProps) {
               ))}
             </div>
           )}
-          
+
           {/* Mobile touch hint overlay - shows briefly when component mounts */}
           {isMobile && product.images.length > 1 && (
             <div className="absolute inset-0 bg-black/5 flex items-center justify-center pointer-events-none animate-fadeout">

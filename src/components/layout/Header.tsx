@@ -22,18 +22,18 @@ export default function Header() {
   const isMenuItemActive = (itemPath: string) => {
     // For exact path matches
     if (itemPath === pathname) return true;
-    
+
     // For product categories
     if (itemPath.includes('?category=') && !!pathname?.includes('/products')) {
       const itemCategory = itemPath.split('category=')[1];
-      
+
       if (typeof window !== 'undefined') {
         const urlParams = new URLSearchParams(window.location.search);
         const currentCategory = urlParams.get('category');
         return itemCategory === currentCategory;
       }
     }
-    
+
     return false;
   };
 
@@ -63,26 +63,26 @@ export default function Header() {
   }, []);
 
   const navItems: NavigationItem[] = [
-    { 
+    {
       title: 'Home',
-      href: '/'
+      href: '/',
     },
-    { 
+    {
       title: 'Handmade',
-      href: '/products?category=handmades'
+      href: '/products?category=handmades',
     },
-    { 
+    {
       title: 'Second-Hand',
-      href: '/products?category=secondHands'
+      href: '/products?category=secondHands',
     },
-    { 
+    {
       title: 'Paintings',
-      href: '/products?category=paintings'
+      href: '/products?category=paintings',
     },
-    { 
+    {
       title: 'Decorative',
-      href: '/products?category=decoratives'
-    }
+      href: '/products?category=decoratives',
+    },
   ];
 
   // Show transparent background only on homepage when not scrolled
@@ -94,7 +94,7 @@ export default function Header() {
         isScrolled || !isHomePage
           ? 'bg-[#FBF9F6] shadow-sm py-3'
           : 'py-5 bg-transparent'
-        } ${hideHeader ? 'md:translate-y-0' : 'translate-y-0'}`}
+      } ${hideHeader ? 'md:translate-y-0' : 'translate-y-0'}`}
       // } ${hideHeader ? 'max-md:-translate-y-full md:translate-y-0' : 'translate-y-0'}`}
     >
       <div className="container mx-auto px-4 flex justify-between items-center">
@@ -122,7 +122,9 @@ export default function Header() {
               key={item.href}
               href={item.href}
               className={`text-sm uppercase tracking-wider hover:text-luxury-sienna transition-colors duration-300 focus-visible ${
-                isMenuItemActive(item.href) ? 'border-b border-luxury-gold pb-1' : ''
+                isMenuItemActive(item.href)
+                  ? 'border-b border-luxury-gold pb-1'
+                  : ''
               } ${showTransparentBackground ? 'text-white' : 'text-luxury-charcoal'}`}
             >
               {item.title}
@@ -167,7 +169,7 @@ export default function Header() {
             className="md:hidden focus-visible p-2 -mr-2 rounded-full hover:bg-luxury-cream/30 transition-all duration-300"
             onClick={() => {
               setIsMobileMenuOpen(!isMobileMenuOpen);
-              setMenuToggleCount(prev => prev + 1);
+              setMenuToggleCount((prev) => prev + 1);
             }}
             aria-label={isMobileMenuOpen ? 'Close menu' : 'Open menu'}
             aria-expanded={isMobileMenuOpen}
@@ -175,17 +177,23 @@ export default function Header() {
             <div className="w-5 h-4 relative flex flex-col justify-between">
               <span
                 className={`w-full h-[1.5px] absolute transition-all duration-300 ${
-                  showTransparentBackground ? 'bg-[#FBF9F6]' : 'bg-luxury-charcoal/80'
+                  showTransparentBackground
+                    ? 'bg-[#FBF9F6]'
+                    : 'bg-luxury-charcoal/80'
                 } ${isMobileMenuOpen ? 'top-[7px] rotate-45' : 'top-0'}`}
               ></span>
               <span
                 className={`w-full h-[1.5px] absolute top-[7px] transition-opacity duration-300 ${
-                  showTransparentBackground ? 'bg-white' : 'bg-luxury-charcoal/80'
+                  showTransparentBackground
+                    ? 'bg-white'
+                    : 'bg-luxury-charcoal/80'
                 } ${isMobileMenuOpen ? 'opacity-0' : 'opacity-100'}`}
               ></span>
               <span
                 className={`w-full h-[1.5px] absolute transition-all duration-300 ${
-                  showTransparentBackground ? 'bg-white' : 'bg-luxury-charcoal/80'
+                  showTransparentBackground
+                    ? 'bg-white'
+                    : 'bg-luxury-charcoal/80'
                 } ${isMobileMenuOpen ? 'bottom-[7px] -rotate-45' : 'bottom-0'}`}
               ></span>
             </div>
@@ -201,27 +209,38 @@ export default function Header() {
         aria-hidden={!isMobileMenuOpen}
       >
         <div className="glass-effect mt-2 rounded-xl shadow-luxury border border-luxury-gold/10 overflow-hidden transform transition-all duration-300">
-          <nav className="flex flex-col py-4" key={`mobile-nav-${menuToggleCount}-${pathname}`}>
+          <nav
+            className="flex flex-col py-4"
+            key={`mobile-nav-${menuToggleCount}-${pathname}`}
+          >
             {navItems.map((item, index) => {
               // Direct check for active state
               let isActive = item.href === pathname;
-              
+
               // Category check for product pages
-              if (typeof window !== 'undefined' && !!pathname?.includes('/products') && item.href.includes('category=')) {
+              if (
+                typeof window !== 'undefined' &&
+                !!pathname?.includes('/products') &&
+                item.href.includes('category=')
+              ) {
                 const itemCategory = item.href.split('category=')[1];
                 const urlParams = new URLSearchParams(window.location.search);
                 const currentCategory = urlParams.get('category');
                 isActive = itemCategory === currentCategory;
               }
-              
+
               return (
                 <Link
                   key={item.href}
                   href={item.href}
                   className={`px-6 py-4 text-sm uppercase tracking-wider transition-all ${
-                    index < navItems.length - 1 ? 'border-b border-luxury-gold/10' : ''
+                    index < navItems.length - 1
+                      ? 'border-b border-luxury-gold/10'
+                      : ''
                   } ${
-                    isActive ? 'text-luxury-sienna font-medium bg-luxury-cream/10' : 'text-luxury-charcoal/90'
+                    isActive
+                      ? 'text-luxury-sienna font-medium bg-luxury-cream/10'
+                      : 'text-luxury-charcoal/90'
                   }`}
                   onClick={() => setIsMobileMenuOpen(false)}
                 >
@@ -233,7 +252,9 @@ export default function Header() {
               <Link
                 href="/track"
                 className={`py-4 text-sm uppercase tracking-wider block -mx-6 px-6 transition-all ${
-                  pathname === '/track' ? 'text-luxury-sienna font-medium bg-luxury-cream/10' : 'text-luxury-charcoal/90'
+                  pathname === '/track'
+                    ? 'text-luxury-sienna font-medium bg-luxury-cream/10'
+                    : 'text-luxury-charcoal/90'
                 }`}
                 onClick={() => setIsMobileMenuOpen(false)}
               >
@@ -241,14 +262,13 @@ export default function Header() {
               </Link>
             </div>
           </nav>
-          
+
           <div className="bg-[#f8f5f2] py-4 px-6 border-t border-luxury-gold/10">
             <div className="flex items-center justify-between">
-              <p className="text-xs text-luxury-charcoal/70">Customer Service</p>
-              <a 
-                href="tel:+33142123456" 
-                className="text-xs text-luxury-sienna"
-              >
+              <p className="text-xs text-luxury-charcoal/70">
+                Customer Service
+              </p>
+              <a href="tel:+33142123456" className="text-xs text-luxury-sienna">
                 +33 1 42 12 34 56
               </a>
             </div>

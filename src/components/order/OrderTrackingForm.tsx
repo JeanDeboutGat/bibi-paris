@@ -9,7 +9,9 @@ export default function OrderTrackingForm() {
   const [email, setEmail] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [orderStatus, setOrderStatus] = useState<OrderStatusDetail | null>(null);
+  const [orderStatus, setOrderStatus] = useState<OrderStatusDetail | null>(
+    null
+  );
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();

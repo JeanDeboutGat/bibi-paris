@@ -31,9 +31,9 @@ export default {
         'spin-slow': 'spin 3s linear infinite',
         'loading-bar': 'loadingBar 2s ease-in-out infinite',
         'logo-float': 'logoFloat 3s ease-in-out infinite',
-        'pulsate': 'pulsate 2s ease-in-out infinite',
-        'fadeOut': 'fadeOut 0.7s ease-out forwards',
-        'crossFade': 'crossFade 0.7s ease-in-out',
+        pulsate: 'pulsate 2s ease-in-out infinite',
+        fadeOut: 'fadeOut 0.7s ease-out forwards',
+        crossFade: 'crossFade 0.7s ease-in-out',
       },
       keyframes: {
         fadeIn: {
