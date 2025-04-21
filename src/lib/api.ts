@@ -20,7 +20,7 @@ export const productApi = {
                 price: 299.99,
                 images: [
                     '/images/handmades/gobolet.jpg',
-                    '/images/handmades/gobolet.jpg',
+                    '/images/handmades/sac.jpg',
                     '/images/handmades/gobolet.jpg'
                 ],
                 category: 'handmades',

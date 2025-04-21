@@ -111,6 +111,27 @@
     color: #A05B44 !important;
     font-weight: 500 !important;
   }
+  
+  /* Product image carousel swipe hint animation */
+  .animate-fadeout {
+    animation: fadeOut 3s forwards;
+  }
+  
+  @keyframes fadeOut {
+    0% { opacity: 1; }
+    70% { opacity: 1; }
+    100% { opacity: 0; }
+  }
+  
+  /* Subtle bounce animation for cart icon */
+  .animate-subtle-bounce {
+    animation: subtleBounce 0.5s ease;
+  }
+  
+  @keyframes subtleBounce {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-5px); }
+  }
 }
 
 @layer utilities {

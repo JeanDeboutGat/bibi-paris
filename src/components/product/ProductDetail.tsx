@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useRef, useEffect, TouchEvent } from 'react';
 import Image from 'next/image';
 import { useLocalCartStore } from '@/lib/store';
 import { CartItem, Product } from '@/types/product';
@@ -14,7 +14,27 @@ export default function ProductDetail({ product }: ProductDetailProps) {
   const [isAddedToCart, setIsAddedToCart] = useState(false);
   const [isZoomed, setIsZoomed] = useState(false);
   const [zoomPosition, setZoomPosition] = useState({ x: 0, y: 0 });
+  const [isMobile, setIsMobile] = useState(false);
   const { addItem } = useLocalCartStore();
+  
+  // Touch handling for mobile swipe
+  const touchStartX = useRef(0);
+  const touchEndX = useRef(0);
+  const imageContainerRef = useRef<HTMLDivElement>(null);
+
+  // Check if we're on a mobile device
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+    
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    
+    return () => {
+      window.removeEventListener('resize', checkMobile);
+    };
+  }, []);
 
   const handleAddToCart = () => {
     const cartItem: CartItem = {
@@ -48,6 +68,36 @@ export default function ProductDetail({ product }: ProductDetailProps) {
   // Make sure product.details is always treated as an array of strings for now
   const details = Array.isArray(product.details) ? product.details : [];
 
+  // Touch handlers for mobile image slider
+  const handleTouchStart = (e: TouchEvent) => {
+    touchStartX.current = e.touches[0].clientX;
+  };
+
+  const handleTouchMove = (e: TouchEvent) => {
+    touchEndX.current = e.touches[0].clientX;
+  };
+
+  const handleTouchEnd = () => {
+    const touchDiff = touchStartX.current - touchEndX.current;
+    const minSwipeDistance = 50;
+    
+    if (touchDiff > minSwipeDistance) {
+      // Swiped left, go to next image
+      if (selectedImage < product.images.length - 1) {
+        setSelectedImage(selectedImage + 1);
+      }
+    } else if (touchDiff < -minSwipeDistance) {
+      // Swiped right, go to previous image
+      if (selectedImage > 0) {
+        setSelectedImage(selectedImage - 1);
+      }
+    }
+    
+    // Reset touch coordinates
+    touchStartX.current = 0;
+    touchEndX.current = 0;
+  };
+
   // Zoom functionality
   const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
     if (!isZoomed) return;
@@ -65,16 +115,20 @@ export default function ProductDetail({ product }: ProductDetailProps) {
       {/* Product Images */}
       <div>
         <div
-          className={`relative h-[500px] md:h-[600px] mb-6 overflow-hidden cursor-zoom-in transition-all duration-500 ${isZoomed ? 'border border-luxury-gold/20' : ''}`}
-          onClick={() => setIsZoomed(!isZoomed)}
+          ref={imageContainerRef}
+          className={`relative h-[500px] md:h-[600px] mb-6 overflow-hidden ${!isMobile ? 'cursor-zoom-in' : ''} transition-all duration-500 ${isZoomed ? 'border border-luxury-gold/20' : ''}`}
+          onClick={() => !isMobile && setIsZoomed(!isZoomed)}
           onMouseMove={handleMouseMove}
           onMouseLeave={() => setIsZoomed(false)}
+          onTouchStart={handleTouchStart}
+          onTouchMove={handleTouchMove}
+          onTouchEnd={handleTouchEnd}
           role="button"
           tabIndex={0}
           aria-label={isZoomed ? 'Zoom out' : 'Zoom in'}
           onKeyDown={(e) => {
             if (e.key === 'Enter' || e.key === ' ') {
-              setIsZoomed(!isZoomed);
+              return !isMobile && setIsZoomed(!isZoomed);
             }
           }}
         >
@@ -83,10 +137,10 @@ export default function ProductDetail({ product }: ProductDetailProps) {
             alt={product.name}
             fill
             className={`object-cover transition-all duration-500 ${
-              isZoomed ? 'scale-150' : 'scale-100'
+              isZoomed && !isMobile ? 'scale-150' : 'scale-100'
             }`}
             style={
-              isZoomed
+              isZoomed && !isMobile
                 ? {
                     transformOrigin: `${zoomPosition.x}% ${zoomPosition.y}%`,
                   }
@@ -94,15 +148,46 @@ export default function ProductDetail({ product }: ProductDetailProps) {
             }
             priority
           />
-          {isZoomed && (
+          {isZoomed && !isMobile && (
             <div className="absolute top-4 right-4 bg-white/80 text-luxury-charcoal text-xs py-1 px-3 rounded-full pointer-events-none">
               Click to exit zoom
             </div>
           )}
+          
+          {/* Mobile swipe indicators */}
+          {isMobile && product.images.length > 1 && (
+            <div className="absolute bottom-4 left-0 right-0 flex justify-center gap-2">
+              {product.images.map((_, index) => (
+                <button
+                  key={index}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setSelectedImage(index);
+                  }}
+                  className={`w-2 h-2 rounded-full ${
+                    selectedImage === index 
+                      ? 'bg-luxury-gold' 
+                      : 'bg-luxury-gold/30'
+                  }`}
+                  aria-label={`View image ${index + 1}`}
+                  aria-current={selectedImage === index}
+                />
+              ))}
+            </div>
+          )}
+          
+          {/* Mobile touch hint overlay - shows briefly when component mounts */}
+          {isMobile && product.images.length > 1 && (
+            <div className="absolute inset-0 bg-black/5 flex items-center justify-center pointer-events-none animate-fadeout">
+              <div className="bg-white/80 text-luxury-charcoal text-xs py-2 px-4 rounded-full">
+                Swipe to see more images
+              </div>
+            </div>
+          )}
         </div>
 
-        {/* Thumbnail Gallery */}
-        {product.images.length > 1 && (
+        {/* Thumbnail Gallery - only show on larger screens */}
+        {!isMobile && product.images.length > 1 && (
           <div className="grid grid-cols-5 gap-2">
             {product.images.map((image, index) => (
               <button
