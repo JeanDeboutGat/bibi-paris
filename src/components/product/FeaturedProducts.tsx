@@ -288,9 +288,9 @@ export default function FeaturedProducts() {
                       <div className="bg-gray-200 aspect-square w-full mb-3"></div>
                       <div className="bg-gray-200 h-4 w-3/4 mb-2"></div>
                       <div className="bg-gray-200 h-3 w-1/4"></div>
-                    </div>
-                  ))}
-                </div>
+          </div>
+        ))}
+      </div>
               </div>
             </div>
           </section>
@@ -349,20 +349,32 @@ export default function FeaturedProducts() {
                   const currentIndex = currentImageIndex[product.id] || 0;
                   
                   return (
-                    <Link 
-                      key={product.id} 
-                      href={`/product/${product.id}`} 
+        <Link
+          key={product.id}
+          href={`/product/${product.id}`}
                       className="block group"
                       onMouseEnter={() => setHoveredProduct(product.id)}
                       onMouseLeave={() => setHoveredProduct(null)}
-                    >
+        >
                       <div className="relative aspect-square overflow-hidden mb-3">
                         <Image
                           src={product.images[currentIndex]}
                           alt={product.name}
                           fill
-                          className="object-cover transition-all duration-500"
+                          className="object-cover transition-all duration-700 ease-in-out"
                         />
+                        
+                        {/* Previous image with fade-out effect */}
+                        {isHovered && (
+                          <div className="absolute inset-0 animate-fadeOut">
+                            <Image
+                              src={product.images[0]}
+                              alt={`${product.name} - previous view`}
+                              fill
+                              className="object-cover"
+                            />
+                          </div>
+                        )}
                         
                         {/* Subtle overlay effect on hover */}
                         <div

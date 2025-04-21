@@ -32,6 +32,8 @@ export default {
         'loading-bar': 'loadingBar 2s ease-in-out infinite',
         'logo-float': 'logoFloat 3s ease-in-out infinite',
         'pulsate': 'pulsate 2s ease-in-out infinite',
+        'fadeOut': 'fadeOut 0.7s ease-out forwards',
+        'crossFade': 'crossFade 0.7s ease-in-out',
       },
       keyframes: {
         fadeIn: {
@@ -59,6 +61,16 @@ export default {
         pulsate: {
           '0%, 100%': { opacity: '0.3' },
           '50%': { opacity: '0.6' },
+        },
+        fadeOut: {
+          '0%': { opacity: '1' },
+          '100%': { opacity: '0' },
+        },
+        crossFade: {
+          '0%': { opacity: '0' },
+          '20%': { opacity: '1' },
+          '80%': { opacity: '1' },
+          '100%': { opacity: '0' },
         },
       },
       transitionDuration: {

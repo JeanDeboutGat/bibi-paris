@@ -283,9 +283,22 @@ export default function ProductGrid({
                     alt={product.name}
                     fill
                     sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                    className="object-cover transition-all duration-500"
+                    className="object-cover transition-all duration-700 ease-in-out"
                     priority={product.id.endsWith('-1')}
                   />
+
+                  {/* Previous image with fade-out effect */}
+                  {isHovered && (
+                    <div className="absolute inset-0 animate-fadeOut">
+                      <Image
+                        src={product.images[0]}
+                        alt={`${product.name} - previous view`}
+                        fill
+                        sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                        className="object-cover"
+                      />
+                    </div>
+                  )}
 
                   {/* Subtle overlay effect on hover */}
                   <div

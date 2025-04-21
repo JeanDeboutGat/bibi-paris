@@ -218,8 +218,20 @@ export default function RelatedProducts({
                 src={product.images[currentIndex]}
                 alt={product.name}
                 fill
-                className="object-cover transition-transform duration-500"
+                className="object-cover transition-transform duration-700 ease-in-out"
               />
+              
+              {/* Previous image with fade-out effect */}
+              {isHovered && (
+                <div className="absolute inset-0 animate-fadeOut">
+                  <Image
+                    src={product.images[0]}
+                    alt={`${product.name} - previous view`}
+                    fill
+                    className="object-cover"
+                  />
+                </div>
+              )}
               
               {/* Subtle overlay effect on hover */}
               <div
