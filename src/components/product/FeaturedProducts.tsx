@@ -5,6 +5,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { productApi } from '@/lib/api';
 import { Product, ProductCategory } from '@/types/product';
+import ErrorMessage from '@/components/ui/ErrorMessage';
 
 export default function FeaturedProducts() {
   const [loading, setLoading] = useState(true);
@@ -20,6 +21,7 @@ export default function FeaturedProducts() {
     paintings: [],
     decoratives: []
   });
+  const [error, setError] = useState<unknown | null>(null);
 
   // Reset image index when hover changes and set to second image on hover
   useEffect(() => {
@@ -52,34 +54,34 @@ export default function FeaturedProducts() {
   useEffect(() => {
     const fetchProducts = async () => {
       setLoading(true);
-      
+      setError(null);
       try {
         const categories: ProductCategory[] = ['handmades', 'secondHands', 'paintings', 'decoratives'];
-        
-        // Create an object to hold products by category
         const products: Record<ProductCategory, Product[]> = {
           handmades: [],
           secondHands: [],
           paintings: [],
           decoratives: []
         };
-        
-        // Fetch products for each category
         await Promise.all(
           categories.map(async (category) => {
             const categoryProducts = await productApi.getByCategory(category);
-            products[category] = categoryProducts.slice(0, 4); // Limit to 4 products per category
+            products[category] = categoryProducts.slice(0, 4);
           })
         );
-        
         setProductsByCategory(products);
-      } catch (error) {
-        console.error('Error fetching products:', error);
+      } catch (err) {
+        setError(err);
+        setProductsByCategory({
+          handmades: [],
+          secondHands: [],
+          paintings: [],
+          decoratives: []
+        });
       } finally {
         setLoading(false);
       }
     };
-
     fetchProducts();
   }, []);
 
@@ -203,6 +205,10 @@ export default function FeaturedProducts() {
 
     return () => clearTimeout(timer);
   }, []);
+
+  if (error) {
+    return <ErrorMessage error={error} fullPage className="py-16" onRetry={() => window.location.reload()} />;
+  }
 
   if (loading) {
     return (

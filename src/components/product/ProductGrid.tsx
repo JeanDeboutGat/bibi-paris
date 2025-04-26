@@ -90,6 +90,7 @@ export default function ProductGrid({ category, sort }: ProductGridProps) {
       } catch (err) {
         console.error('Failed to fetch products:', err);
         setError(err);
+        setProducts([]); // Defensive: clear products on error
       } finally {
         setLoading(false);
       }
@@ -188,11 +189,11 @@ export default function ProductGrid({ category, sort }: ProductGridProps) {
     );
   }
 
-  if (products.length === 0) {
+  if (!products || products.length === 0) {
     return (
       <div className="text-center py-16">
         <p className="font-serif text-lg text-luxury-charcoal mb-6">
-          No products match your selected criteria.
+          No products match your selected criteria or failed to load products.
         </p>
         <button
           onClick={() => window.history.back()}

@@ -5,6 +5,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { productApi } from '@/lib/api';
 import { Product, ProductCategory } from '@/types/product';
+import ErrorMessage from '@/components/ui/ErrorMessage';
 
 type RelatedProductsProps = {
   currentProductId: string;
@@ -23,6 +24,7 @@ export default function RelatedProducts({
   >({});
   const [isMobile, setIsMobile] = useState(false);
   const [selectedProduct, setSelectedProduct] = useState<string | null>(null);
+  const [error, setError] = useState<unknown | null>(null);
 
   // Reset image index when hover changes and set to second image on hover
   useEffect(() => {
@@ -55,11 +57,9 @@ export default function RelatedProducts({
     const fetchRelatedProducts = async () => {
       try {
         setLoading(true);
-
+        setError(null);
         // Get all products first
         const allProducts = await productApi.getAll();
-        console.log(allProducts);
-
         // Filter products from the same category, excluding current product
         const relatedProducts = allProducts
           .filter(
@@ -67,16 +67,14 @@ export default function RelatedProducts({
               product.category === category && product.id !== currentProductId
           )
           .slice(0, 4);
-
-        console.log('related', relatedProducts);
         setProducts(relatedProducts);
       } catch (err) {
-        console.error('Failed to fetch related products:', err);
+        setError(err);
+        setProducts([]);
       } finally {
         setLoading(false);
       }
     };
-
     fetchRelatedProducts();
   }, [currentProductId, category]);
 
@@ -123,6 +121,10 @@ export default function RelatedProducts({
     window.location.href = `/product/${productId}`;
   };
 
+  if (error) {
+    return <ErrorMessage error={error} className="py-8" onRetry={() => window.location.reload()} />;
+  }
+
   if (loading) {
     return (
       <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
@@ -137,7 +139,7 @@ export default function RelatedProducts({
     );
   }
 
-  if (products.length === 0) {
+  if (!products || products.length === 0) {
     return null;
   }
 
