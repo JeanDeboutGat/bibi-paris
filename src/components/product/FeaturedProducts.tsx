@@ -337,7 +337,7 @@ export default function FeaturedProducts() {
                                 onClick={(e) =>
                                   handleImageNavigation(e, product.id, 'prev')
                                 }
-                                className="absolute left-3 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-white/80 text-luxury-charcoal hover:bg-white flex items-center justify-center transition-all duration-300 focus-visible shadow-lg"
+                                className="absolute left-3 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-white/80 text-luxury-charcoal hover:bg-white flex items-center justify-center transition-all duration-300 focus-visible shadow-lg z-20"
                                 aria-label="Previous image"
                               >
                                 <svg
@@ -361,7 +361,7 @@ export default function FeaturedProducts() {
                                 onClick={(e) =>
                                   handleImageNavigation(e, product.id, 'next')
                                 }
-                                className="absolute right-3 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-white/80 text-luxury-charcoal hover:bg-white flex items-center justify-center transition-all duration-300 focus-visible shadow-lg"
+                                className="absolute right-3 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-white/80 text-luxury-charcoal hover:bg-white flex items-center justify-center transition-all duration-300 focus-visible shadow-lg z-20"
                                 aria-label="Next image"
                               >
                                 <svg
@@ -381,7 +381,7 @@ export default function FeaturedProducts() {
                               </button>
 
                               {/* Image indicators */}
-                              <div className="absolute bottom-3 left-1/2 -translate-x-1/2 flex space-x-1.5">
+                              <div className="absolute bottom-3 left-1/2 -translate-x-1/2 flex space-x-1.5 z-20">
                                 {product.images.map((_, index) => (
                                   <span
                                     key={index}
