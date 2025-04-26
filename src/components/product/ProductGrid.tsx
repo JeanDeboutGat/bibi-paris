@@ -10,6 +10,7 @@ import {
   ProductSortOption,
 } from '@/types/product';
 import { productApi } from '@/lib/api';
+import ErrorMessage from '@/components/ui/ErrorMessage';
 
 type ProductGridProps = {
   category?: ProductCategory;
@@ -19,7 +20,7 @@ type ProductGridProps = {
 export default function ProductGrid({ category, sort }: ProductGridProps) {
   const [products, setProducts] = useState<ProductListItem[]>([]);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+  const [error, setError] = useState<unknown | null>(null);
   const [hoveredProduct, setHoveredProduct] = useState<string | null>(null);
   const [currentImageIndex, setCurrentImageIndex] = useState<
     Record<string, number>
@@ -88,7 +89,7 @@ export default function ProductGrid({ category, sort }: ProductGridProps) {
         setProducts(data);
       } catch (err) {
         console.error('Failed to fetch products:', err);
-        setError('Failed to load products. Please try again later.');
+        setError(err);
       } finally {
         setLoading(false);
       }
@@ -178,15 +179,12 @@ export default function ProductGrid({ category, sort }: ProductGridProps) {
 
   if (error) {
     return (
-      <div className="text-center py-16 text-luxury-charcoal">
-        <p className="text-lg mb-6 font-light">{error}</p>
-        <button
-          onClick={() => window.location.reload()}
-          className="font-light border border-luxury-charcoal text-luxury-charcoal py-3 px-10 hover:bg-luxury-charcoal hover:text-white transition-colors duration-300"
-        >
-          Try Again
-        </button>
-      </div>
+      <ErrorMessage 
+        error={error} 
+        onRetry={() => window.location.reload()} 
+        fullPage={true}
+        className="py-16"
+      />
     );
   }
 

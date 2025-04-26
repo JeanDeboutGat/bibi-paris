@@ -3,6 +3,7 @@
 import { useEffect } from 'react';
 import { useDataLoading } from '@/hooks/useDataLoading';
 import LoadingSpinner from './LoadingSpinner';
+import ErrorMessage from './ErrorMessage';
 
 type ExampleData = {
   id: number;
@@ -39,8 +40,8 @@ export default function DataLoadingExample() {
 
   if (error) {
     return (
-      <div className="my-8 text-center text-red-500">
-        Error loading data: {error.message}
+      <div className="my-8">
+        <ErrorMessage error={error} onRetry={() => loadData(fetchData)} />
       </div>
     );
   }

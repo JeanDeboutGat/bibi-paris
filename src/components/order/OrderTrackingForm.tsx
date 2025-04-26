@@ -3,12 +3,13 @@
 import { useState } from 'react';
 import { orderApi } from '@/lib/api';
 import { OrderStatusDetail } from '@/types';
+import ErrorMessage from '@/components/ui/ErrorMessage';
 
 export default function OrderTrackingForm() {
   const [orderId, setOrderId] = useState('');
   const [email, setEmail] = useState('');
   const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+  const [error, setError] = useState<unknown | null>(null);
   const [orderStatus, setOrderStatus] = useState<OrderStatusDetail | null>(
     null
   );
@@ -29,9 +30,7 @@ export default function OrderTrackingForm() {
       setOrderStatus(data);
     } catch (err) {
       console.error('Failed to fetch order status:', err);
-      setError(
-        'We could not find an order with the provided information. Please check and try again.'
-      );
+      setError(err);
 
       // For development, use mock data if API fails
       if (process.env.NODE_ENV === 'development') {
@@ -75,6 +74,12 @@ export default function OrderTrackingForm() {
     } finally {
       setIsLoading(false);
     }
+  };
+
+  const resetForm = () => {
+    setError(null);
+    setOrderId('');
+    setEmail('');
   };
 
   const getStatusColor = (status: string) => {
@@ -128,7 +133,13 @@ export default function OrderTrackingForm() {
               />
             </div>
 
-            {error && <div className="text-red-500 text-sm">{error}</div>}
+            {!!error && (
+              <ErrorMessage 
+                error={error} 
+                onRetry={resetForm} 
+                className="mt-4" 
+              />
+            )}
 
             <button
               type="submit"

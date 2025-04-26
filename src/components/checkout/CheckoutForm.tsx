@@ -6,6 +6,7 @@ import { useCartStore } from '@/lib/store';
 import OrderSummary from '../order/OrderSummary';
 import { orderApi } from '@/lib/api';
 import { Order, PaymentMethod } from '@/types';
+import ErrorMessage from "@/components/ui/ErrorMessage";
 
 type FormData = {
   firstName: string;
@@ -42,6 +43,7 @@ export default function CheckoutForm() {
   const [errors, setErrors] = useState<Partial<Record<keyof FormData, string>>>(
     {}
   );
+  const [apiError, setApiError] = useState<unknown | null>(null);
 
   // Calculate order totals
   const subtotal = items.reduce(
@@ -126,6 +128,9 @@ export default function CheckoutForm() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
+    // Reset any API errors
+    setApiError(null);
+
     if (!validateForm()) {
       return;
     }
@@ -185,7 +190,7 @@ export default function CheckoutForm() {
       router.push(`/order-confirmation?id=${response.orderId}`);
     } catch (error) {
       console.error('Error submitting order:', error);
-      alert('There was an error processing your order. Please try again.');
+      setApiError(error);
     } finally {
       setIsSubmitting(false);
     }
@@ -210,6 +215,14 @@ export default function CheckoutForm() {
     <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
       {/* Checkout Form */}
       <div className="lg:col-span-2">
+        {!!apiError && (
+          <ErrorMessage 
+            error={apiError}
+            onRetry={() => setApiError(null)}
+            className="mb-6"
+          />
+        )}
+        
         <form onSubmit={handleSubmit}>
           {/* Contact Information */}
           <div className="mb-10">

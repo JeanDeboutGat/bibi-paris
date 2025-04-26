@@ -6,7 +6,7 @@ import { useCallback } from 'react';
 type UseDataLoadingResult<T> = {
   data: T | null;
   isLoading: boolean;
-  error: Error | null;
+  error: unknown | null;
   loadData: (fetchFn: () => Promise<T>) => Promise<T | null>;
 };
 
@@ -15,7 +15,7 @@ export function useDataLoading<T>(
 ): UseDataLoadingResult<T> {
   const [data, setData] = useState<T | null>(initialData);
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [error, setError] = useState<Error | null>(null);
+  const [error, setError] = useState<unknown | null>(null);
 
   const loadData = useCallback(
     async (fetchFn: () => Promise<T>): Promise<T | null> => {
@@ -27,8 +27,8 @@ export function useDataLoading<T>(
         setData(result);
         return result;
       } catch (err) {
-        const errorObj = err instanceof Error ? err : new Error(String(err));
-        setError(errorObj);
+        // Store the original error to preserve API error types and details
+        setError(err);
         return null;
       } finally {
         setIsLoading(false);
