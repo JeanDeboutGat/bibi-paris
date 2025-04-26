@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { productApi } from '@/lib/api';
@@ -72,102 +72,6 @@ export default function RelatedProducts({
         setProducts(relatedProducts);
       } catch (err) {
         console.error('Failed to fetch related products:', err);
-
-        // Fallback to category-specific mock data if API fails
-        const mockImages = {
-          handmades: [
-            '/images/handmades/gobolet.jpg',
-            '/images/handmades/pull.jpg',
-            '/images/handmades/cousin.jpg',
-            '/images/handmades/sac.jpg',
-          ],
-          secondHands: [
-            '/images/secondHands/table.jpg',
-            '/images/secondHands/chair.jpg',
-            '/images/secondHands/chairdark.jpg',
-            '/images/secondHands/smallChair.jpg',
-          ],
-          paintings: [
-            '/images/paintings/girl.jpg',
-            '/images/paintings/gate.jpg',
-            '/images/paintings/girl-boy.jpg',
-            '/images/paintings/flower.jpg',
-          ],
-          decoratives: [
-            '/images/decoratives/vase.jpg',
-            '/images/decoratives/pot.jpg',
-            '/images/decoratives/flower.jpg',
-            '/images/decoratives/alexandra-gorn-W5dsm9n6e3g-unsplash.jpg',
-          ],
-        };
-
-        // Use the appropriate image array based on category
-        const categoryImages =
-          mockImages[category as keyof typeof mockImages] ||
-          mockImages.decoratives; // Default fallback
-
-        setProducts([
-          {
-            id: `${category}-1`,
-            name: `${category.charAt(0).toUpperCase() + category.slice(1, -1)} Item 1`,
-            price: 599,
-            images: [categoryImages[0], categoryImages[1], categoryImages[2]],
-            category,
-            description: 'Related product description',
-            inStock: true,
-            sku: `SKU-${category.toUpperCase()}-1`,
-            details: [
-              'Quality craftsmanship',
-              'Sustainable materials',
-              'Unique design',
-            ],
-          },
-          {
-            id: `${category}-2`,
-            name: `${category.charAt(0).toUpperCase() + category.slice(1, -1)} Item 2`,
-            price: 699,
-            images: [categoryImages[1], categoryImages[2], categoryImages[3]],
-            category,
-            description: 'Related product description',
-            inStock: true,
-            sku: `SKU-${category.toUpperCase()}-2`,
-            details: [
-              'Quality craftsmanship',
-              'Sustainable materials',
-              'Unique design',
-            ],
-          },
-          {
-            id: `${category}-3`,
-            name: `${category.charAt(0).toUpperCase() + category.slice(1, -1)} Item 3`,
-            price: 799,
-            images: [categoryImages[2], categoryImages[3], categoryImages[0]],
-            category,
-            description: 'Related product description',
-            inStock: true,
-            sku: `SKU-${category.toUpperCase()}-3`,
-            details: [
-              'Quality craftsmanship',
-              'Sustainable materials',
-              'Unique design',
-            ],
-          },
-          {
-            id: `${category}-4`,
-            name: `${category.charAt(0).toUpperCase() + category.slice(1, -1)} Item 4`,
-            price: 899,
-            images: [categoryImages[3], categoryImages[0], categoryImages[1]],
-            category,
-            description: 'Related product description',
-            inStock: true,
-            sku: `SKU-${category.toUpperCase()}-4`,
-            details: [
-              'Quality craftsmanship',
-              'Sustainable materials',
-              'Unique design',
-            ],
-          },
-        ]);
       } finally {
         setLoading(false);
       }

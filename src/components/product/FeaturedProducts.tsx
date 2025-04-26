@@ -3,6 +3,8 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
+import { productApi } from '@/lib/api';
+import { Product, ProductCategory } from '@/types/product';
 
 export default function FeaturedProducts() {
   const [loading, setLoading] = useState(true);
@@ -12,6 +14,12 @@ export default function FeaturedProducts() {
   >({});
   const [isMobile, setIsMobile] = useState(false);
   const [selectedProduct, setSelectedProduct] = useState<string | null>(null);
+  const [productsByCategory, setProductsByCategory] = useState<Record<ProductCategory, Product[]>>({
+    handmades: [],
+    secondHands: [],
+    paintings: [],
+    decoratives: []
+  });
 
   // Reset image index when hover changes and set to second image on hover
   useEffect(() => {
@@ -40,6 +48,41 @@ export default function FeaturedProducts() {
     };
   }, []);
 
+  // Fetch products for each category
+  useEffect(() => {
+    const fetchProducts = async () => {
+      setLoading(true);
+      
+      try {
+        const categories: ProductCategory[] = ['handmades', 'secondHands', 'paintings', 'decoratives'];
+        
+        // Create an object to hold products by category
+        const products: Record<ProductCategory, Product[]> = {
+          handmades: [],
+          secondHands: [],
+          paintings: [],
+          decoratives: []
+        };
+        
+        // Fetch products for each category
+        await Promise.all(
+          categories.map(async (category) => {
+            const categoryProducts = await productApi.getByCategory(category);
+            products[category] = categoryProducts.slice(0, 4); // Limit to 4 products per category
+          })
+        );
+        
+        setProductsByCategory(products);
+      } catch (error) {
+        console.error('Error fetching products:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchProducts();
+  }, []);
+
   // Collections data to display with featured image and product images
   const collections = [
     {
@@ -47,204 +90,60 @@ export default function FeaturedProducts() {
       name: 'Handmade Pieces',
       description:
         'Expertly crafted furniture that celebrates the beauty of natural wood and artisanal techniques.',
-      featuredImage: '/images/handmades/gobolet.jpg',
+      featuredImage: productsByCategory.handmades[0]?.images[0] || '/images/handmades/gobolet.jpg',
       categoryHref: '/products?category=handmades',
       productHref: '/product/handmades-1', // Example product page link
-      products: [
-        {
-          id: 'handmades-1',
-          images: [
-            '/images/handmades/pull.jpg',
-            '/images/handmades/cousin.jpg',
-            '/images/handmades/gobolet.jpg',
-          ],
-          name: 'Hand-carved Oak Table',
-          price: 1825,
-        },
-        {
-          id: 'handmades-2',
-          images: [
-            '/images/handmades/cousin.jpg',
-            '/images/handmades/pull.jpg',
-            '/images/handmades/sac.jpg',
-          ],
-          name: 'Sculpted Maple Vessel',
-          price: 2125,
-        },
-        {
-          id: 'handmades-3',
-          images: [
-            '/images/handmades/sac.jpg',
-            '/images/handmades/gobolet.jpg',
-            '/images/handmades/pull.jpg',
-          ],
-          name: 'Handcrafted Walnut Box',
-          price: 907,
-        },
-        {
-          id: 'handmades-4',
-          images: [
-            '/images/handmades/gobolet.jpg',
-            '/images/handmades/sac.jpg',
-            '/images/handmades/cousin.jpg',
-          ],
-          name: 'Artisanal Wooden Goblet',
-          price: 2107,
-        },
-      ],
+      products: productsByCategory.handmades.map(p => ({
+        id: p.id,
+        images: p.images,
+        name: p.name,
+        price: p.price
+      }))
     },
     {
       id: 'secondHands',
       name: 'Second-Hand',
       description:
         'Curated vintage pieces with history and character, restored to their original splendor.',
-      featuredImage: '/images/secondHands/table.jpg',
+      featuredImage: productsByCategory.secondHands[0]?.images[0] || '/images/secondHands/table.jpg',
       categoryHref: '/products?category=secondHands',
       productHref: '/product/secondHands-1', // Example product page link
-      products: [
-        {
-          id: 'secondHands-1',
-          images: [
-            '/images/secondHands/chair.jpg',
-            '/images/secondHands/table.jpg',
-            '/images/secondHands/chairdark.jpg',
-          ],
-          name: 'Mid-century Lounge Chair',
-          price: 1825,
-        },
-        {
-          id: 'secondHands-2',
-          images: [
-            '/images/secondHands/chairdark.jpg',
-            '/images/secondHands/smallChair.jpg',
-            '/images/secondHands/chair.jpg',
-          ],
-          name: 'Antique Oak Cabinet',
-          price: 2125,
-        },
-        {
-          id: 'secondHands-3',
-          images: [
-            '/images/secondHands/smallChair.jpg',
-            '/images/secondHands/chairdark.jpg',
-            '/images/secondHands/table.jpg',
-          ],
-          name: 'Classic Rattan Armchair',
-          price: 907,
-        },
-        {
-          id: 'secondHands-4',
-          images: [
-            '/images/secondHands/table.jpg',
-            '/images/secondHands/chair.jpg',
-            '/images/secondHands/smallChair.jpg',
-          ],
-          name: 'Vintage Dining Table',
-          price: 2107,
-        },
-      ],
+      products: productsByCategory.secondHands.map(p => ({
+        id: p.id,
+        images: p.images,
+        name: p.name,
+        price: p.price
+      }))
     },
     {
       id: 'paintings',
       name: 'Paintings',
       description:
         'Original artworks that complement our furniture and bring emotional depth to any space.',
-      featuredImage: '/images/paintings/girl.jpg',
+      featuredImage: productsByCategory.paintings[0]?.images[0] || '/images/paintings/girl.jpg',
       categoryHref: '/products?category=paintings',
       productHref: '/product/paintings-1', // Example product page link
-      products: [
-        {
-          id: 'paintings-1',
-          images: [
-            '/images/paintings/gate.jpg',
-            '/images/paintings/girl.jpg',
-            '/images/paintings/flower.jpg',
-          ],
-          name: 'Botanical Study Print',
-          price: 1825,
-        },
-        {
-          id: 'paintings-2',
-          images: [
-            '/images/paintings/girl-boy.jpg',
-            '/images/paintings/gate.jpg',
-            '/images/paintings/girl.jpg',
-          ],
-          name: 'Heritage Portrait',
-          price: 2125,
-        },
-        {
-          id: 'paintings-3',
-          images: [
-            '/images/paintings/flower.jpg',
-            '/images/paintings/girl-boy.jpg',
-            '/images/paintings/gate.jpg',
-          ],
-          name: 'Landscape Oil Painting',
-          price: 907,
-        },
-        {
-          id: 'paintings-4',
-          images: [
-            '/images/paintings/girl.jpg',
-            '/images/paintings/flower.jpg',
-            '/images/paintings/girl-boy.jpg',
-          ],
-          name: 'Portrait Study',
-          price: 2107,
-        },
-      ],
+      products: productsByCategory.paintings.map(p => ({
+        id: p.id,
+        images: p.images,
+        name: p.name,
+        price: p.price
+      }))
     },
     {
       id: 'decoratives',
       name: 'Decorative Objects',
       description:
         'Refined accessories that add the perfect finishing touch to your carefully curated interiors.',
-      featuredImage: '/images/decoratives/vase.jpg',
+      featuredImage: productsByCategory.decoratives[0]?.images[0] || '/images/decoratives/vase.jpg',
       categoryHref: '/products?category=decoratives',
       productHref: '/product/decoratives-1', // Example product page link
-      products: [
-        {
-          id: 'decoratives-1',
-          images: [
-            '/images/decoratives/pot.jpg',
-            '/images/decoratives/vase.jpg',
-            '/images/decoratives/flower.jpg',
-          ],
-          name: 'Handblown Glass Bowl',
-          price: 1825,
-        },
-        {
-          id: 'decoratives-2',
-          images: [
-            '/images/decoratives/flower.jpg',
-            '/images/decoratives/pot.jpg',
-            '/images/decoratives/alexandra-gorn-W5dsm9n6e3g-unsplash.jpg',
-          ],
-          name: 'Modernist Bronze Object',
-          price: 2125,
-        },
-        {
-          id: 'decoratives-3',
-          images: [
-            '/images/decoratives/alexandra-gorn-W5dsm9n6e3g-unsplash.jpg',
-            '/images/decoratives/flower.jpg',
-            '/images/decoratives/vase.jpg',
-          ],
-          name: 'Woven Rattan Basket',
-          price: 907,
-        },
-        {
-          id: 'decoratives-4',
-          images: [
-            '/images/decoratives/vase.jpg',
-            '/images/decoratives/alexandra-gorn-W5dsm9n6e3g-unsplash.jpg',
-            '/images/decoratives/pot.jpg',
-          ],
-          name: 'Sculptural Ceramic Vase',
-          price: 2107,
-        },
-      ],
+      products: productsByCategory.decoratives.map(p => ({
+        id: p.id,
+        images: p.images,
+        name: p.name,
+        price: p.price
+      }))
     },
   ];
 

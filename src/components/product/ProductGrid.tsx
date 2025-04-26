@@ -9,6 +9,7 @@ import {
   ProductListItem,
   ProductSortOption,
 } from '@/types/product';
+import { productApi } from '@/lib/api';
 
 type ProductGridProps = {
   category?: ProductCategory;
@@ -58,112 +59,17 @@ export default function ProductGrid({ category, sort }: ProductGridProps) {
     const fetchProducts = async () => {
       try {
         setLoading(true);
-
-        // Use actual image filenames based on category
-        const mockImages = {
-          handmades: [
-            '/images/handmades/gobolet.jpg',
-            '/images/handmades/pull.jpg',
-            '/images/handmades/cousin.jpg',
-            '/images/handmades/sac.jpg',
-          ],
-          secondHands: [
-            '/images/secondHands/table.jpg',
-            '/images/secondHands/chair.jpg',
-            '/images/secondHands/chairdark.jpg',
-            '/images/secondHands/smallChair.jpg',
-          ],
-          paintings: [
-            '/images/paintings/girl.jpg',
-            '/images/paintings/gate.jpg',
-            '/images/paintings/girl-boy.jpg',
-            '/images/paintings/flower.jpg',
-          ],
-          decoratives: [
-            '/images/decoratives/vase.jpg',
-            '/images/decoratives/pot.jpg',
-            '/images/decoratives/flower.jpg',
-            '/images/decoratives/alexandra-gorn-W5dsm9n6e3g-unsplash.jpg',
-          ],
-        };
-
-        // Create mock data for all categories
-        let data: ProductListItem[] = [];
-
-        // Only generate products for the selected category, or all categories if none selected
-        const categoriesToGenerate = category
-          ? [category]
-          : ([
-              'handmades',
-              'secondHands',
-              'paintings',
-              'decoratives',
-            ] as ProductCategory[]);
-
-        // Enhanced product names to convey luxury
-        const productNamesByCategory = {
-          handmades: [
-            'Artisanal Wooden Goblet',
-            'Hand-carved Oak Table',
-            'Sculpted Maple Vessel',
-            'Handcrafted Walnut Box',
-          ],
-          secondHands: [
-            'Vintage Dining Table',
-            'Mid-century Lounge Chair',
-            'Antique Oak Cabinet',
-            'Classic Rattan Armchair',
-          ],
-          paintings: [
-            'Abstract Forest Canvas',
-            'Botanical Study Print',
-            'Heritage Portrait',
-            'Landscape Oil Painting',
-          ],
-          decoratives: [
-            'Sculptural Ceramic Vase',
-            'Handblown Glass Bowl',
-            'Modernist Bronze Object',
-            'Woven Rattan Basket',
-          ],
-        };
-
-        categoriesToGenerate.forEach((cat) => {
-          const categoryImages = mockImages[cat as keyof typeof mockImages];
-          const categoryNames =
-            productNamesByCategory[cat as keyof typeof productNamesByCategory];
-
-          if (categoryImages) {
-            const categoryProducts = Array.from({ length: 4 }, (_, i) => {
-              // Generate 3 images per product by reusing images from the category
-              const productImages = [
-                categoryImages[i % categoryImages.length],
-                categoryImages[(i + 1) % categoryImages.length],
-                categoryImages[(i + 2) % categoryImages.length],
-              ];
-
-              return {
-                id: `${cat}-${i + 1}`,
-                name:
-                  categoryNames[i] ||
-                  `${
-                    cat === 'handmades'
-                      ? 'Handcrafted'
-                      : cat === 'secondHands'
-                        ? 'Vintage'
-                        : cat === 'paintings'
-                          ? 'Artwork'
-                          : 'Decorative'
-                  } Piece ${i + 1}`,
-                price: Math.floor(Math.random() * 1500) + 500,
-                images: productImages,
-                category: cat,
-              };
-            });
-            data = [...data, ...categoryProducts];
-          }
-        });
-
+        
+        let data = [];
+        
+        if (category) {
+          // Fetch products for a specific category
+          data = await productApi.getByCategory(category);
+        } else {
+          // Fetch all products
+          data = await productApi.getAll();
+        }
+        
         // Sort products
         if (sort) {
           switch (sort) {
