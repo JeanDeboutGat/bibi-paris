@@ -32,15 +32,20 @@ export default function ProductGrid({ category, sort }: ProductGridProps) {
   // Reset image index when hover changes and set to second image on hover
   useEffect(() => {
     if (!hoveredProduct) {
-      setCurrentImageIndex({});
+      // Keep the current indices, don't reset them
+      return;
     } else {
-      // Set to second image (index 1) when hovering
-      setCurrentImageIndex((prev) => ({
-        ...prev,
-        [hoveredProduct]: 1,
-      }));
+      // Set to second image (index 1) when hovering,
+      // but only if there are multiple images
+      const product = products.find(p => p.id === hoveredProduct);
+      if (product && product.images.length > 1) {
+        setCurrentImageIndex((prev) => ({
+          ...prev,
+          [hoveredProduct]: 1,
+        }));
+      }
     }
-  }, [hoveredProduct]);
+  }, [hoveredProduct, products]);
 
   // Check if device is mobile
   useEffect(() => {
@@ -237,7 +242,7 @@ export default function ProductGrid({ category, sort }: ProductGridProps) {
                 onMouseEnter={() => !isMobile && setHoveredProduct(product.id)}
                 onMouseLeave={() => !isMobile && setHoveredProduct(null)}
               >
-                <div className="relative mb-6 overflow-hidden">
+                <div className="relative mb-6 overflow-hidden group-hover:bg-opacity-10">
                   {/* Aspect ratio container for consistent image heights */}
                   <div className="relative aspect-[3/4] w-full">
                     <Image
@@ -270,74 +275,75 @@ export default function ProductGrid({ category, sort }: ProductGridProps) {
                     />
 
                     {/* Navigation arrows - shown on hover or when selected on mobile */}
-                    {((isHovered && !isMobile) || (isSelected && isMobile)) &&
-                      product.images.length > 1 && (
-                        <>
-                          {/* Left navigation arrow */}
-                          <button
-                            onClick={(e) => {
-                              e.preventDefault();
-                              e.stopPropagation();
-                              handleImageNavigation(e, product.id, 'prev');
-                            }}
-                            className="absolute left-3 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-white/80 text-luxury-charcoal hover:bg-white flex items-center justify-center transition-all duration-300 focus-visible shadow-lg z-20"
-                            aria-label="Previous image"
+                    {(product.images.length > 1) && (
+                      <div className={`absolute inset-0 z-20 transition-opacity duration-300 ${
+                        (isHovered || isSelected) ? 'opacity-100' : 'opacity-0'
+                      }`}>
+                        {/* Left navigation arrow */}
+                        <button
+                          onClick={(e) => {
+                            e.preventDefault();
+                            e.stopPropagation();
+                            handleImageNavigation(e, product.id, 'prev');
+                          }}
+                          className="absolute left-3 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-white/80 text-luxury-charcoal hover:bg-white flex items-center justify-center transition-all duration-300 focus-visible shadow-lg"
+                          aria-label="Previous image"
+                        >
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            strokeWidth={1.5}
+                            stroke="currentColor"
+                            className="w-4 h-4"
                           >
-                            <svg
-                              xmlns="http://www.w3.org/2000/svg"
-                              fill="none"
-                              viewBox="0 0 24 24"
-                              strokeWidth={1.5}
-                              stroke="currentColor"
-                              className="w-4 h-4"
-                            >
-                              <path
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                                d="M15.75 19.5L8.25 12l7.5-7.5"
-                              />
-                            </svg>
-                          </button>
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              d="M15.75 19.5L8.25 12l7.5-7.5"
+                            />
+                          </svg>
+                        </button>
 
-                          {/* Right navigation arrow */}
-                          <button
-                            onClick={(e) => {
-                              e.preventDefault();
-                              e.stopPropagation();
-                              handleImageNavigation(e, product.id, 'next');
-                            }}
-                            className="absolute right-3 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-white/80 text-luxury-charcoal hover:bg-white flex items-center justify-center transition-all duration-300 focus-visible shadow-lg z-20"
-                            aria-label="Next image"
+                        {/* Right navigation arrow */}
+                        <button
+                          onClick={(e) => {
+                            e.preventDefault();
+                            e.stopPropagation();
+                            handleImageNavigation(e, product.id, 'next');
+                          }}
+                          className="absolute right-3 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-white/80 text-luxury-charcoal hover:bg-white flex items-center justify-center transition-all duration-300 focus-visible shadow-lg"
+                          aria-label="Next image"
+                        >
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            strokeWidth={1.5}
+                            stroke="currentColor"
+                            className="w-4 h-4"
                           >
-                            <svg
-                              xmlns="http://www.w3.org/2000/svg"
-                              fill="none"
-                              viewBox="0 0 24 24"
-                              strokeWidth={1.5}
-                              stroke="currentColor"
-                              className="w-4 h-4"
-                            >
-                              <path
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                                d="M8.25 4.5l7.5 7.5-7.5 7.5"
-                              />
-                            </svg>
-                          </button>
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              d="M8.25 4.5l7.5 7.5-7.5 7.5"
+                            />
+                          </svg>
+                        </button>
 
-                          {/* Image indicators */}
-                          <div className="absolute bottom-3 left-1/2 -translate-x-1/2 flex space-x-1.5 z-20">
-                            {product.images.map((_, index) => (
-                              <span
-                                key={index}
-                                className={`w-1.5 h-1.5 rounded-full transition-all duration-300 ${
-                                  currentIndex === index ? 'bg-white w-2.5' : 'bg-white/60'
-                                }`}
-                              />
-                            ))}
-                          </div>
-                        </>
-                      )}
+                        {/* Image indicators */}
+                        <div className="absolute bottom-3 left-1/2 -translate-x-1/2 flex space-x-1.5">
+                          {product.images.map((_, index) => (
+                            <span
+                              key={index}
+                              className={`w-1.5 h-1.5 rounded-full transition-all duration-300 ${
+                                currentIndex === index ? 'bg-white w-2.5' : 'bg-white/60'
+                              }`}
+                            />
+                          ))}
+                        </div>
+                      </div>
+                    )}
                   </div>
 
                   {/* Add to cart button */}
