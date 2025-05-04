@@ -1,31 +1,74 @@
+"use client";
+
 import Image from 'next/image';
 import Link from 'next/link';
-import { Metadata } from 'next';
 import FeaturedProducts from '@/components/product/FeaturedProducts';
+import LoadingSpinner from '@/components/ui/LoadingSpinner';
+import {useEffect, useState} from "react";
 
-export const metadata: Metadata = {
-  title: 'Bibi Paris | Timeless Wooden Furniture',
-  description:
-    'Discover our collection of high-end wooden furniture, featuring handmade pieces, second-hand items, paintings, and decorative objects.',
+type FeaturedGridItem = {
+  image: string;
+  title: string;
+  href: string;
+  alt?: string;
+};
+
+type HomepageData = {
+  heroVideo: string;
+  heroPoster: string;
+  featuredGrid: FeaturedGridItem[];
 };
 
 export default function Home() {
+  const [data, setData] = useState<HomepageData | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<null | string>(null);
+
+  useEffect(() => {
+    setLoading(true);
+    fetch('/api/homepage')
+      .then((res) => {
+        if (!res.ok) throw new Error('Failed to fetch homepage data');
+        return res.json();
+      })
+      .then(setData)
+      .catch((err) => setError(err.message))
+      .finally(() => setLoading(false));
+  }, []);
+
+  // Skeleton for featured grid
+  const featuredGridSkeleton = (
+    <div className="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-4 gap-6 md:gap-10">
+      {[...Array(8)].map((_, i) => (
+        <div key={i} className="block group animate-pulse">
+          <div className="relative aspect-square overflow-hidden mb-3 bg-neutral-200" />
+          <div className="h-4 w-3/4 mx-auto bg-neutral-200 rounded" />
+        </div>
+      ))}
+    </div>
+  );
+
   return (
     <>
       {/* Hero Section */}
       <section className="relative h-screen overflow-hidden bg-neutral-100">
         <div className="absolute inset-0">
-          <video
-            autoPlay
-            muted
-            loop
-            playsInline
-            className="absolute inset-0 w-full h-full object-cover"
-            // poster="/images/handmades/gobolet.jpg"
-          >
-            <source src="/videos/wood.mp4" type="video/mp4" />
-            {/* Fallback image if video fails */}
-          </video>
+          {loading || error ? (
+            <div className="absolute inset-0 flex items-center justify-center bg-neutral-100">
+              <LoadingSpinner fullScreen={false} />
+            </div>
+          ) : (
+            <video
+              autoPlay
+              muted
+              loop
+              playsInline
+              className="absolute inset-0 w-full h-full object-cover"
+              poster={data?.heroPoster}
+            >
+              <source src={data?.heroVideo} type="video/mp4" />
+            </video>
+          )}
           <div className="absolute inset-0 bg-black bg-opacity-5"></div>
         </div>
 
@@ -57,127 +100,27 @@ export default function Home() {
       <section className="py-24 bg-[#f6f1eb]">
         <div className="container mx-auto px-4 md:px-8">
           <div className="max-w-7xl mx-auto">
-            <div className="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-4 gap-6 md:gap-10">
-              {/* Handmades */}
-              <Link href="/products?category=handmades" className="block group">
-                <div className="relative aspect-square overflow-hidden mb-3">
-                  <Image
-                    src="/images/handmades/pull.jpg"
-                    alt="Hand-carved Oak Table"
-                    fill
-                    className="object-cover"
-                  />
-                </div>
-                <h3 className="font-serif text-xs text-center text-luxury-charcoal/70">
-                  Hand-carved Oak Table
-                </h3>
-              </Link>
-              <Link
-                href="/products?category=secondHands"
-                className="block group"
-              >
-                <div className="relative aspect-square overflow-hidden mb-3">
-                  <Image
-                    src="/images/secondHands/chair.jpg"
-                    alt="Mid-century Lounge Chair"
-                    fill
-                    className="object-cover"
-                  />
-                </div>
-                <h3 className="font-serif text-xs text-center text-luxury-charcoal/70">
-                  Mid-century Lounge Chair
-                </h3>
-              </Link>
-              <Link href="/products?category=paintings" className="block group">
-                <div className="relative aspect-square overflow-hidden mb-3">
-                  <Image
-                    src="/images/paintings/girl.jpg"
-                    alt="Portrait Study"
-                    fill
-                    className="object-cover"
-                  />
-                </div>
-                <h3 className="font-serif text-xs text-center text-luxury-charcoal/70">
-                  Portrait Study
-                </h3>
-              </Link>
-              <Link
-                href="/products?category=decoratives"
-                className="block group"
-              >
-                <div className="relative aspect-square overflow-hidden mb-3">
-                  <Image
-                    src="/images/decoratives/vase.jpg"
-                    alt="Sculptural Ceramic Vase"
-                    fill
-                    className="object-cover"
-                  />
-                </div>
-                <h3 className="font-serif text-xs text-center text-luxury-charcoal/70">
-                  Sculptural Ceramic Vase
-                </h3>
-              </Link>
-
-              {/* Second row */}
-              <Link href="/products?category=handmades" className="block group">
-                <div className="relative aspect-square overflow-hidden mb-3">
-                  <Image
-                    src="/images/handmades/cousin.jpg"
-                    alt="Sculpted Maple Vessel"
-                    fill
-                    className="object-cover"
-                  />
-                </div>
-                <h3 className="font-serif text-xs text-center text-luxury-charcoal/70">
-                  Sculpted Maple Vessel
-                </h3>
-              </Link>
-              <Link
-                href="/products?category=secondHands"
-                className="block group"
-              >
-                <div className="relative aspect-square overflow-hidden mb-3">
-                  <Image
-                    src="/images/secondHands/smallChair.jpg"
-                    alt="Classic Rattan Armchair"
-                    fill
-                    className="object-cover"
-                  />
-                </div>
-                <h3 className="font-serif text-xs text-center text-luxury-charcoal/70">
-                  Classic Rattan Armchair
-                </h3>
-              </Link>
-              <Link href="/products?category=paintings" className="block group">
-                <div className="relative aspect-square overflow-hidden mb-3">
-                  <Image
-                    src="/images/paintings/gate.jpg"
-                    alt="Botanical Study Print"
-                    fill
-                    className="object-cover"
-                  />
-                </div>
-                <h3 className="font-serif text-xs text-center text-luxury-charcoal/70">
-                  Botanical Study Print
-                </h3>
-              </Link>
-              <Link
-                href="/products?category=decoratives"
-                className="block group"
-              >
-                <div className="relative aspect-square overflow-hidden mb-3">
-                  <Image
-                    src="/images/decoratives/pot.jpg"
-                    alt="Handblown Glass Bowl"
-                    fill
-                    className="object-cover"
-                  />
-                </div>
-                <h3 className="font-serif text-xs text-center text-luxury-charcoal/70">
-                  Handblown Glass Bowl
-                </h3>
-              </Link>
-            </div>
+            {loading || error ? (
+              featuredGridSkeleton
+            ) : (
+              <div className="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-4 gap-6 md:gap-10">
+                {data?.featuredGrid.map((item: FeaturedGridItem, i: number) => (
+                  <Link key={i} href={item.href} className="block group">
+                    <div className="relative aspect-square overflow-hidden mb-3">
+                      <Image
+                        src={item.image}
+                        alt={item.alt ?? ''}
+                        fill
+                        className="object-cover"
+                      />
+                    </div>
+                    <h3 className="font-serif text-xs text-center text-luxury-charcoal/70">
+                      {item.title}
+                    </h3>
+                  </Link>
+                ))}
+              </div>
+            )}
           </div>
         </div>
       </section>
