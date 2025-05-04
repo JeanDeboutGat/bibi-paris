@@ -11,4 +11,18 @@ export interface ProductDataProvider {
 export interface OrderDataProvider {
   create(orderData: Order): Promise<{ orderId: string }>;
   getStatus(orderId: string, email: string): Promise<OrderStatusDetail>;
-} 
+}
+
+// Homepage types
+export type FeaturedGridItem = {
+  image: string;
+  title: string;
+  href: string;
+  alt?: string;
+};
+
+export type HomepageData = {
+  heroVideo: string;
+  heroPoster: string;
+  featuredGrid: FeaturedGridItem[];
+}; 

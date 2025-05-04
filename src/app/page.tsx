@@ -1,10 +1,11 @@
-"use client";
+'use client';
 
 import Image from 'next/image';
 import Link from 'next/link';
 import FeaturedProducts from '@/components/product/FeaturedProducts';
 import LoadingSpinner from '@/components/ui/LoadingSpinner';
-import {useEffect, useState} from "react";
+import { useEffect, useState } from 'react';
+import { getHomePageData } from '@/lib/dataProviders';
 
 type FeaturedGridItem = {
   image: string;
@@ -26,10 +27,10 @@ export default function Home() {
 
   useEffect(() => {
     setLoading(true);
-    fetch('/api/homepage')
+    getHomePageData()
       .then((res) => {
-        if (!res.ok) throw new Error('Failed to fetch homepage data');
-        return res.json();
+        if (!res) throw new Error('Failed to fetch homepage data');
+        return res;
       })
       .then(setData)
       .catch((err) => setError(err.message))
