@@ -1,10 +1,10 @@
 import { ProductDataProvider } from './types';
-import { mockProducts } from './mockData';
+import { mockProducts, mockProductListItems } from './mockData';
 import { Product, ProductCategory } from '@/types/product';
 
 export const mockProductProvider: ProductDataProvider = {
-  async getAll(): Promise<Product[]> {
-    return mockProducts;
+  async getAll() {
+    return mockProductListItems;
   },
   async getById(id: string): Promise<Product> {
     await new Promise((resolve) => setTimeout(resolve, 500));
@@ -26,12 +26,12 @@ export const mockProductProvider: ProductDataProvider = {
       details: ['Product details not available'],
     };
   },
-  async getRelated(category: string, excludeId: string): Promise<Product[]> {
+  async getRelated(category: string, excludeId: string) {
     await new Promise((resolve) => setTimeout(resolve, 500));
-    return mockProducts.filter((p) => p.category === category && p.id !== excludeId).slice(0, 4);
+    return mockProductListItems.filter((p) => p.category === category && p.id !== excludeId).slice(0, 4);
   },
-  async getByCategory(category: ProductCategory): Promise<Product[]> {
+  async getByCategory(category: ProductCategory) {
     await new Promise((resolve) => setTimeout(resolve, 500));
-    return mockProducts.filter((p) => p.category === category);
+    return mockProductListItems.filter((p) => p.category === category);
   },
 }; 

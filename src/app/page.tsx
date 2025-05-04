@@ -16,7 +16,7 @@ type FeaturedGridItem = {
 
 type HomepageData = {
   heroVideo: string;
-  heroPoster: string;
+  heroPoster?: string;
   featuredGrid: FeaturedGridItem[];
 };
 

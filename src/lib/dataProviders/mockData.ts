@@ -1,4 +1,4 @@
-import { Product } from '@/types/product';
+import { Product, ProductListItem } from '@/types/product';
 
 export const mockProducts: Product[] = [
   {
@@ -313,9 +313,17 @@ export const mockProducts: Product[] = [
   },
 ];
 
+export const mockProductListItems: ProductListItem[] = mockProducts.map(({ id, name, price, images, category }) => ({
+  id,
+  name,
+  price,
+  images,
+  category,
+}));
+
 export const mockHomepageData = {
   heroVideo: '/videos/wood.mp4',
-  heroPoster: '/images/handmades/gobolet.jpg',
+  // heroPoster: '/images/handmades/gobolet.jpg',
   featuredGrid: [
     {
       image: '/images/handmades/pull.jpg',
@@ -367,7 +375,3 @@ export const mockHomepageData = {
     },
   ],
 };
-
-export function getMockHomepageData() {
-  return mockHomepageData;
-}

@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { productApi } from '@/lib/api';
-import { Product, ProductCategory } from '@/types/product';
+import { ProductListItem, ProductCategory } from '@/types/product';
 import ErrorMessage from '@/components/ui/ErrorMessage';
 
 type RelatedProductsProps = {
@@ -16,7 +16,7 @@ export default function RelatedProducts({
   currentProductId,
   category,
 }: RelatedProductsProps) {
-  const [products, setProducts] = useState<Product[]>([]);
+  const [products, setProducts] = useState<ProductListItem[]>([]);
   const [loading, setLoading] = useState(true);
   const [hoveredProduct, setHoveredProduct] = useState<string | null>(null);
   const [currentImageIndex, setCurrentImageIndex] = useState<
@@ -59,14 +59,7 @@ export default function RelatedProducts({
         setLoading(true);
         setError(null);
         // Get all products first
-        const allProducts = await productApi.getAll();
-        // Filter products from the same category, excluding current product
-        const relatedProducts = allProducts
-          .filter(
-            (product) =>
-              product.category === category && product.id !== currentProductId
-          )
-          .slice(0, 4);
+        const relatedProducts = await productApi.getRelated(category, currentProductId);
         setProducts(relatedProducts);
       } catch (err) {
         setError(err);

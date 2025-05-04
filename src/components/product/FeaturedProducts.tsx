@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { productApi } from '@/lib/api';
-import { Product, ProductCategory } from '@/types/product';
+import { ProductListItem, ProductCategory } from '@/types/product';
 import ErrorMessage from '@/components/ui/ErrorMessage';
 
 export default function FeaturedProducts() {
@@ -15,7 +15,7 @@ export default function FeaturedProducts() {
   >({});
   const [isMobile, setIsMobile] = useState(false);
   const [selectedProduct, setSelectedProduct] = useState<string | null>(null);
-  const [productsByCategory, setProductsByCategory] = useState<Record<ProductCategory, Product[]>>({
+  const [productsByCategory, setProductsByCategory] = useState<Record<ProductCategory, ProductListItem[]>>({
     handmades: [],
     secondHands: [],
     paintings: [],
@@ -57,7 +57,7 @@ export default function FeaturedProducts() {
       setError(null);
       try {
         const categories: ProductCategory[] = ['handmades', 'secondHands', 'paintings', 'decoratives'];
-        const products: Record<ProductCategory, Product[]> = {
+        const products: Record<ProductCategory, ProductListItem[]> = {
           handmades: [],
           secondHands: [],
           paintings: [],
