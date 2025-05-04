@@ -3,9 +3,6 @@ import { mockProducts, mockProductListItems } from './mockData';
 import { Product, ProductCategory } from '@/types/product';
 
 export const mockProductProvider: ProductDataProvider = {
-  async getAll() {
-    return mockProductListItems;
-  },
   async getById(id: string): Promise<Product> {
     await new Promise((resolve) => setTimeout(resolve, 500));
     const product = mockProducts.find((p) => p.id === id);
@@ -33,5 +30,19 @@ export const mockProductProvider: ProductDataProvider = {
   async getByCategory(category: ProductCategory) {
     await new Promise((resolve) => setTimeout(resolve, 500));
     return mockProductListItems.filter((p) => p.category === category);
+  },
+  async getPaginated({ category, page, pageSize }) {
+    await new Promise((resolve) => setTimeout(resolve, 500));
+    let filtered = mockProductListItems;
+    if (category) {
+      filtered = filtered.filter((p) => p.category === category);
+    }
+    const total = filtered.length;
+    const start = (page - 1) * pageSize;
+    const end = start + pageSize;
+    return {
+      products: filtered.slice(start, end),
+      total,
+    };
   },
 }; 

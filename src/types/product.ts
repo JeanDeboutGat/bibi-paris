@@ -68,3 +68,8 @@ export type ProductFilterOptions = {
   materials?: string[];
   inStock?: boolean;
 };
+
+export type PaginatedProducts = {
+  products: ProductListItem[];
+  total: number;
+};

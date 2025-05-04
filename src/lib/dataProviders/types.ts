@@ -1,11 +1,12 @@
 import { Product, ProductListItem, ProductCategory } from '@/types/product';
 import { Order, OrderStatusDetail } from '@/types/order';
+import { PaginatedProducts } from '@/types/product';
 
 export interface ProductDataProvider {
-  getAll(): Promise<ProductListItem[]>;
   getById(id: string): Promise<Product>;
   getRelated(category: string, excludeId: string): Promise<ProductListItem[]>;
   getByCategory(category: ProductCategory): Promise<ProductListItem[]>;
+  getPaginated(params: { category?: ProductCategory; page: number; pageSize: number }): Promise<PaginatedProducts>;
 }
 
 export interface OrderDataProvider {

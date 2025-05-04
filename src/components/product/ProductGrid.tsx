@@ -27,7 +27,18 @@ export default function ProductGrid({ category, sort }: ProductGridProps) {
   >({});
   const [isMobile, setIsMobile] = useState(false);
   const [selectedProduct, setSelectedProduct] = useState<string | null>(null);
+  const [page, setPage] = useState(1);
+  const [hasMore, setHasMore] = useState(true);
+  const [total, setTotal] = useState(0);
+  const PAGE_SIZE = 2;
   const { addItem } = useLocalCartStore();
+
+  // Reset products when category or sort changes
+  useEffect(() => {
+    setProducts([]);
+    setPage(1);
+    setHasMore(true);
+  }, [category, sort]);
 
   // Reset image index when hover changes and set to second image on hover
   useEffect(() => {
@@ -61,48 +72,25 @@ export default function ProductGrid({ category, sort }: ProductGridProps) {
     };
   }, []);
 
+  // Fetch products paginated
   useEffect(() => {
     const fetchProducts = async () => {
       try {
         setLoading(true);
-        
-        let data = [];
-        
-        if (category) {
-          // Fetch products for a specific category
-          data = await productApi.getByCategory(category);
-        } else {
-          // Fetch all products
-          data = await productApi.getAll();
-        }
-        
-        // Sort products
-        if (sort) {
-          switch (sort) {
-            case 'price_asc':
-              data.sort((a, b) => a.price - b.price);
-              break;
-            case 'price_desc':
-              data.sort((a, b) => b.price - a.price);
-              break;
-            case 'newest':
-              data.reverse();
-              break;
-          }
-        }
-
-        setProducts(data);
+        const res = await productApi.getPaginated({ category, page, pageSize: PAGE_SIZE });
+        setProducts(prev => page === 1 ? res.products : [...prev, ...res.products]);
+        setTotal(res.total);
+        setHasMore((page - 1) * PAGE_SIZE + res.products.length < res.total);
       } catch (err) {
         console.error('Failed to fetch products:', err);
         setError(err);
-        setProducts([]); // Defensive: clear products on error
+        setProducts([]);
       } finally {
         setLoading(false);
       }
     };
-
     fetchProducts();
-  }, [category, sort]);
+  }, [category, sort, page]);
 
   const handleQuickAdd = (e: React.MouseEvent, product: ProductListItem) => {
     e.preventDefault();
@@ -169,7 +157,7 @@ export default function ProductGrid({ category, sort }: ProductGridProps) {
     window.location.href = `/product/${productId}`;
   };
 
-  if (loading) {
+  if (loading && products.length === 0) {
     return (
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-8 gap-y-16">
         {[...Array(6)].map((_, index) => (
@@ -213,7 +201,7 @@ export default function ProductGrid({ category, sort }: ProductGridProps) {
   return (
     <>
       <p className="font-light text-sm text-luxury-charcoal/60 mb-10">
-        Showing {products.length} {products.length === 1 ? 'item' : 'items'}
+        Showing {products.length} of {total} {total === 1 ? 'item' : 'items'}
       </p>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-12 gap-y-20">
@@ -371,6 +359,21 @@ export default function ProductGrid({ category, sort }: ProductGridProps) {
           );
         })}
       </div>
+      {hasMore && !loading && (
+        <div className="flex justify-center mt-10">
+          <button
+            onClick={() => setPage(page + 1)}
+            className="font-light border border-luxury-charcoal text-luxury-charcoal py-3 px-10 hover:bg-luxury-charcoal hover:text-white transition-colors duration-300"
+          >
+            Load More
+          </button>
+        </div>
+      )}
+      {loading && products.length > 0 && (
+        <div className="flex justify-center mt-10">
+          <span className="text-luxury-charcoal/60 text-sm">Loading...</span>
+        </div>
+      )}
     </>
   );
 }
