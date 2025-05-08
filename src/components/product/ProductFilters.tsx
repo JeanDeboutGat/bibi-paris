@@ -78,6 +78,15 @@ export default function ProductFilters({
     }
   };
 
+  // Add a handler for category change that toggles off if already selected.
+  const handleCategoryChange = (option: ProductCategory) => {
+    if (selectedCategory === option) {
+      updateFilters('category', null); // Remove category if clicking the active one
+    } else {
+      updateFilters('category', option);
+    }
+  };
+
   // Check if any filters are active
   const hasActiveFilters = selectedCategory || selectedSort;
 
@@ -158,11 +167,11 @@ export default function ProductFilters({
                     className={`w-4 h-4 border ${selectedCategory === category.value ? 'bg-luxury-gold/10 border-luxury-gold' : 'border-luxury-charcoal/20'} mr-3 transition-colors`}
                   ></span>
                   <input
-                    type="radio"
-                    name="category"
-                    checked={selectedCategory === category.value}
-                    onChange={() => updateFilters('category', category.value)}
+                    type="button"
+                    aria-pressed={selectedCategory === category.value}
+                    onClick={() => handleCategoryChange(category.value)}
                     className="sr-only"
+                    tabIndex={-1}
                   />
                   <span
                     className={`text-sm ${selectedCategory === category.value ? 'text-luxury-charcoal' : 'text-luxury-charcoal/60'}`}
