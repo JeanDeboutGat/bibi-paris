@@ -224,28 +224,146 @@ export default function ProductGrid({ category, sort }: ProductGridProps) {
           const isSelected = selectedProduct === product.id;
           const currentIndex = currentImageIndex[product.id] || 0;
 
-          return (
-            <div
-              key={product.id}
-              className="group relative"
-            >
-              {/* Non-mobile users get normal links */}
-              {!isMobile && (
-                <Link
-                  href={`/product/${product.id}`}
-                  className="absolute inset-0 z-10"
-                  aria-label={`View ${product.name} details`}
-                />
-              )}
-              
-              <div 
-                className="relative"
-                onClick={(e) => isMobile && handleProductClick(e, product.id)}
-                onMouseEnter={() => !isMobile && setHoveredProduct(product.id)}
-                onMouseLeave={() => !isMobile && setHoveredProduct(null)}
+          // Desktop: wrap card in Link, Mobile: use div with onClick
+          if (!isMobile) {
+            return (
+              <Link
+                key={product.id}
+                href={`/product/${product.id}`}
+                className="group relative cursor-pointer block"
+                aria-label={`View ${product.name} details`}
               >
+                {/* Card content start */}
+                <div className="relative"
+                  onMouseEnter={() => setHoveredProduct(product.id)}
+                  onMouseLeave={() => setHoveredProduct(null)}
+                >
+                  <div className="relative mb-6 overflow-hidden group-hover:bg-opacity-10">
+                    <div className="relative aspect-[3/4] w-full">
+                      <Image
+                        src={product.images[currentIndex]}
+                        alt={product.name}
+                        fill
+                        sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                        className="object-cover transition-all duration-700 ease-in-out"
+                        priority={product.id.endsWith('-1')}
+                      />
+                      {isHovered && (
+                        <div className="absolute inset-0 animate-fadeOut">
+                          <Image
+                            src={product.images[0]}
+                            alt={`${product.name} - previous view`}
+                            fill
+                            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                            className="object-cover"
+                          />
+                        </div>
+                      )}
+                      <div
+                        className={`absolute inset-0 bg-black transition-opacity duration-500 ${
+                          isHovered || isSelected ? 'bg-opacity-10' : 'bg-opacity-0'
+                        }`}
+                      />
+                      {(product.images.length > 1) && (
+                        <div className={`absolute inset-0 z-20 transition-opacity duration-300 ${
+                          (isHovered || isSelected) ? 'opacity-100' : 'opacity-0'
+                        }`}>
+                          {/* Left navigation arrow */}
+                          <button
+                            onClick={(e) => {
+                              e.preventDefault();
+                              e.stopPropagation();
+                              handleImageNavigation(e, product.id, 'prev');
+                            }}
+                            className="absolute left-3 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-white/80 text-luxury-charcoal hover:bg-white flex items-center justify-center transition-all duration-300 focus-visible shadow-lg"
+                            aria-label="Previous image"
+                          >
+                            <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              fill="none"
+                              viewBox="0 0 24 24"
+                              strokeWidth={1.5}
+                              stroke="currentColor"
+                              className="w-4 h-4"
+                            >
+                              <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                d="M15.75 19.5L8.25 12l7.5-7.5"
+                              />
+                            </svg>
+                          </button>
+                          {/* Right navigation arrow */}
+                          <button
+                            onClick={(e) => {
+                              e.preventDefault();
+                              e.stopPropagation();
+                              handleImageNavigation(e, product.id, 'next');
+                            }}
+                            className="absolute right-3 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-white/80 text-luxury-charcoal hover:bg-white flex items-center justify-center transition-all duration-300 focus-visible shadow-lg"
+                            aria-label="Next image"
+                          >
+                            <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              fill="none"
+                              viewBox="0 0 24 24"
+                              strokeWidth={1.5}
+                              stroke="currentColor"
+                              className="w-4 h-4"
+                            >
+                              <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                d="M8.25 4.5l7.5 7.5-7.5 7.5"
+                              />
+                            </svg>
+                          </button>
+                          <div className="absolute bottom-3 left-1/2 -translate-x-1/2 flex space-x-1.5">
+                            {product.images.map((_, index) => (
+                              <span
+                                key={index}
+                                className={`w-1.5 h-1.5 rounded-full transition-all duration-300 ${
+                                  currentIndex === index ? 'bg-white w-2.5' : 'bg-white/60'
+                                }`}
+                              />
+                            ))}
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                    <button
+                      onClick={(e) => handleQuickAdd(e, product)}
+                      className={`absolute bottom-4 right-4 bg-white text-luxury-charcoal/90 px-4 py-2 text-xs font-light tracking-wide border border-luxury-charcoal/10 transition-all duration-500 focus-visible z-20 ${
+                        isHovered
+                          ? 'opacity-100 translate-y-0'
+                          : 'opacity-0 translate-y-4'
+                      }`}
+                      aria-label={`Add ${product.name} to cart`}
+                    >
+                      Add to Cart
+                    </button>
+                  </div>
+                  <h3 className="font-serif text-base mb-2 transition-colors duration-300 group-hover:text-luxury-gold">
+                    {product.name}
+                  </h3>
+                  <p className="text-luxury-charcoal/70 text-sm font-light">
+                    ${product.price.toLocaleString()}
+                  </p>
+                </div>
+                {/* Card content end */}
+              </Link>
+            );
+          } else {
+            return (
+              <div
+                key={product.id}
+                className="group relative"
+                onClick={(e) => handleProductClick(e, product.id)}
+                onMouseEnter={() => setHoveredProduct(product.id)}
+                onMouseLeave={() => setHoveredProduct(null)}
+              >
+                {/* Card content start */}
                 <div className="relative mb-6 overflow-hidden group-hover:bg-opacity-10">
-                  {/* Aspect ratio container for consistent image heights */}
                   <div className="relative aspect-[3/4] w-full">
                     <Image
                       src={product.images[currentIndex]}
@@ -255,8 +373,6 @@ export default function ProductGrid({ category, sort }: ProductGridProps) {
                       className="object-cover transition-all duration-700 ease-in-out"
                       priority={product.id.endsWith('-1')}
                     />
-
-                    {/* Previous image with fade-out effect */}
                     {isHovered && (
                       <div className="absolute inset-0 animate-fadeOut">
                         <Image
@@ -268,15 +384,11 @@ export default function ProductGrid({ category, sort }: ProductGridProps) {
                         />
                       </div>
                     )}
-
-                    {/* Subtle overlay effect on hover/selected */}
                     <div
                       className={`absolute inset-0 bg-black transition-opacity duration-500 ${
                         isHovered || isSelected ? 'bg-opacity-10' : 'bg-opacity-0'
                       }`}
                     />
-
-                    {/* Navigation arrows - shown on hover or when selected on mobile */}
                     {(product.images.length > 1) && (
                       <div className={`absolute inset-0 z-20 transition-opacity duration-300 ${
                         (isHovered || isSelected) ? 'opacity-100' : 'opacity-0'
@@ -306,7 +418,6 @@ export default function ProductGrid({ category, sort }: ProductGridProps) {
                             />
                           </svg>
                         </button>
-
                         {/* Right navigation arrow */}
                         <button
                           onClick={(e) => {
@@ -332,8 +443,6 @@ export default function ProductGrid({ category, sort }: ProductGridProps) {
                             />
                           </svg>
                         </button>
-
-                        {/* Image indicators */}
                         <div className="absolute bottom-3 left-1/2 -translate-x-1/2 flex space-x-1.5">
                           {product.images.map((_, index) => (
                             <span
@@ -347,8 +456,6 @@ export default function ProductGrid({ category, sort }: ProductGridProps) {
                       </div>
                     )}
                   </div>
-
-                  {/* Add to cart button */}
                   <button
                     onClick={(e) => handleQuickAdd(e, product)}
                     className={`absolute bottom-4 right-4 bg-white text-luxury-charcoal/90 px-4 py-2 text-xs font-light tracking-wide border border-luxury-charcoal/10 transition-all duration-500 focus-visible z-20 ${
@@ -361,16 +468,16 @@ export default function ProductGrid({ category, sort }: ProductGridProps) {
                     Add to Cart
                   </button>
                 </div>
-
                 <h3 className="font-serif text-base mb-2 transition-colors duration-300 group-hover:text-luxury-gold">
                   {product.name}
                 </h3>
                 <p className="text-luxury-charcoal/70 text-sm font-light">
                   ${product.price.toLocaleString()}
                 </p>
+                {/* Card content end */}
               </div>
-            </div>
-          );
+            );
+          }
         })}
       </div>
       {hasMore && !loading && (
