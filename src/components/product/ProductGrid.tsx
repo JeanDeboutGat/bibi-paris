@@ -78,7 +78,21 @@ export default function ProductGrid({ category, sort }: ProductGridProps) {
       try {
         setLoading(true);
         const res = await productApi.getPaginated({ category, page, pageSize: PAGE_SIZE });
-        setProducts(prev => page === 1 ? res.products : [...prev, ...res.products]);
+        let newProductsList = page === 1 ? res.products : [...products, ...res.products]
+        if (sort) {
+          switch (sort) {
+            case 'price_asc':
+              newProductsList = [...newProductsList].sort((a, b) => a.price - b.price);
+              break;
+            case 'price_desc':
+              newProductsList = [...newProductsList].sort((a, b) => b.price - a.price);
+              break;
+            case 'newest':
+              newProductsList = [...newProductsList].reverse();
+              break;
+          }
+        }
+        setProducts(newProductsList);
         setTotal(res.total);
         setHasMore((page - 1) * PAGE_SIZE + res.products.length < res.total);
       } catch (err) {
@@ -365,7 +379,7 @@ export default function ProductGrid({ category, sort }: ProductGridProps) {
             onClick={() => setPage(page + 1)}
             className="font-light border border-luxury-charcoal text-luxury-charcoal py-3 px-10 hover:bg-luxury-charcoal hover:text-white transition-colors duration-300"
           >
-            Load More
+            See More
           </button>
         </div>
       )}
