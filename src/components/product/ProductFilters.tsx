@@ -69,6 +69,15 @@ export default function ProductFilters({
     }
   };
 
+  // Add a handler for sort change that toggles off if already selected.
+  const handleSortChange = (option: ProductSortOption) => {
+    if (selectedSort === option) {
+      updateFilters('sort', null); // Remove sort if clicking the active one
+    } else {
+      updateFilters('sort', option);
+    }
+  };
+
   // Check if any filters are active
   const hasActiveFilters = selectedCategory || selectedSort;
 
@@ -198,12 +207,12 @@ export default function ProductFilters({
                   <span
                     className={`w-4 h-4 border ${selectedSort === option.value ? 'bg-luxury-gold/10 border-luxury-gold' : 'border-luxury-charcoal/20'} mr-3 transition-colors`}
                   ></span>
-                  <input
-                    type="radio"
-                    name="sort"
-                    checked={selectedSort === option.value}
-                    onChange={() => updateFilters('sort', option.value)}
+                  <button
+                    type="button"
+                    aria-pressed={selectedSort === option.value}
+                    onClick={() => handleSortChange(option.value)}
                     className="sr-only"
+                    tabIndex={-1}
                   />
                   <span
                     className={`text-sm ${selectedSort === option.value ? 'text-luxury-charcoal' : 'text-luxury-charcoal/60'}`}
